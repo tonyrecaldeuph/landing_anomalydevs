@@ -1,0 +1,38 @@
+.manifesto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.body {
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  max-width: 760px;
+  line-height: 1.5;
+}
+
+.stats {
+  display: flex;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.statValue {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  color: var(--color-accent);
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
