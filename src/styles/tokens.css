@@ -1,1 +1,25 @@
-/* Placeholder — will be filled in Task 2 */
+:root {
+  --color-black: #060A07;
+  --color-neon: #33FF77;
+  --color-mint: #9DFFC0;
+  --color-node-highlight: #CFFFE0;
+  --color-neon-muted: #1C6B3A;
+
+  --color-bg: var(--color-black);
+  --color-text: var(--color-node-highlight);
+  --color-text-muted: #8FA898;
+  --color-accent: var(--color-neon);
+  --color-border: var(--color-neon-muted);
+
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+
+  --max-width: 1200px;
+}
