@@ -17,6 +17,7 @@ export function Projects() {
                   <span className={styles.tag} key={tag}>{tag}</span>
                 ))}
               </div>
+              <a href="#contacto" className={styles.caseLink}>Ver caso &rarr;</a>
             </div>
           </article>
         ))}

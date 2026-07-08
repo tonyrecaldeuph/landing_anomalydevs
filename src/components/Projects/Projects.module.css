@@ -42,3 +42,11 @@
   font-size: 0.9rem;
   margin: 0;
 }
+
+.caseLink {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-top: var(--space-1);
+}

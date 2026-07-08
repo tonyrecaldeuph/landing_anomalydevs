@@ -42,6 +42,7 @@ export function Contact({ onSubmit }: ContactProps) {
           <label htmlFor="contact-name">Nombre</label>
           <input
             id="contact-name"
+            required
             value={values.name}
             onChange={(e) => setValues({ ...values, name: e.target.value })}
           />
@@ -51,6 +52,7 @@ export function Contact({ onSubmit }: ContactProps) {
           <input
             id="contact-email"
             type="email"
+            required
             value={values.email}
             onChange={(e) => setValues({ ...values, email: e.target.value })}
           />
@@ -60,6 +62,7 @@ export function Contact({ onSubmit }: ContactProps) {
           <textarea
             id="contact-message"
             rows={4}
+            required
             value={values.message}
             onChange={(e) => setValues({ ...values, message: e.target.value })}
           />

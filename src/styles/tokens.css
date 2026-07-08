@@ -10,6 +10,7 @@
   --color-text-muted: #8FA898;
   --color-accent: var(--color-neon);
   --color-border: var(--color-neon-muted);
+  --color-error: #ff6b6b;
 
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --font-sans: 'Inter', system-ui, sans-serif;
