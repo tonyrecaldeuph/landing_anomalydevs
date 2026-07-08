@@ -1,0 +1,65 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: radial-gradient(circle at 60% 35%, #0d1f13 0%, var(--color-black) 65%);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  color: var(--color-mint);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.headline {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  color: var(--color-accent);
+  text-shadow: 0 0 24px rgba(51, 255, 119, 0.35);
+  max-width: 900px;
+}
+
+.subheadline {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: var(--color-text);
+  max-width: 600px;
+}
+
+.ctas {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ctaPrimary, .ctaSecondary {
+  font-family: var(--font-mono);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.ctaPrimary {
+  background: var(--color-accent);
+  color: var(--color-black);
+}
+
+.ctaSecondary {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.scrollHint {
+  position: absolute;
+  bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
