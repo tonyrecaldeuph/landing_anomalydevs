@@ -1,10 +1,13 @@
 import { projects } from '../../content/projects';
+import { Reveal } from '../Reveal/Reveal';
 import styles from './Projects.module.css';
 
 export function Projects() {
   return (
     <section id="proyectos" className="section-inner">
-      <h2>Proyectos</h2>
+      <Reveal>
+        <h2>Proyectos</h2>
+      </Reveal>
       <div className={styles.grid}>
         {projects.map((project) => (
           <article className={styles.card} key={project.id}>

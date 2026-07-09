@@ -1,10 +1,13 @@
 import { testimonials } from '../../content/testimonials';
+import { Reveal } from '../Reveal/Reveal';
 import styles from './Testimonials.module.css';
 
 export function Testimonials() {
   return (
     <section id="testimonios" className="section-inner">
-      <h2>Testimonios</h2>
+      <Reveal>
+        <h2>Testimonios</h2>
+      </Reveal>
       <div className={styles.grid}>
         {testimonials.map((t) => (
           <article className={styles.card} key={t.id}>

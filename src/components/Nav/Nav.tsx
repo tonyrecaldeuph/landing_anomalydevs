@@ -1,4 +1,5 @@
 import { navSections } from '../../content/nav';
+import { SoundToggle } from '../SoundToggle/SoundToggle';
 import styles from './Nav.module.css';
 
 export function Nav() {
@@ -12,6 +13,7 @@ export function Nav() {
           </li>
         ))}
       </ul>
+      <SoundToggle />
     </nav>
   );
 }

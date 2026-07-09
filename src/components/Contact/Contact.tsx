@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { contactContent } from '../../content/contact';
+import { Reveal } from '../Reveal/Reveal';
 import styles from './Contact.module.css';
 
 export interface ContactFormValues {
@@ -28,7 +29,9 @@ export function Contact({ onSubmit }: ContactProps) {
 
   return (
     <section id="contacto" className={`section-inner ${styles.contact}`}>
-      <h2>{contactContent.heading}</h2>
+      <Reveal>
+        <h2>{contactContent.heading}</h2>
+      </Reveal>
       <div className={styles.links}>
         <a href={`mailto:${contactContent.email}`}>{contactContent.email}</a>
         {contactContent.socials.map((social) => (

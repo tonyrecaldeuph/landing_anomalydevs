@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import { Hero } from './Hero';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('gsap', () => ({
+  default: { quickTo: vi.fn(() => vi.fn()) },
+}));
+
+const { Hero } = await import('./Hero');
 
 describe('Hero', () => {
   it('renders headline, subheadline and both CTAs from content', () => {
