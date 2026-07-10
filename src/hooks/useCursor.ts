@@ -24,14 +24,19 @@ export function useCursor() {
     document.body.appendChild(canvas);
     document.body.style.cursor = 'none';
 
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      canvas.remove();
+      document.body.style.cursor = '';
+      return;
+    }
     ctxRef.current = ctx;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     function render() {
       rafRef.current = requestAnimationFrame(render);
-      renderCursor(ctx, stateRef.current, canvas.width, canvas.height);
+      renderCursor(ctx!, stateRef.current, canvas.width, canvas.height);
     }
     render();
 

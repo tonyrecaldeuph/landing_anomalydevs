@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateParticles, generateAllParticles, getMobileConfig } from './particleSystem';
+import { generateParticles, getMobileConfig } from './particleSystem';
 import { SECTIONS } from './clusterConfig';
 
 describe('generateParticles', () => {

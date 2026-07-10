@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './SoundToggle.module.css';
 
 const STORAGE_KEY = 'anomalydevs:sound-enabled';
+const FREQ_BY_CLUSTER = [110, 130, 155, 175, 195, 220];
 
-export function SoundToggle() {
+interface SoundToggleProps {
+  activeCluster?: number;
+}
+
+export function SoundToggle({ activeCluster = 0 }: SoundToggleProps) {
   const [enabled, setEnabled] = useState(() => window.localStorage.getItem(STORAGE_KEY) === 'true');
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainRef = useRef<GainNode | null>(null);
@@ -17,7 +22,7 @@ export function SoundToggle() {
       const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
       oscillator.type = 'sine';
-      oscillator.frequency.value = 110;
+      oscillator.frequency.value = FREQ_BY_CLUSTER[activeCluster] || 110;
       gain.gain.value = 0;
       oscillator.connect(gain).connect(ctx.destination);
       oscillator.start();
@@ -34,7 +39,13 @@ export function SoundToggle() {
     }
 
     return undefined;
-  }, [enabled]);
+  }, [enabled, activeCluster]);
+
+  useEffect(() => {
+    if (enabled && oscillatorRef.current) {
+      oscillatorRef.current.frequency.value = FREQ_BY_CLUSTER[activeCluster] || 110;
+    }
+  }, [activeCluster, enabled]);
 
   return (
     <button

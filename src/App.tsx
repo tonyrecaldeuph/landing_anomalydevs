@@ -1,25 +1,50 @@
-import { NodeNetworkContainer } from './components/NodeNetwork/NodeNetworkContainer';
+import { useState, useCallback, useRef, lazy, Suspense } from 'react';
 import { Nav } from './components/Nav/Nav';
-import { Hero } from './components/Hero/Hero';
-import { Manifesto } from './components/Manifesto/Manifesto';
-import { Services } from './components/Services/Services';
-import { Projects } from './components/Projects/Projects';
-import { Testimonials } from './components/Testimonials/Testimonials';
-import { Contact } from './components/Contact/Contact';
 import { Footer } from './components/Footer/Footer';
+import { EnterScreen } from './components/EnterScreen/EnterScreen';
+import { SectionOverlay } from './components/SectionOverlay/SectionOverlay';
+import { useScrollNavigation } from './hooks/useScrollNavigation';
+import { useCursor } from './hooks/useCursor';
+import { ParticleSceneAPI } from './components/ImmersiveCanvas/ParticleScene';
+
+const ImmersiveCanvas = lazy(() =>
+  import('./components/ImmersiveCanvas/ImmersiveCanvas').then((m) => ({ default: m.ImmersiveCanvas })),
+);
 
 export default function App() {
+  const [entered, setEntered] = useState(false);
+  const sceneApiRef = useRef<ParticleSceneAPI | null>(null);
+  const { activeCluster } = useScrollNavigation({ sectionCount: 6 });
+
+  useCursor();
+
+  const handleSceneReady = useCallback((api: ParticleSceneAPI) => {
+    sceneApiRef.current = api;
+  }, []);
+
+  function handleEnter() {
+    setEntered(true);
+    setTimeout(() => sceneApiRef.current?.startEnter(), 100);
+  }
+
   return (
     <>
-      <NodeNetworkContainer />
-      <Nav />
-      <Hero />
-      <Manifesto />
-      <Services />
-      <Projects />
-      <Testimonials />
-      <Contact />
-      <Footer />
+      {!entered && <EnterScreen onEnter={handleEnter} />}
+      <Suspense fallback={null}>
+        <ImmersiveCanvas
+          onSceneReady={handleSceneReady}
+          activeCluster={activeCluster}
+        />
+      </Suspense>
+      {entered && (
+        <>
+          <Nav />
+          <main>
+            <SectionOverlay activeIndex={activeCluster} />
+          </main>
+          <Footer />
+        </>
+      )}
     </>
   );
 }
