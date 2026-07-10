@@ -114,6 +114,10 @@ export function createParticleScene(isMobile: boolean, reducedMotion: boolean): 
 
   animate();
 
+  function scheduleStateIdle(delayMs: number) {
+    setTimeout(() => { state = 'idle'; }, delayMs);
+  }
+
   return {
     domElement: renderer.domElement,
     setActiveCluster(index: number) {
@@ -122,11 +126,12 @@ export function createParticleScene(isMobile: boolean, reducedMotion: boolean): 
       state = 'transitioning';
       const target = configs[index].position;
       flyToCluster(camera, target);
+      scheduleStateIdle(1300);
     },
     startEnter() {
       state = 'entering';
       flyToCluster(camera, configs[0].position, 1.5);
-      setTimeout(() => { state = 'idle'; }, 1600);
+      scheduleStateIdle(1600);
     },
     dispose() {
       cancelAnimationFrame(rafId);

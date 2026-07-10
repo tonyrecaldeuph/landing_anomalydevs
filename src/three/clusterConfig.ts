@@ -13,7 +13,7 @@ export interface ClusterConfig {
 }
 
 export const SECTIONS: ClusterConfig[] = [
-  { id: 'hero', label: 'Hero', shape: 'sphere', color: '#33FF77', seed: 1, count: 15000, position: [0, 0, 0] },
+  { id: 'hero', label: 'Hero', shape: 'sphere', color: '#33FF77', seed: 1, count: 15000, position: [0, 0, 4] },
   { id: 'manifesto', label: 'Manifiesto', shape: 'ring', color: '#9DFFC0', seed: 2, count: 8000, position: [0, 4, -4] },
   { id: 'services', label: 'Servicios', shape: 'subclusters', color: '#CFFFE0', seed: 3, count: 3000, position: [4, 0, -4], subClusterCount: 4, subClusterSeeds: [3, 4, 5, 6] },
   { id: 'projects', label: 'Proyectos', shape: 'grid', color: '#1C6B3A', seed: 7, count: 6000, position: [-4, 0, -4] },
