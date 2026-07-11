@@ -6,7 +6,26 @@
 >
 > Acciones ya tomadas: `main` local se rebasó sobre `origin/main` (los docs spec/plan 2026-07-10 quedaron encima) y se pusheó (`62670ef`); la rama `feature/webgl-landing` (re-implementación parcial de Fase 1 §3 + este handoff) también está pusheada.
 >
-> **Consecuencia: los §3-§4 de este documento describen la rama `feature/webgl-landing`, NO `main`.** La Fase 1 que ahí figura "en curso" ya existe terminada en `main`. **DECISIÓN PENDIENTE DEL USUARIO** antes de continuar: (A) adoptar la implementación de `main` (auditar/QA y seguir desde ahí, descartando la re-implementación de la feature branch), (B) continuar el plan inmersivo 2026-07-10 en la feature branch reemplazando lo de `main`, o (C) híbrido: base `main` + portar el viaje scroll-driven con formaciones del plan 2026-07-10. No ejecutar nada de los §3-§5 hasta que el usuario elija.
+> **Consecuencia: los §3-§4 de este documento describen la rama `feature/webgl-landing`, NO `main`.** La Fase 1 que ahí figura "en curso" ya existe terminada en `main`.
+>
+> ## ✅ DECISIÓN DEL USUARIO (2026-07-11): RUMBO A — ADOPTAR `main`
+>
+> El usuario eligió adoptar la implementación paralela de `main`. Por lo tanto:
+>
+> - **Los §3, §4 y §5 de este documento quedan OBSOLETOS** (describían la re-implementación en `feature/webgl-landing`, que se descarta; la rama queda pusheada solo como referencia histórica — no continuarla, no mergearla).
+> - Los planes `2026-07-07-anomalydevs-landing-static.md` y `2026-07-10-anomalydevs-landing-webgl-inmersiva.md` **ya no se ejecutan**; sirven solo como referencia de intención de diseño.
+>
+> ### Misión REAL del agente derivado: auditoría + QA de `main`
+>
+> 1. **Rama de trabajo:** crear `feature/qa-auditoria` desde `main` (no commitear directo a `main`).
+> 2. **Setup:** `cd` a la raíz del repo, `npm install`, `npm run test` — establecer línea base (documentar cuántos tests hay y si todos pasan).
+> 3. **Leer la spec/plan que la implementación de `main` dice seguir:** `docs/superpowers/specs/2026-07-09-anomalydevs-landing-immersive.md` y `docs/superpowers/plans/2026-07-09-anomalydevs-landing-immersive.md`. Auditar el código contra esa spec (¿todo lo prometido está implementado? ¿hay extras no pedidos?).
+> 4. **Contrastar con la spec 2026-07-10** (`docs/superpowers/specs/2026-07-10-landing-webgl-inmersiva-design.md`, intención más reciente validada con el usuario): identificar brechas de experiencia (viaje scroll-driven continuo, formaciones por sección, narrativa de la anomalía, fallbacks reduced-motion/sin-WebGL/móvil, lazy-load de three para LCP, sonido off por defecto). Reportar brechas al usuario ANTES de implementar cambios grandes.
+> 5. **QA funcional completo** (checklist): suite de tests; `npm run build` sin errores; `npm run dev` + verificación en navegador del flujo completo (EnterScreen → escena → todas las secciones → formulario); Lighthouse desktop/mobile; `prefers-reduced-motion`; deshabilitar WebGL; emulación móvil; consola sin errores; toggle de sonido sin autoplay y persistente.
+> 6. **Registrar hallazgos** en `docs/superpowers/QA-2026-07-11-hallazgos.md` clasificados (Crítico/Importante/Menor), con file:line, y proponer plan de fixes al usuario. Fixes triviales (typos, bugs evidentes con test que lo demuestre) pueden hacerse directamente vía TDD con commits atómicos.
+> 7. **Push** de la rama de auditoría; presentar opciones de integración al usuario (skill finishing-a-development-branch). Nada se mergea a `main` sin su OK.
+>
+> Los §6 (gotchas de entorno) y §7 (definition of done) siguen vigentes, con una corrección al §6: las versiones pineadas del plan 2026-07-10 ya no aplican — `main` usa `three@^0.160.0` + `@react-three/fiber@^8.15.11` + `@react-three/drei@^9.92.7` + `gsap@^3.12.2`; **no actualizar versiones** salvo hallazgo de seguridad crítico aprobado por el usuario.
 
 **Fecha:** 2026-07-11
 **Destinatario:** agente Claude (Sonnet 5) que continuará la implementación.
