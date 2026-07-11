@@ -1,5 +1,13 @@
 # HANDOFF — Estado del proyecto y guía de ejecución para el agente implementador
 
+> ## ⚠️ ADDENDUM CRÍTICO (2026-07-11, posterior al resto del documento)
+>
+> Al intentar el push se descubrió que **`origin/main` ya contiene una implementación completa hecha en paralelo por otra sesión** (21 commits: `3b05a05..0ff6ca0`): Fase 1 estática completa (con fixes de code review), la Fase 2 antigua (NodeNetwork + fallback + sonido + botones magnéticos, con `three@0.160`/`drei`) y una **"Fase 3 inmersiva" distinta a nuestro plan** (`EnterScreen`, `ImmersiveCanvas`/`ParticleScene.ts`, `SectionOverlay`, cluster config, camera controls, custom cursor; su spec/plan están en el repo, commit `f3ab2ce`).
+>
+> Acciones ya tomadas: `main` local se rebasó sobre `origin/main` (los docs spec/plan 2026-07-10 quedaron encima) y se pusheó (`62670ef`); la rama `feature/webgl-landing` (re-implementación parcial de Fase 1 §3 + este handoff) también está pusheada.
+>
+> **Consecuencia: los §3-§4 de este documento describen la rama `feature/webgl-landing`, NO `main`.** La Fase 1 que ahí figura "en curso" ya existe terminada en `main`. **DECISIÓN PENDIENTE DEL USUARIO** antes de continuar: (A) adoptar la implementación de `main` (auditar/QA y seguir desde ahí, descartando la re-implementación de la feature branch), (B) continuar el plan inmersivo 2026-07-10 en la feature branch reemplazando lo de `main`, o (C) híbrido: base `main` + portar el viaje scroll-driven con formaciones del plan 2026-07-10. No ejecutar nada de los §3-§5 hasta que el usuario elija.
+
 **Fecha:** 2026-07-11
 **Destinatario:** agente Claude (Sonnet 5) que continuará la implementación.
 **Rama de trabajo:** `feature/webgl-landing` (creada desde `main`; NUNCA commitear directo a `main`).
