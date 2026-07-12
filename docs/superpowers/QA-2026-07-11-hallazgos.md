@@ -17,7 +17,46 @@ El usuario aprobó el enfoque de **scroll-jacking discreto** para el Crítico 2.
 
 **Importante 1 (sonido modulado)** queda resuelto como efecto colateral de conectar `activeCluster` — no se verificó el cambio de frecuencia audible (requiere audio real, no cubierto por Playwright headless), pero el wiring de props está verificado por test unitario y por lectura de código.
 
-**Pendientes sin tocar en esta pasada** (fuera del alcance que aprobó el usuario): Importante 2 (código muerto de Fase 2), Importante 3 (draw-calls/perf de partículas), Menor 1-2. Ver detalle original más abajo. **QA manual restante** (Lighthoude, cross-browser fuera de Chromium, `prefers-reduced-motion` visual, deshabilitar WebGL, emulación móvil real) tampoco se ejecutó — ver §5 (ahora parcialmente cubierto por la verificación end-to-end de arriba, pero no el checklist completo).
+## ✅ Actualización 2 (2026-07-12): hallazgo nuevo corregido, Importante 2-3 abordados, resto de QA manual automatizado
+
+### Hallazgo nuevo (no estaba en la pasada original): clústeres superpuestos en el origen
+
+Mientras investigaba Importante 3 encontré algo más grave que el propio hallazgo: **los 6 clústeres de partículas nunca se posicionaban en el mundo 3D.** `config.position` solo se usaba para mover la cámara (`flyToCluster`); cada `THREE.Points` se agregaba a la escena sin `mesh.position.set(...)`, así que las 6 formas quedaban literalmente superpuestas en el origen. Con blending aditivo, eso producía una franja blanca lavada visible en las capturas (ej. sección Contacto). Además, `flyToCluster` siempre hacía `camera.lookAt(0, 0, 0)` sin importar el destino — al llegar a un clúster ahora sí ubicado en su propia posición, la cámara miraba hacia el vacío en vez de hacia él.
+
+- `b5385e4` — `applyClusterTransform` (nuevo, con tests) posiciona cada clúster en su `config.position`; `flyToCluster` ahora mira hacia el destino real. Verificado visualmente en Chromium: las capturas post-fix muestran formas de partícula distintas por sección en vez de un blob único superpuesto (nota: las capturas de esta iteración muestran además "bloques" verdes rectangulares en vez de puntos — confirmado que es un artefacto de **SwiftShader** (renderer software de Chromium headless sin GPU real: `ANGLE ... SwiftShader Device`), no un bug de la app; usuarios reales con GPU no deberían verlo, pero **queda como riesgo no verificado en hardware real**).
+
+### Importante 2 — código muerto eliminado
+
+- `b119d73` — se eliminó `src/components/NodeNetwork/**`, `useNodeNetworkState.*`, `networkGeometry.*`, `networkConfig.*` (Fase 2, sin referencias desde `App` ni ningún componente activo, confirmado por grep antes de borrar) y las dependencias `@react-three/fiber`/`@react-three/drei` que solo ese código usaba. Bono: vulnerabilidades de `npm audit` bajaron de 8 a 5.
+
+### Importante 3 — parcialmente resuelto
+
+- `c5114c7` — los clústeres inactivos ya no recalculan su animación de wobble (`sin()`) cada frame; solo el clúster activo lo hace (antes: ~50.000 partículas actualizadas por frame sin importar visibilidad; ahora: solo las del clúster activo). Reduce el costo real de CPU/frame.
+- **Sin resolver, requiere decisión de diseño mayor:** seguir siendo 6 draw calls (`THREE.Points` por clúster) en vez de 1 vía `THREE.InstancedMesh`/GPU instancing real, como pide la spec. Reestructurar esto es un cambio de arquitectura no trivial — se deja como follow-up explícito, no se fuerza en esta pasada.
+
+### QA manual — automatizado con Playwright donde fue posible
+
+Todo verificado en Chromium real (no jsdom), con capturas y logs:
+
+| Ítem | Resultado |
+|---|---|
+| `prefers-reduced-motion` | ✅ El canvas WebGL no se monta (`page.locator('canvas')` = 0 tras excluir el canvas del cursor); Nav y contenido siguen usables |
+| Fallback sin WebGL | ✅ Verificado interceptando `HTMLCanvasElement.getContext` para simular ausencia de WebGL — `ImmersiveCanvas` correctamente no monta ningún canvas propio (el único canvas restante en el DOM es el del cursor personalizado, un `<canvas 2D>` no relacionado — el primer intento de este check dio un falso positivo por no excluirlo) |
+| Emulación móvil (iPhone 12, Playwright device) | ✅ Entrada por `tap`, Hero renderiza; navegación por gesto táctil (`touchstart`/`touchend` sintéticos) avanza correctamente a la siguiente sección |
+| Lighthouse | ⏭️ **No ejecutado a propósito** — el renderer headless es SwiftShader (software, sin GPU), lo que sesgaría gravemente cualquier métrica de performance de un sitio WebGL-pesado; correrlo daría números engañosos, no representativos de hardware real |
+| Cross-browser fuera de Chromium (Firefox/Safari) | ⏭️ **No ejecutado** — Playwright no tenía binarios de Firefox/WebKit cacheados en este entorno; descargarlos era desproporcionado para esta pasada |
+| Consola sin errores | ✅ Cero errores/`pageerror` en todos los escenarios anteriores |
+
+### Estado final de la suite
+
+Tras todos los cambios: **62/62 tests, `tsc -b` limpio, `npm run build` OK.** (Bajó de 66 a 62 porque se eliminaron ~10 tests del código muerto de Importante 2, y se sumaron los nuevos de `clusterTransform`/`cameraControls`/`shouldAnimateCluster`.)
+
+### Pendiente real, honesto, para quien retome esto
+
+1. **Verificación en GPU/hardware real** de la escena de partículas (esta sesión solo pudo usar SwiftShader) — confirmar que no hay artefactos de renderizado en Chrome/Firefox/Safari reales.
+2. **GPU instancing real** para los 6 clústeres (Importante 3, la parte no resuelta) — requiere diseño explícito antes de implementar.
+3. **Menor 1** (cursor activo antes de "entrar" al sitio) y **Menor 2** (detalle de las 5 vulnerabilidades restantes de `npm audit`) — no tocados, bajo impacto.
+4. Lighthouse y cross-browser real, cuando haya acceso a hardware/navegadores reales.
 
 ## Línea base
 
