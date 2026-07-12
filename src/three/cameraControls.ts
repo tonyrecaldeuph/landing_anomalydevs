@@ -30,6 +30,6 @@ export function flyToCluster(
     z: targetPosition[2],
     duration,
     ease: 'power3.inOut',
-    onUpdate: () => camera.lookAt(0, 0, 0),
+    onUpdate: () => camera.lookAt(targetPosition[0], targetPosition[1], targetPosition[2]),
   });
 }

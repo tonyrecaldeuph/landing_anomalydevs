@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { generateParticles } from '../../three/particleSystem';
 import { SECTIONS, ClusterConfig } from '../../three/clusterConfig';
 import { createCameraControls, CameraControls, flyToCluster } from '../../three/cameraControls';
+import { applyClusterTransform } from './clusterTransform';
 
 export type SceneState = 'entering' | 'idle' | 'transitioning';
 
@@ -80,6 +81,7 @@ export function createParticleScene(isMobile: boolean, reducedMotion: boolean): 
     });
 
     const mesh = new THREE.Points(geometry, material);
+    applyClusterTransform(mesh, config);
     scene.add(mesh);
     return { mesh, config, basePositions: data.positions, phase: Math.random() * Math.PI * 2 };
   }
