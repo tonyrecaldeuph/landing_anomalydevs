@@ -2,7 +2,22 @@
 
 **Fecha:** 2026-07-11
 **Rama de auditoría:** `feature/qa-auditoria` (desde `main` @ `62670ef`)
-**Alcance:** auditoría de código estático + revisión arquitectónica, siguiendo la misión del §Addendum de `docs/superpowers/HANDOFF-2026-07-11-sonnet5.md`. **QA manual en navegador (Lighthouse, cross-browser, reduced-motion, sin-WebGL, móvil) aún NO ejecutado** — ver §5.
+**Alcance:** auditoría de código estático + revisión arquitectónica, siguiendo la misión del §Addendum de `docs/superpowers/HANDOFF-2026-07-11-sonnet5.md`.
+
+## ✅ Actualización (2026-07-11, mismo día): Críticos 1-3 + Importante 1 corregidos y verificados en navegador real
+
+El usuario aprobó el enfoque de **scroll-jacking discreto** para el Crítico 2. Se implementaron los 4 fixes vía TDD, con commits atómicos en `feature/qa-auditoria`:
+
+- `68ceaf4` — `useScrollNavigation` reescrito: gestos discretos (rueda/touch/teclado) con lock de transición, en vez del mapeo continuo `scrollY/scrollHeight` que no tenía recorrido real.
+- `5c85a7d` — `Nav` navega por índice de clúster (`navigateTo`) en vez de anclas muertas; conecta `activeCluster` a `SoundToggle`.
+- `a7a7b87` — `EnterScreen` ahora es un `<button>` real (accesible por teclado/lector de pantalla).
+- `fd00532` — `App.tsx` conecta `activeCluster`/`navigateTo` de punta a punta.
+
+**Verificación:** suite completa 66/66 tests en verde (subió de 50 con los tests nuevos), `tsc -b` limpio, `npm run build` OK. Además, verificación **end-to-end en Chromium real** (Playwright) simulando un usuario: entrada por teclado (Tab+Enter) confirma el fix de accesibilidad, navegación por rueda del mouse avanza correctamente por las 6 secciones en orden (Hero→Manifiesto→Servicios→Proyectos→Testimonios→Contacto), clic en botón del Nav navega a la sección correcta, clic en el logo vuelve al Hero, estado activo (`aria-current`) visible en el Nav, cero errores de consola. Capturas de pantalla confirman el render visual correcto.
+
+**Importante 1 (sonido modulado)** queda resuelto como efecto colateral de conectar `activeCluster` — no se verificó el cambio de frecuencia audible (requiere audio real, no cubierto por Playwright headless), pero el wiring de props está verificado por test unitario y por lectura de código.
+
+**Pendientes sin tocar en esta pasada** (fuera del alcance que aprobó el usuario): Importante 2 (código muerto de Fase 2), Importante 3 (draw-calls/perf de partículas), Menor 1-2. Ver detalle original más abajo. **QA manual restante** (Lighthoude, cross-browser fuera de Chromium, `prefers-reduced-motion` visual, deshabilitar WebGL, emulación móvil real) tampoco se ejecutó — ver §5 (ahora parcialmente cubierto por la verificación end-to-end de arriba, pero no el checklist completo).
 
 ## Línea base
 
