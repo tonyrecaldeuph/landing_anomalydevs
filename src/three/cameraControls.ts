@@ -19,17 +19,26 @@ export function createCameraControls(): CameraControls {
   };
 }
 
+/** Distance the camera stands off from a cluster's center — comfortably past its particle radius (~2). */
+export const CAMERA_STANDOFF = 3.5;
+
+/** Where the camera should fly TO for a given cluster: offset from its center, never landing inside the particle cloud. */
+export function getCameraViewpoint(clusterPosition: [number, number, number]): [number, number, number] {
+  return [clusterPosition[0], clusterPosition[1], clusterPosition[2] + CAMERA_STANDOFF];
+}
+
 export function flyToCluster(
   camera: THREE.PerspectiveCamera,
-  targetPosition: [number, number, number],
+  clusterPosition: [number, number, number],
   duration = 1.2,
 ): gsap.core.Tween {
+  const viewpoint = getCameraViewpoint(clusterPosition);
   return gsap.to(camera.position, {
-    x: targetPosition[0],
-    y: targetPosition[1],
-    z: targetPosition[2],
+    x: viewpoint[0],
+    y: viewpoint[1],
+    z: viewpoint[2],
     duration,
     ease: 'power3.inOut',
-    onUpdate: () => camera.lookAt(targetPosition[0], targetPosition[1], targetPosition[2]),
+    onUpdate: () => camera.lookAt(clusterPosition[0], clusterPosition[1], clusterPosition[2]),
   });
 }
