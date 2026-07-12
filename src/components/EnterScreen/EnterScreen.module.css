@@ -20,8 +20,13 @@
 }
 
 .logo {
-  width: 240px;
-  height: auto;
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 700;
+  color: #33FF77;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
   animation: pulse 2s ease-in-out infinite;
 }
 

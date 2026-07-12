@@ -17,4 +17,10 @@ describe('EnterScreen', () => {
     expect(onEnter).toHaveBeenCalled();
     vi.useRealTimers();
   });
+
+  it('renders the wordmark as real, reflowing text — not a fixed-width SVG that can clip long text', () => {
+    const { container } = render(<EnterScreen onEnter={vi.fn()} />);
+    expect(screen.getByText('anomalydevs')).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeNull();
+  });
 });
