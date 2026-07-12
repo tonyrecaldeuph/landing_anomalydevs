@@ -18,9 +18,14 @@ describe('EnterScreen', () => {
     vi.useRealTimers();
   });
 
-  it('renders the wordmark as real, reflowing text — not a fixed-width SVG that can clip long text', () => {
+  it('renders the wordmark, capitalized, as real reflowing text — not a fixed-width SVG that can clip long text', () => {
     const { container } = render(<EnterScreen onEnter={vi.fn()} />);
-    expect(screen.getByText('anomalydevs')).toBeInTheDocument();
-    expect(container.querySelector('svg')).toBeNull();
+    expect(screen.getByText('Anomalydevs')).toBeInTheDocument();
+    expect(container.querySelector('svg text')).toBeNull();
+  });
+
+  it('renders the brand icon mark', () => {
+    const { container } = render(<EnterScreen onEnter={vi.fn()} />);
+    expect(container.querySelector('svg')).not.toBeNull();
   });
 });
