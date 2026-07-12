@@ -3,6 +3,7 @@ import { generateParticles } from '../../three/particleSystem';
 import { SECTIONS, ClusterConfig } from '../../three/clusterConfig';
 import { createCameraControls, CameraControls, flyToCluster } from '../../three/cameraControls';
 import { applyClusterTransform } from './clusterTransform';
+import { shouldAnimateCluster } from './shouldAnimateCluster';
 
 export type SceneState = 'entering' | 'idle' | 'transitioning';
 
@@ -99,6 +100,8 @@ export function createParticleScene(isMobile: boolean, reducedMotion: boolean): 
       } else if (i === currentCluster) {
         mat.opacity = reducedMotion ? 1 : 0.8;
       }
+
+      if (!shouldAnimateCluster(i, currentCluster)) return;
 
       const positions = cluster.mesh.geometry.attributes.position.array as Float32Array;
       const base = cluster.basePositions;
