@@ -21,7 +21,10 @@ export function ImmersiveCanvas({ onSceneReady, activeCluster = 0 }: ImmersiveCa
     apiRef.current = api;
     containerRef.current?.appendChild(api.domElement);
     onSceneReady?.(api);
-    return () => api.dispose();
+    return () => {
+      api.domElement.remove();
+      api.dispose();
+    };
   }, [reducedMotion, onSceneReady]);
 
   useEffect(() => {
