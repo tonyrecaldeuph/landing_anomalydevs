@@ -14,7 +14,7 @@ const ImmersiveCanvas = lazy(() =>
 export default function App() {
   const [entered, setEntered] = useState(false);
   const sceneApiRef = useRef<ParticleSceneAPI | null>(null);
-  const { activeCluster } = useScrollNavigation({ sectionCount: 6 });
+  const { activeCluster, navigateTo } = useScrollNavigation({ sectionCount: 6, enabled: entered });
 
   useCursor();
 
@@ -38,7 +38,7 @@ export default function App() {
       </Suspense>
       {entered && (
         <>
-          <Nav />
+          <Nav activeCluster={activeCluster} onNavigate={navigateTo} />
           <main>
             <SectionOverlay activeIndex={activeCluster} />
           </main>
