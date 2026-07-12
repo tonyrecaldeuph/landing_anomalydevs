@@ -14,6 +14,21 @@ const DEFAULT_LOCK_MS = 1300;
 const DEFAULT_WHEEL_THRESHOLD = 50;
 const DEFAULT_TOUCH_THRESHOLD = 50;
 
+/** Approximate pixels per "line" — browsers reporting DOM_DELTA_LINE (mode 1) use tiny deltaY (often 3). */
+const LINE_HEIGHT_PX = 40;
+
+/** Normalizes a WheelEvent's deltaY to pixel units regardless of the browser/device's reported deltaMode. */
+function normalizedWheelDelta(e: WheelEvent): number {
+  switch (e.deltaMode) {
+    case 1: // DOM_DELTA_LINE
+      return e.deltaY * LINE_HEIGHT_PX;
+    case 2: // DOM_DELTA_PAGE
+      return e.deltaY * window.innerHeight;
+    default: // DOM_DELTA_PIXEL
+      return e.deltaY;
+  }
+}
+
 export function useScrollNavigation({
   sectionCount,
   enabled = true,
@@ -25,8 +40,10 @@ export function useScrollNavigation({
   const activeClusterRef = useRef(0);
   const lockedRef = useRef(false);
   const touchStartYRef = useRef<number | null>(null);
+  const wheelAccumulatorRef = useRef(0);
 
   const lock = useCallback(() => {
+    wheelAccumulatorRef.current = 0;
     if (lockDurationMs <= 0) return;
     lockedRef.current = true;
     setTimeout(() => {
@@ -52,9 +69,12 @@ export function useScrollNavigation({
 
     function handleWheel(e: WheelEvent) {
       if (lockedRef.current) return;
-      if (Math.abs(e.deltaY) < wheelThreshold) return;
       e.preventDefault();
-      goTo(activeClusterRef.current + (e.deltaY > 0 ? 1 : -1));
+      wheelAccumulatorRef.current += normalizedWheelDelta(e);
+      if (Math.abs(wheelAccumulatorRef.current) < wheelThreshold) return;
+      const direction = wheelAccumulatorRef.current > 0 ? 1 : -1;
+      wheelAccumulatorRef.current = 0;
+      goTo(activeClusterRef.current + direction);
     }
 
     function handleTouchStart(e: TouchEvent) {
