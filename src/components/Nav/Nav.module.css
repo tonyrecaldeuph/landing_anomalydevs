@@ -30,13 +30,20 @@
   padding: 0;
 }
 
-.links a {
+.link {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: var(--color-text);
 }
 
-.links a:hover {
+.link:hover {
+  color: var(--color-accent);
+}
+
+.link[aria-current='true'] {
   color: var(--color-accent);
 }
