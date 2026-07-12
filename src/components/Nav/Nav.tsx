@@ -21,7 +21,7 @@ export function Nav({ activeCluster, onNavigate }: NavProps) {
           onNavigate(0);
         }}
       >
-        anomalydevs
+        Anomalydevs
       </a>
       <ul className={styles.links}>
         {navSections.map((section, i) => {

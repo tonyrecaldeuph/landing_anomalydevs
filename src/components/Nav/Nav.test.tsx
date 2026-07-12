@@ -22,7 +22,7 @@ describe('Nav', () => {
 
   it('renders the logo wordmark and a button for each nav section', () => {
     render(<Nav activeCluster={0} onNavigate={vi.fn()} />);
-    expect(screen.getByText('anomalydevs')).toBeInTheDocument();
+    expect(screen.getByText('Anomalydevs')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Servicios' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Proyectos' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Testimonios' })).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('Nav', () => {
   it('clicking the logo navigates back to the hero cluster', () => {
     const onNavigate = vi.fn();
     render(<Nav activeCluster={3} onNavigate={onNavigate} />);
-    screen.getByText('anomalydevs').click();
+    screen.getByText('Anomalydevs').click();
     expect(onNavigate).toHaveBeenCalledWith(0);
   });
 
