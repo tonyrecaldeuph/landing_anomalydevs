@@ -3,11 +3,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { Contact } from './Contact';
 
 describe('Contact', () => {
-  it('renders heading, email and social links from content', () => {
+  it('renders heading, email and phone from content', () => {
     render(<Contact />);
     expect(screen.getByRole('heading', { name: '¿Tienes una anomalía que resolver?' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'hola@anomalydevs.com' })).toHaveAttribute('href', 'mailto:hola@anomalydevs.com');
-    expect(screen.getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/anomalydevs');
+    expect(screen.getByRole('link', { name: 'anomalydevsec@gmail.com' })).toHaveAttribute('href', 'mailto:anomalydevsec@gmail.com');
+    expect(screen.getByRole('link', { name: '+593 098 096 4513' })).toHaveAttribute('href', 'tel:+5930980964513');
   });
 
   it('shows a validation error when submitting with empty fields', () => {

@@ -34,11 +34,7 @@ export function Contact({ onSubmit }: ContactProps) {
       </Reveal>
       <div className={styles.links}>
         <a href={`mailto:${contactContent.email}`}>{contactContent.email}</a>
-        {contactContent.socials.map((social) => (
-          <a href={social.href} key={social.label} target="_blank" rel="noreferrer">
-            {social.label}
-          </a>
-        ))}
+        <a href={`tel:${contactContent.phone.replace(/\s+/g, '')}`}>{contactContent.phone}</a>
       </div>
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.field}>

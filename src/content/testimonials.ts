@@ -7,7 +7,25 @@ export interface Testimonial {
 }
 
 export const testimonials: Testimonial[] = [
-  { id: 't1', quote: 'AnomalyDevs entendió un problema que ningún otro equipo había resuelto bien.', author: 'Cliente Ficticio', role: 'CTO, Empresa Placeholder', initials: 'CF' },
-  { id: 't2', quote: 'Entregaron en tiempo récord sin sacrificar calidad.', author: 'Cliente Ficticio Dos', role: 'Founder, Startup Placeholder', initials: 'CD' },
-  { id: 't3', quote: 'El equipo se sintió como una extensión interna, no como un proveedor externo.', author: 'Cliente Ficticio Tres', role: 'PM, Compañía Placeholder', initials: 'CT' },
+  {
+    id: 't1',
+    quote: 'La Terminal de Cobranza se implementó para 200 usuarios sin fricción y hoy es parte del día a día del equipo.',
+    author: 'Supervisor de Cobranza',
+    role: 'Uphone (holding, 40M+ en facturación anual)',
+    initials: 'UP',
+  },
+  {
+    id: 't2',
+    quote: 'Con SMS Pro pasamos de campañas manuales a envíos masivos de SMS y RCS sin límite, con seguimiento en tiempo real.',
+    author: 'Responsable de Marketing',
+    role: 'Campañas de mensajería masiva',
+    initials: 'SP',
+  },
+  {
+    id: 't3',
+    quote: 'Mailer Pro nos dejó operar varias cuentas en paralelo para el envío masivo de correo sin saturar ninguna.',
+    author: 'Equipo de Comunicaciones',
+    role: 'Envío masivo de email multicuenta',
+    initials: 'MP',
+  },
 ];

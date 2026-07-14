@@ -11,7 +11,13 @@ export function Projects() {
       <div className={styles.grid}>
         {projects.map((project) => (
           <article className={styles.card} key={project.id}>
-            <div className={styles.thumb} aria-hidden="true" />
+            <div className={styles.thumb}>
+              <img
+                src={project.image}
+                alt={`Captura de pantalla del proyecto ${project.title}`}
+                className={styles.thumbImage}
+              />
+            </div>
             <div className={styles.body}>
               <h3>{project.title}</h3>
               <p className={styles.description}>{project.description}</p>
