@@ -31,11 +31,19 @@ http://anomalydevs.qzz.io {
 }
 ```
 
-Recargar Caddy (no genera downtime en los otros sitios):
+Recargar Caddy:
 
 ```bash
-systemctl reload caddy
+systemctl restart caddy
 ```
+
+> **Nota:** `systemctl reload caddy` **falla** en este VPS (`Error: sending configuration to
+> instance: ... dial tcp [::1]:2019: connect: connection refused`) porque el Caddyfile global
+> tiene `admin off`, y `reload` depende de la admin API para aplicar la config en caliente. Con
+> `admin off` la única forma de aplicar cambios es un `restart` completo — el proceso viejo sigue
+> sirviendo tráfico hasta que el nuevo termina de arrancar, así que el corte es sub-segundo, pero
+> **afecta a todos los sitios** de este Caddy (incluido el gateway de UPHONE), no solo este
+> proyecto. Confirmado en producción 2026-07-14.
 
 ## Despliegues siguientes
 
@@ -46,4 +54,5 @@ git pull
 docker compose up -d --build
 ```
 
-No hace falta volver a tocar el Caddyfile ni recargar Caddy — solo la primera vez.
+No hace falta volver a tocar el Caddyfile ni el `restart` de Caddy — solo la primera vez
+(el bloque de sitio ya queda permanente en `/etc/caddy/Caddyfile`, fuera del repo).
