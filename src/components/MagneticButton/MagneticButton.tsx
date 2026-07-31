@@ -1,16 +1,18 @@
-import { PropsWithChildren, useEffect, useRef } from 'react';
+import { MouseEventHandler, PropsWithChildren, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 interface MagneticButtonProps {
   href: string;
   className?: string;
   strength?: number;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
 export function MagneticButton({
   href,
   className,
   strength = 0.3,
+  onClick,
   children,
 }: PropsWithChildren<MagneticButtonProps>) {
   const ref = useRef<HTMLAnchorElement>(null);
@@ -43,7 +45,7 @@ export function MagneticButton({
   }, [strength]);
 
   return (
-    <a ref={ref} href={href} className={className}>
+    <a ref={ref} href={href} className={className} onClick={onClick}>
       {children}
     </a>
   );

@@ -1,8 +1,17 @@
+import { MouseEvent, useContext } from 'react';
 import { projects } from '../../content/projects';
+import { NavigationContext, SECTION_INDEX_BY_HASH } from '../../hooks/navigationContext';
 import { Reveal } from '../Reveal/Reveal';
 import styles from './Projects.module.css';
 
 export function Projects() {
+  const navigateTo = useContext(NavigationContext);
+
+  const flyToContact = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigateTo(SECTION_INDEX_BY_HASH['#contacto']);
+  };
+
   return (
     <section id="proyectos" className="section-inner">
       <Reveal>
@@ -26,7 +35,7 @@ export function Projects() {
                   <span className={styles.tag} key={tag}>{tag}</span>
                 ))}
               </div>
-              <a href="#contacto" className={styles.caseLink}>Ver caso &rarr;</a>
+              <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>Ver caso &rarr;</a>
             </div>
           </article>
         ))}
