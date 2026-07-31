@@ -55,7 +55,7 @@ describe('Nav', () => {
     expect(screen.getByRole('button', { name: 'Servicios' })).not.toHaveAttribute('aria-current');
   });
 
-  it('passes activeCluster through to the sound toggle for frequency modulation', () => {
+  it('renders the sound toggle', () => {
     render(<Nav activeCluster={2} onNavigate={vi.fn()} />);
     expect(screen.getByRole('button', { name: /Sonido/ })).toBeInTheDocument();
   });

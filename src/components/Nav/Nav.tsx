@@ -41,7 +41,7 @@ export function Nav({ activeCluster, onNavigate }: NavProps) {
           );
         })}
       </ul>
-      <SoundToggle activeCluster={activeCluster} />
+      <SoundToggle />
     </nav>
   );
 }
