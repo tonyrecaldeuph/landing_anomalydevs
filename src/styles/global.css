@@ -8,7 +8,11 @@ html, body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  scroll-behavior: smooth;
+}
+
+/* The document never scrolls: each section scrolls inside its own container. */
+body {
+  overflow: hidden;
 }
 
 h1, h2, h3, h4 {

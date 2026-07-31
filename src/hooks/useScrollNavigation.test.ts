@@ -188,6 +188,125 @@ describe('useScrollNavigation', () => {
     expect(result.current.activeCluster).toBe(1);
   });
 
+  describe('with a scrollable container', () => {
+    function makeContainer({ scrollTop = 0, scrollHeight = 800, clientHeight = 800 } = {}) {
+      const el = document.createElement('div');
+      let top = scrollTop;
+      Object.defineProperty(el, 'scrollTop', {
+        get: () => top,
+        set: (v: number) => {
+          top = Math.max(0, Math.min(v, scrollHeight - clientHeight));
+        },
+      });
+      Object.defineProperty(el, 'scrollHeight', { get: () => scrollHeight, configurable: true });
+      Object.defineProperty(el, 'clientHeight', { get: () => clientHeight, configurable: true });
+      return el;
+    }
+
+    it('lets the wheel scroll the content natively (no navigation) while there is room below', () => {
+      const el = makeContainer({ scrollTop: 0, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({ sectionCount: 6, enabled: true, containerRef: { current: el } }),
+      );
+      act(() => wheel(300));
+      expect(result.current.activeCluster).toBe(0);
+    });
+
+    it('navigates when the container is at the bottom and the gesture passes the edge threshold', () => {
+      const el = makeContainer({ scrollTop: 1200, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({
+          sectionCount: 6,
+          enabled: true,
+          containerRef: { current: el },
+          wheelThreshold: 150,
+        }),
+      );
+      act(() => wheel(160));
+      expect(result.current.activeCluster).toBe(1);
+    });
+
+    it('discards wheel deltas during the cooldown right after the content reaches the bottom edge', () => {
+      vi.useFakeTimers();
+      const el = makeContainer({ scrollTop: 0, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({
+          sectionCount: 6,
+          enabled: true,
+          containerRef: { current: el },
+          wheelThreshold: 150,
+          edgeCooldownMs: 400,
+        }),
+      );
+      // the user scrolls the content down to the bottom edge
+      act(() => {
+        el.scrollTop = 1200;
+        el.dispatchEvent(new Event('scroll'));
+      });
+      act(() => wheel(300)); // same momentum, within cooldown — must be discarded
+      expect(result.current.activeCluster).toBe(0);
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+      act(() => wheel(300)); // deliberate new gesture after the cooldown
+      expect(result.current.activeCluster).toBe(1);
+    });
+
+    it('a swipe that only reaches the edge during the gesture does not navigate; the next one does', () => {
+      const el = makeContainer({ scrollTop: 1100, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({
+          sectionCount: 6,
+          enabled: true,
+          containerRef: { current: el },
+          touchThreshold: 70,
+        }),
+      );
+      act(() => {
+        window.dispatchEvent(
+          new TouchEvent('touchstart', { touches: [{ clientY: 500 } as Touch], cancelable: true }),
+        );
+        el.scrollTop = 1200; // native scroll brings it to the bottom mid-gesture
+        window.dispatchEvent(
+          new TouchEvent('touchend', { changedTouches: [{ clientY: 300 } as Touch], cancelable: true }),
+        );
+      });
+      expect(result.current.activeCluster).toBe(0);
+      act(() => swipe(500, 300)); // starts already at the edge → navigates
+      expect(result.current.activeCluster).toBe(1);
+    });
+
+    it('ArrowDown scrolls the content instead of navigating while there is room', () => {
+      const el = makeContainer({ scrollTop: 0, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({ sectionCount: 6, enabled: true, containerRef: { current: el } }),
+      );
+      act(() => key('ArrowDown'));
+      expect(result.current.activeCluster).toBe(0);
+      expect(el.scrollTop).toBeGreaterThan(0);
+    });
+
+    it('ArrowDown navigates once the content is at the bottom', () => {
+      const el = makeContainer({ scrollTop: 1200, scrollHeight: 2000, clientHeight: 800 });
+      const { result } = renderHook(() =>
+        useScrollNavigation({ sectionCount: 6, enabled: true, containerRef: { current: el } }),
+      );
+      act(() => key('ArrowDown'));
+      expect(result.current.activeCluster).toBe(1);
+    });
+  });
+
+  it('ignores keyboard gestures while typing in a form field', () => {
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    const { result } = renderHook(() => useScrollNavigation({ sectionCount: 6, enabled: true }));
+    act(() => {
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true }));
+    });
+    expect(result.current.activeCluster).toBe(0);
+    input.remove();
+  });
+
   it('removes its listeners on unmount', () => {
     const addSpy = vi.spyOn(window, 'addEventListener');
     const removeSpy = vi.spyOn(window, 'removeEventListener');

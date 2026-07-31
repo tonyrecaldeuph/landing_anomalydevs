@@ -11,6 +11,7 @@ vi.mock('gsap/ScrollTrigger', () => ({ ScrollTrigger: {} }));
 
 const gsap = (await import('gsap')).default;
 const { Reveal } = await import('./Reveal');
+const { ScrollContainerContext } = await import('./scrollContainerContext');
 
 describe('Reveal', () => {
   beforeEach(() => {
@@ -39,5 +40,22 @@ describe('Reveal', () => {
     ];
     expect(fromVars).toMatchObject({ opacity: 0, y: 24 });
     expect(toVars).toMatchObject({ opacity: 1, y: 0 });
+  });
+
+  it('uses the scroll container from context as the ScrollTrigger scroller', () => {
+    const el = document.createElement('div');
+    render(
+      <ScrollContainerContext.Provider value={{ current: el }}>
+        <Reveal>
+          <p>Hola</p>
+        </Reveal>
+      </ScrollContainerContext.Provider>,
+    );
+    const [, , toVars] = (gsap.fromTo as unknown as { mock: { calls: unknown[][] } }).mock.calls[0] as [
+      unknown,
+      unknown,
+      { scrollTrigger: { scroller?: HTMLElement } },
+    ];
+    expect(toVars.scrollTrigger.scroller).toBe(el);
   });
 });

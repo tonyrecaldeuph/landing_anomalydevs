@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, lazy, Suspense } from 'react';
 import { Nav } from './components/Nav/Nav';
-import { Footer } from './components/Footer/Footer';
 import { EnterScreen } from './components/EnterScreen/EnterScreen';
 import { SectionOverlay } from './components/SectionOverlay/SectionOverlay';
 import { useScrollNavigation } from './hooks/useScrollNavigation';
@@ -14,7 +13,12 @@ const ImmersiveCanvas = lazy(() =>
 export default function App() {
   const [entered, setEntered] = useState(false);
   const sceneApiRef = useRef<ParticleSceneAPI | null>(null);
-  const { activeCluster, navigateTo } = useScrollNavigation({ sectionCount: 6, enabled: entered });
+  const overlayScrollRef = useRef<HTMLDivElement | null>(null);
+  const { activeCluster, navigateTo } = useScrollNavigation({
+    sectionCount: 6,
+    enabled: entered,
+    containerRef: overlayScrollRef,
+  });
 
   useCursor();
 
@@ -40,9 +44,8 @@ export default function App() {
         <>
           <Nav activeCluster={activeCluster} onNavigate={navigateTo} />
           <main>
-            <SectionOverlay activeIndex={activeCluster} />
+            <SectionOverlay activeIndex={activeCluster} scrollRef={overlayScrollRef} />
           </main>
-          <Footer />
         </>
       )}
     </>
