@@ -5,3 +5,20 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:8643:80"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: anomalydevs-api
+    restart: unless-stopped
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+    volumes:
+      - api-data:/data
+
+volumes:
+  api-data:

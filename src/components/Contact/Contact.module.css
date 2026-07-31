@@ -64,3 +64,19 @@
   font-size: 0.85rem;
   margin: 0;
 }
+
+.success {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Fuera de pantalla, no display:none — algunos bots omiten campos ocultos por CSS de display. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

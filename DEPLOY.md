@@ -45,6 +45,35 @@ systemctl restart caddy
 > **afecta a todos los sitios** de este Caddy (incluido el gateway de UPHONE), no solo este
 > proyecto. Confirmado en producción 2026-07-14.
 
+## Backend de contacto (`/api`)
+
+Desde 2026-07-31 el compose levanta **dos** servicios: `landing` (estático, Caddy) y `api`
+(Node 20, `server/index.mjs`, sin dependencias npm). El Caddy del contenedor enruta
+`/api/*` hacia `api:3000`; nada cambia en el Caddy del sistema ni en los puertos expuestos.
+
+- Los leads del formulario se guardan **siempre** en el volumen `api-data`
+  (`/data/leads.jsonl` dentro del contenedor `anomalydevs-api`). Verlos:
+  `docker exec anomalydevs-api cat /data/leads.jsonl`
+- La notificación por Telegram se activa creando `/opt/anomalydevs-landing/.env`
+  (NO se versiona; ya está en `.gitignore`):
+
+```
+TELEGRAM_BOT_TOKEN=<token de @BotFather>
+TELEGRAM_CHAT_ID=<chat id de @userinfobot>
+```
+
+  Tras crear o cambiar `.env`: `docker compose up -d` (recrea `api` con las nuevas vars).
+  Sin `.env` el backend funciona igual, solo que sin notificación.
+
+Verificación post-deploy:
+
+```bash
+curl -s http://127.0.0.1:8643/api/health        # → {"ok":true}
+curl -s -X POST http://127.0.0.1:8643/api/contact \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Prueba","email":"prueba@example.com","message":"Test de deploy"}'
+```
+
 ## Despliegues siguientes
 
 ```bash
