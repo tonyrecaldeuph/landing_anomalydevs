@@ -22,7 +22,7 @@ export function Hero() {
         {heroContent.status}
       </span>
 
-      <ScrambleText as="h1" className={styles.headline} text={heroContent.headline} delayMs={250} durationMs={1400} replayOnHover />
+      <ScrambleText as="h1" className={styles.headline} text={heroContent.headline} delayMs={250} durationMs={1400} />
 
       <p className={styles.subheadline}>{heroContent.subheadline}</p>
       <p className={styles.body}>{heroContent.body}</p>
