@@ -18,9 +18,16 @@ describe('EnterScreen', () => {
     vi.useRealTimers();
   });
 
-  it('renders only the capitalized wordmark as real, reflowing text — no icon mark, no SVG-trapped text', () => {
+  it('shows the brand symbol as a decorative svg and the wordmark as real text', () => {
     const { container } = render(<EnterScreen onEnter={vi.fn()} />);
     expect(screen.getByText('Anomalydevs')).toBeInTheDocument();
-    expect(container.querySelector('svg')).toBeNull();
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('exposes the boot sequence as a progress bar', () => {
+    render(<EnterScreen onEnter={vi.fn()} />);
+    const bar = screen.getByRole('progressbar', { name: 'Inicializando sistema' });
+    expect(bar).toHaveAttribute('aria-valuemin', '0');
+    expect(bar).toHaveAttribute('aria-valuemax', '100');
   });
 });

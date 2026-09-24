@@ -1,60 +1,136 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: var(--space-3);
 }
 
 .card {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  background: var(--color-panel);
+  backdrop-filter: var(--blur-panel);
+  -webkit-backdrop-filter: var(--blur-panel);
+  border: 1px solid var(--color-line);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+
+.card:hover {
+  border-color: var(--color-line-strong);
 }
 
 .thumb {
-  height: 160px;
-  background: linear-gradient(135deg, #0d1f13, var(--color-black));
+  position: relative;
+  height: 210px;
   overflow: hidden;
+  background: linear-gradient(135deg, #0d1f13, var(--color-black));
+  border-bottom: 1px solid var(--color-line);
 }
 
 .thumbImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
   display: block;
+  filter: saturate(0.6) brightness(0.8);
+  transform: scale(1.02);
+  transition: filter 0.5s ease, transform 0.8s var(--ease-out);
+}
+
+.card:hover .thumbImage {
+  filter: saturate(1) brightness(1);
+  transform: scale(1.07);
+}
+
+/* Green scan grid + tint over the screenshot; fades on hover to reveal the real image. */
+.thumbGrid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(6, 10, 7, 0.85), transparent 55%),
+    repeating-linear-gradient(to bottom, rgba(51, 255, 119, 0.07) 0 1px, transparent 1px 4px);
+  mix-blend-mode: normal;
+  transition: opacity 0.5s ease;
+}
+
+.card:hover .thumbGrid {
+  opacity: 0.55;
+}
+
+.thumbTag {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--color-black);
+  background: var(--color-neon);
 }
 
 .body {
-  padding: var(--space-2);
+  position: relative;
+  padding: 1.4rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 0.7rem;
+  flex: 1;
+}
+
+.body h3 {
+  font-size: 1.2rem;
 }
 
 .tags {
   display: flex;
-  gap: var(--space-1);
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
 .tag {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
   color: var(--color-mint);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--color-line-strong);
+  background: rgba(51, 255, 119, 0.05);
+  padding: 0.2rem 0.6rem;
 }
 
 .description {
   color: var(--color-text-muted);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
   margin: 0;
 }
 
 .caseLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 0.4rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--color-accent);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-neon);
   text-decoration: none;
-  margin-top: var(--space-1);
+}
+
+.caseLink span {
+  transition: transform 0.3s ease;
+}
+
+.caseLink:hover span {
+  transform: translateX(5px);
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,75 +1,252 @@
 .contact {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: var(--space-5);
   align-items: center;
-  gap: var(--space-4);
-  text-align: center;
 }
 
-.links {
+/* ---------- Intro ---------- */
+
+.intro {
   display: flex;
-  gap: var(--space-3);
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.kicker {
   font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.kickerIndex {
+  color: var(--color-neon);
+  margin-right: 0.5rem;
+}
+
+.heading {
+  font-size: clamp(2rem, 4.4vw, 3.3rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--color-node-highlight);
+}
+
+.lead {
+  margin: 0;
+  max-width: 440px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.channel {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-node-highlight);
+  border: 1px solid var(--color-line);
+  background: var(--color-panel);
+  backdrop-filter: var(--blur-panel);
+  -webkit-backdrop-filter: var(--blur-panel);
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-out);
+}
+
+.channel:hover {
+  border-color: var(--color-line-strong);
+  transform: translateX(6px);
+}
+
+.channelLabel {
+  min-width: 5.5rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.channel a {
+  color: var(--color-neon);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.channel a:hover {
+  text-shadow: var(--glow-sm);
+}
+
+/* ---------- Terminal form ---------- */
+
+.terminal {
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-panel-strong);
+  backdrop-filter: var(--blur-panel);
+  -webkit-backdrop-filter: var(--blur-panel);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), var(--glow-md);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--color-line);
+  background: rgba(51, 255, 119, 0.04);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+.titlebar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f56;
+}
+
+.titlebar i:nth-child(2) { background: #ffbd2e; }
+.titlebar i:nth-child(3) { background: var(--color-neon); }
+
+.titlebar span {
+  margin-left: auto;
+  margin-right: auto;
+  transform: translateX(-1.5rem);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
-  max-width: 480px;
+  gap: 1.2rem;
+  padding: 1.6rem;
   text-align: left;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .field label {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-mint);
+}
+
+.field label::before {
+  content: '> ';
+  color: var(--color-neon);
 }
 
 .field input,
 .field textarea {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 0.6rem;
-  color: var(--color-text);
-  font-family: var(--font-sans);
+  background: rgba(6, 10, 7, 0.6);
+  border: none;
+  border-bottom: 1px solid var(--color-line-strong);
+  padding: 0.7rem 0.2rem;
+  color: var(--color-node-highlight);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  caret-color: var(--color-neon);
+  resize: vertical;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgba(143, 168, 152, 0.5);
 }
 
 .field input:focus,
 .field textarea:focus {
-  border-color: var(--color-accent);
   outline: none;
+  border-bottom-color: var(--color-neon);
+  background: rgba(51, 255, 119, 0.05);
+  box-shadow: 0 1px 0 var(--color-neon), 0 8px 20px -12px rgba(51, 255, 119, 0.6);
 }
 
 .submit {
-  align-self: flex-start;
-  background: var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  align-self: stretch;
+  margin-top: 0.4rem;
+  padding: 0.95rem 1.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
   color: var(--color-black);
+  background: var(--color-neon);
   border: none;
-  border-radius: 4px;
-  padding: 0.7rem 1.6rem;
   cursor: pointer;
+  box-shadow: var(--glow-sm);
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--color-mint);
+  box-shadow: var(--glow-md);
+}
+
+.submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s ease;
+}
+
+.submit:hover::after {
+  transform: translateX(120%);
+}
+
+.submit[data-status='sending'] {
+  cursor: progress;
+  background: repeating-linear-gradient(45deg, var(--color-neon) 0 12px, var(--color-mint) 12px 24px);
+  background-size: 200% 100%;
+  animation: stripes 0.8s linear infinite;
+}
+
+@keyframes stripes {
+  to { background-position: -34px 0; }
 }
 
 .error {
   color: var(--color-error);
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
   margin: 0;
 }
 
+.error::before {
+  content: '[ERR] ';
+}
+
 .success {
-  color: var(--color-accent);
+  color: var(--color-neon);
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin: 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-line-strong);
+  background: rgba(51, 255, 119, 0.08);
 }
 
 /* Fuera de pantalla, no display:none — algunos bots omiten campos ocultos por CSS de display. */
@@ -79,4 +256,11 @@
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .contact {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
 }

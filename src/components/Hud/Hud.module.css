@@ -1,0 +1,223 @@
+/* ---------- Frame ---------- */
+
+.frame {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+}
+
+.corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--color-neon);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.55;
+}
+
+.tl { top: 76px; left: 18px; border-top-width: 1px; border-left-width: 1px; }
+.tr { top: 76px; right: 18px; border-top-width: 1px; border-right-width: 1px; }
+.bl { bottom: 18px; left: 18px; border-bottom-width: 1px; border-left-width: 1px; }
+.br { bottom: 18px; right: 18px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.readout {
+  position: absolute;
+  left: 52px;
+  bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-mint);
+}
+
+.blip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-neon);
+  box-shadow: 0 0 10px var(--color-neon);
+  animation: blip 1.6s ease-in-out infinite;
+}
+
+@keyframes blip {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.telemetry {
+  position: absolute;
+  right: 52px;
+  bottom: 22px;
+  display: flex;
+  gap: 1.4rem;
+  align-items: center;
+}
+
+.signal {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.signal i {
+  display: inline-block;
+  width: 3px;
+  background: var(--color-neon);
+  opacity: 0.8;
+  animation: bar 1.2s ease-in-out infinite;
+}
+
+.signal i:nth-child(1) { height: 4px; margin-left: 6px; }
+.signal i:nth-child(2) { height: 7px; animation-delay: 0.15s; }
+.signal i:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+.signal i:nth-child(4) { height: 13px; animation-delay: 0.45s; }
+
+@keyframes bar {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.3; }
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(51, 255, 119, 0.08);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, transparent, var(--color-neon));
+  box-shadow: 0 0 12px var(--color-neon);
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ---------- Rail ---------- */
+
+.rail {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 16;
+}
+
+.rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.rail ol::before {
+  content: '';
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--color-neon-muted), transparent);
+}
+
+.waypoint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  padding: 0.35rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.waypointIndex {
+  opacity: 0.5;
+}
+
+.waypointLabel {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.4s ease, opacity 0.3s ease;
+}
+
+.waypointNode {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--color-neon-muted);
+  transform: rotate(45deg);
+  background: var(--color-black);
+  transition: all 0.3s ease;
+}
+
+.waypoint:hover .waypointLabel,
+.waypoint:focus-visible .waypointLabel {
+  max-width: 10rem;
+  opacity: 1;
+}
+
+/* Only wide screens have a free gutter for the active label; elsewhere it would sit on content. */
+@media (min-width: 1560px) {
+  .waypoint[aria-current='true'] .waypointLabel {
+    max-width: 10rem;
+    opacity: 1;
+  }
+}
+
+.waypoint:hover,
+.waypoint[aria-current='true'] {
+  color: var(--color-mint);
+}
+
+.waypoint:hover .waypointNode {
+  border-color: var(--color-neon);
+}
+
+.waypoint[aria-current='true'] .waypointNode {
+  border-color: var(--color-neon);
+  background: var(--color-neon);
+  box-shadow: 0 0 14px var(--color-neon), 0 0 2px var(--color-neon);
+}
+
+@media (max-width: 900px) {
+  .rail,
+  .telemetry,
+  .corner {
+    display: none;
+  }
+
+  .readout {
+    left: 16px;
+    bottom: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blip,
+  .signal i {
+    animation: none;
+  }
+
+  .progress span {
+    transition: none;
+  }
+}

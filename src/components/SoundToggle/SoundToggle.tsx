@@ -94,9 +94,13 @@ export function SoundToggle() {
       type="button"
       className={styles.toggle}
       aria-pressed={enabled}
+      title={enabled ? 'Silenciar ambiente' : 'Activar ambiente'}
       onClick={() => setEnabled((v) => !v)}
     >
-      {enabled ? 'Sonido: activado' : 'Sonido: desactivado'}
+      <span className={styles.bars} aria-hidden="true">
+        <i /> <i /> <i /> <i />
+      </span>
+      <span className="sr-only">{enabled ? 'Sonido: activado' : 'Sonido: desactivado'}</span>
     </button>
   );
 }

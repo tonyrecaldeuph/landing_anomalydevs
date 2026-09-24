@@ -1,0 +1,32 @@
+.tilt {
+  --rx: 0deg;
+  --ry: 0deg;
+  --glare-x: 50%;
+  --glare-y: 50%;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.tilt[data-active] {
+  transition: transform 0.08s linear, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--glare-x) var(--glare-y),
+    rgba(51, 255, 119, 0.16),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tilt[data-active] .glare {
+  opacity: 1;
+}

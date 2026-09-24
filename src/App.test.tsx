@@ -23,8 +23,12 @@ describe('App', () => {
 
     fireEvent.click(screen.getByText('Haz clic para entrar'));
 
-    await waitFor(() => {
-      expect(screen.getByText('DETECTAMOS LA ANOMALÍA.')).toBeInTheDocument();
-    });
+    // Exit animation (600 ms) + lazily loaded Hero chunk: allow headroom under a loaded test runner.
+    await waitFor(
+      () => {
+        expect(screen.getByText('DETECTAMOS LA ANOMALÍA.')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });

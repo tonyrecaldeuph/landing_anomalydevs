@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { createParticleScene, ParticleSceneAPI } from './ParticleScene';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { supportsWebGL } from '../../three/supportsWebGL';
+import { pointerToNdc } from '../../fx/pointer';
 
 interface ImmersiveCanvasProps {
   onSceneReady?: (api: ParticleSceneAPI) => void;
@@ -21,7 +22,23 @@ export function ImmersiveCanvas({ onSceneReady, activeCluster = 0 }: ImmersiveCa
     apiRef.current = api;
     containerRef.current?.appendChild(api.domElement);
     onSceneReady?.(api);
+
+    // Particles react to the mouse; touch never repels (a finger would hide what it pushes).
+    function handlePointerMove(e: PointerEvent) {
+      if (e.pointerType === 'touch') return;
+      const { x, y } = pointerToNdc(e.clientX, e.clientY, window.innerWidth, window.innerHeight);
+      api.setPointer(x, y);
+    }
+    const handlePointerOut = () => api.clearPointer();
+    const root = document.documentElement;
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    root.addEventListener('pointerleave', handlePointerOut);
+    window.addEventListener('blur', handlePointerOut);
+
     return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      root.removeEventListener('pointerleave', handlePointerOut);
+      window.removeEventListener('blur', handlePointerOut);
       api.domElement.remove();
       api.dispose();
     };

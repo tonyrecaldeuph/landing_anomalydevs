@@ -1,41 +1,101 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--space-3);
 }
 
 .card {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 1.1rem;
+  padding: 1.6rem;
+  background: var(--color-panel);
+  backdrop-filter: var(--blur-panel);
+  -webkit-backdrop-filter: var(--blur-panel);
+  border: 1px solid var(--color-line);
+  border-left: 2px solid var(--color-neon);
+}
+
+.card:hover {
+  border-color: var(--color-line-strong);
+  border-left-color: var(--color-neon);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+.live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5f56;
+  box-shadow: 0 0 8px #ff5f56;
+  animation: live 1.4s ease-in-out infinite;
+}
+
+@keyframes live {
+  50% { opacity: 0.3; }
+}
+
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 22px;
+}
+
+.wave i {
+  display: block;
+  width: 3px;
+  height: 100%;
+  background: var(--color-neon);
+  opacity: 0.55;
+  transform-origin: center;
+  animation: wave 1.2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.15); }
+  50% { transform: scaleY(1); }
 }
 
 .quote {
-  font-style: italic;
-  color: var(--color-text);
+  position: relative;
   margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--color-node-highlight);
 }
 
 .person {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--color-line);
 }
 
 .badge {
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--color-accent);
-  border-radius: 8px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  color: var(--color-accent);
+  font-weight: 700;
   font-size: 0.85rem;
+  color: var(--color-black);
+  background: var(--color-neon);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
   flex-shrink: 0;
 }
 
@@ -48,4 +108,11 @@
 .role {
   font-size: 0.8rem;
   color: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live,
+  .wave i {
+    animation: none;
+  }
 }

@@ -59,4 +59,11 @@ describe('Nav', () => {
     render(<Nav activeCluster={2} onNavigate={vi.fn()} />);
     expect(screen.getByRole('button', { name: /Sonido/ })).toBeInTheDocument();
   });
+
+  it('offers a "Hablemos" call to action that flies to the contact cluster', () => {
+    const onNavigate = vi.fn();
+    render(<Nav activeCluster={0} onNavigate={onNavigate} />);
+    screen.getByRole('button', { name: 'Hablemos' }).click();
+    expect(onNavigate).toHaveBeenCalledWith(5);
+  });
 });

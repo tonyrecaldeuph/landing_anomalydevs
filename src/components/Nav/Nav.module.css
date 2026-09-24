@@ -1,73 +1,166 @@
 .nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100% - 28px));
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  background: rgba(6, 10, 7, 0.8);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0.55rem 0.6rem 0.55rem 1.1rem;
+  background: rgba(8, 16, 11, 0.55);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(51, 255, 119, 0.16);
+  border-radius: 999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(207, 255, 224, 0.06);
+  animation: navIn 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes navIn {
+  from { opacity: 0; transform: translate(-50%, -24px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-mono);
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-neon);
   text-decoration: none;
   font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.mark {
+  width: 18px;
+  height: 20px;
 }
 
 .links {
   display: flex;
-  gap: var(--space-3);
+  gap: 0.25rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .link {
+  position: relative;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
   background: none;
   border: none;
-  padding: 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--color-text-muted);
+  transition: color 0.25s ease, background 0.25s ease;
 }
 
 .link:hover {
-  color: var(--color-accent);
+  color: var(--color-node-highlight);
+  background: rgba(51, 255, 119, 0.06);
 }
 
 .link[aria-current='true'] {
-  color: var(--color-accent);
+  color: var(--color-neon);
+  background: rgba(51, 255, 119, 0.1);
 }
 
-/* En móvil el nav no cabe en una fila: logo + sonido arriba, enlaces en fila propia. */
-@media (max-width: 767px) {
+.link[aria-current='true']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--color-neon);
+  box-shadow: 0 0 8px var(--color-neon);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  color: var(--color-black);
+  background: var(--color-neon);
+  box-shadow: 0 0 22px rgba(51, 255, 119, 0.35);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+
+.cta:hover {
+  box-shadow: 0 0 36px rgba(51, 255, 119, 0.65);
+  transform: translateY(-1px);
+}
+
+.cta:hover::after {
+  transform: translateX(120%);
+}
+
+/* En móvil el nav no cabe en una fila: logo + acciones arriba, enlaces en fila propia. */
+@media (max-width: 860px) {
   .nav {
     flex-wrap: wrap;
-    row-gap: var(--space-1);
-    padding: var(--space-1) var(--space-2);
+    row-gap: 0.35rem;
+    top: 8px;
+    border-radius: 18px;
+    padding: 0.5rem 0.6rem 0.4rem 0.9rem;
   }
 
   .links {
     order: 3;
     flex-basis: 100%;
     justify-content: space-between;
-    gap: var(--space-1);
+    gap: 0;
   }
 
   .link {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    padding: 0.4rem 0.5rem;
   }
 
   .logo {
     font-size: 0.9rem;
+  }
+
+  .cta {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.72rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav {
+    animation: none;
   }
 }

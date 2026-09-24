@@ -12,4 +12,5 @@ export const manifestoContent = {
     { value: '5', label: 'años de experiencia' },
     { value: '100%', label: 'remoto, foco en LATAM' },
   ] as Stat[],
+  principles: ['Ingeniería, no plantillas', 'Entrega medible en semanas', 'Código que escala contigo'],
 };

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { createCursorOverlay, renderCursor, CursorState } from '../three/cursorEffect';
+import { createCursorOverlay, renderCursor, stepRing, CursorRing, CursorState } from '../three/cursorEffect';
 
 const CTA_SELECTORS = 'a, button, [role="button"], input, textarea';
 
@@ -7,6 +7,7 @@ export function useCursor() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const stateRef = useRef<CursorState>({ x: 0, y: 0, hovering: false, hoveringCTA: false });
+  const ringRef = useRef<CursorRing>({ x: 0, y: 0, radius: 16 });
   const rafRef = useRef(0);
 
   const handleResize = useCallback(() => {
@@ -36,13 +37,16 @@ export function useCursor() {
 
     function render() {
       rafRef.current = requestAnimationFrame(render);
-      renderCursor(ctx!, stateRef.current, canvas.width, canvas.height);
+      ringRef.current = stepRing(ringRef.current, stateRef.current);
+      renderCursor(ctx!, stateRef.current, ringRef.current, canvas.width, canvas.height);
     }
     render();
 
     function handleMouse(e: MouseEvent) {
       const target = e.target as HTMLElement;
       const isCTA = target.matches?.(CTA_SELECTORS) || target.closest?.(CTA_SELECTORS) !== null;
+      // First move: start the ring on the pointer instead of sweeping in from the corner.
+      if (!stateRef.current.hovering) ringRef.current = { ...ringRef.current, x: e.clientX, y: e.clientY };
       stateRef.current = { x: e.clientX, y: e.clientY, hovering: true, hoveringCTA: isCTA };
     }
 

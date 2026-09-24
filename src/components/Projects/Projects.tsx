@@ -1,7 +1,8 @@
 import { MouseEvent, useContext } from 'react';
 import { projects } from '../../content/projects';
 import { NavigationContext, SECTION_INDEX_BY_HASH } from '../../hooks/navigationContext';
-import { Reveal } from '../Reveal/Reveal';
+import { SectionHeading } from '../SectionHeading/SectionHeading';
+import { TiltCard } from '../TiltCard/TiltCard';
 import styles from './Projects.module.css';
 
 export function Projects() {
@@ -14,18 +15,20 @@ export function Projects() {
 
   return (
     <section id="proyectos" className="section-inner">
-      <Reveal>
-        <h2>Proyectos</h2>
-      </Reveal>
+      <SectionHeading index={3} kicker="casos reales en producción" title="Proyectos" />
       <div className={styles.grid}>
-        {projects.map((project) => (
-          <article className={styles.card} key={project.id}>
+        {projects.map((project, i) => (
+          <TiltCard className={styles.card} key={project.id} maxDeg={5}>
             <div className={styles.thumb}>
               <img
                 src={project.image}
                 alt={`Captura de pantalla del proyecto ${project.title}`}
                 className={styles.thumbImage}
               />
+              <span className={styles.thumbGrid} aria-hidden="true" />
+              <span className={styles.thumbTag} aria-hidden="true">
+                {`CASO_${String(i + 1).padStart(2, '0')}`}
+              </span>
             </div>
             <div className={styles.body}>
               <h3>{project.title}</h3>
@@ -35,9 +38,11 @@ export function Projects() {
                   <span className={styles.tag} key={tag}>{tag}</span>
                 ))}
               </div>
-              <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>Ver caso &rarr;</a>
+              <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>
+                Ver caso <span aria-hidden="true">→</span>
+              </a>
             </div>
-          </article>
+          </TiltCard>
         ))}
       </div>
     </section>

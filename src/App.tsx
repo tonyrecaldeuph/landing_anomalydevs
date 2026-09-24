@@ -1,5 +1,7 @@
 import { useState, useCallback, useRef, lazy, Suspense } from 'react';
 import { Nav } from './components/Nav/Nav';
+import { HudFrame } from './components/Hud/HudFrame';
+import { SectionRail } from './components/Hud/SectionRail';
 import { EnterScreen } from './components/EnterScreen/EnterScreen';
 import { SectionOverlay } from './components/SectionOverlay/SectionOverlay';
 import { useScrollNavigation } from './hooks/useScrollNavigation';
@@ -44,6 +46,8 @@ export default function App() {
       {entered && (
         <NavigationContext.Provider value={navigateTo}>
           <Nav activeCluster={activeCluster} onNavigate={navigateTo} />
+          <HudFrame activeCluster={activeCluster} />
+          <SectionRail activeCluster={activeCluster} onNavigate={navigateTo} />
           <main>
             <SectionOverlay activeIndex={activeCluster} scrollRef={overlayScrollRef} />
           </main>

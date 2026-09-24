@@ -15,6 +15,11 @@ function seededRandom(seed: number): () => number {
   };
 }
 
+const ORB_SHELL_RADIUS = 1.2;
+const ORB_SHELL_THICKNESS = 0.16;
+const ORB_CORE_RADIUS = 0.3;
+const ORB_CORE_SHARE = 0.08;
+
 function generateSphere(config: ClusterConfig): ParticleData {
   const rand = seededRandom(config.seed);
   const positions = new Float32Array(config.count * 3);
@@ -22,15 +27,18 @@ function generateSphere(config: ClusterConfig): ParticleData {
   const sizes = new Float32Array(config.count);
   const color = new THREE.Color(config.color);
 
+  const core = new THREE.Color('#CFFFE0');
   for (let i = 0; i < config.count; i++) {
     const theta = rand() * Math.PI * 2;
     const phi = Math.acos(2 * rand() - 1);
-    const r = 1.5 + rand() * 0.8;
+    // Thin glowing shell framing the headline, plus a small bright nucleus: the "anomaly".
+    const inCore = rand() < ORB_CORE_SHARE;
+    const r = inCore ? Math.pow(rand(), 2) * ORB_CORE_RADIUS : ORB_SHELL_RADIUS + (rand() - 0.5) * ORB_SHELL_THICKNESS;
     positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
     positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
     positions[i * 3 + 2] = r * Math.cos(phi);
-    color.toArray(colors, i * 3);
-    sizes[i] = 0.02 + rand() * 0.04;
+    (inCore ? core : color).toArray(colors, i * 3);
+    sizes[i] = inCore ? 0.015 + rand() * 0.02 : 0.02 + rand() * 0.035;
   }
   return { positions, colors, sizes };
 }
@@ -158,6 +166,39 @@ const generators: Record<string, (config: ClusterConfig) => ParticleData> = {
 
 export function generateParticles(config: ClusterConfig): ParticleData {
   return generators[config.shape](config);
+}
+
+const STAR_MIN_RADIUS = 18;
+const STAR_MAX_RADIUS = 45;
+const STAR_COLORS = ['#1C6B3A', '#8FA898', '#9DFFC0'];
+
+/** Distant dust shell around the whole scene: gives depth and motion cues during camera flights. */
+export function generateStarfield(count: number, seed: number): ParticleData {
+  const rand = seededRandom(seed);
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+  const palette = STAR_COLORS.map((c) => new THREE.Color(c));
+
+  for (let i = 0; i < count; i++) {
+    const theta = rand() * Math.PI * 2;
+    const phi = Math.acos(2 * rand() - 1);
+    const r = STAR_MIN_RADIUS + rand() * (STAR_MAX_RADIUS - STAR_MIN_RADIUS);
+    positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i * 3 + 2] = r * Math.cos(phi);
+    palette[Math.floor(rand() * palette.length)].toArray(colors, i * 3);
+    sizes[i] = 0.05 + rand() * 0.12;
+  }
+  return { positions, colors, sizes };
+}
+
+/** Per-particle random in [0, 1), deterministic per seed — drives phase, drift and scatter in the shader. */
+export function buildRandoms(count: number, seed: number): Float32Array {
+  const rand = seededRandom(seed * 7919 + 13);
+  const out = new Float32Array(count);
+  for (let i = 0; i < count; i++) out[i] = rand();
+  return out;
 }
 
 export function generateAllParticles(count: number): ParticleData[] {

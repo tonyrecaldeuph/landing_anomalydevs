@@ -1,31 +1,109 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: var(--space-3);
 }
 
 .card {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  gap: 0.75rem;
+  min-height: 220px;
+  padding: 1.7rem;
+  overflow: hidden;
+  background: var(--color-panel);
+  backdrop-filter: var(--blur-panel);
+  -webkit-backdrop-filter: var(--blur-panel);
+  border: 1px solid var(--color-line);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
 }
 
 .card:hover {
-  border-color: var(--color-accent);
-  transform: translateY(-4px);
+  border-color: var(--color-line-strong);
+  box-shadow: inset 0 0 40px rgba(51, 255, 119, 0.06);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.iconWrap {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--color-neon);
+  border: 1px solid var(--color-line-strong);
+  background: rgba(51, 255, 119, 0.06);
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.card:hover .iconWrap {
+  background: rgba(51, 255, 119, 0.14);
+  box-shadow: var(--glow-sm);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(51, 255, 119, 0.28);
+  transition: -webkit-text-stroke-color 0.3s ease;
+}
+
+.card:hover .index {
+  -webkit-text-stroke-color: var(--color-neon);
 }
 
 .card h3 {
-  font-size: 1.1rem;
-  color: var(--color-accent);
+  position: relative;
+  font-size: 1.15rem;
+  color: var(--color-node-highlight);
 }
 
 .card p {
-  color: var(--color-text);
-  font-size: 0.95rem;
+  position: relative;
   margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Horizontal scan sweep on hover. */
+.scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -40%;
+  height: 40%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(51, 255, 119, 0.1), transparent);
+  opacity: 0;
+}
+
+.card:hover .scan {
+  opacity: 1;
+  animation: sweep 1.4s var(--ease-out);
+}
+
+@keyframes sweep {
+  from { top: -40%; }
+  to { top: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .scan {
+    animation: none;
+    opacity: 0;
+  }
 }

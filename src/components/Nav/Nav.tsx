@@ -1,9 +1,13 @@
 import { navSections } from '../../content/nav';
+import { SECTION_INDEX_BY_HASH } from '../../hooks/navigationContext';
+import { BrandMark } from '../BrandMark/BrandMark';
+import { ScrambleText } from '../ScrambleText/ScrambleText';
 import { SoundToggle } from '../SoundToggle/SoundToggle';
 import styles from './Nav.module.css';
 
 /** content/nav.ts starts at "Servicios" — Hero (0) and Manifiesto (1) have no nav entry. */
 const NAV_CLUSTER_OFFSET = 2;
+const CONTACT_CLUSTER = SECTION_INDEX_BY_HASH['#contacto'];
 
 interface NavProps {
   activeCluster: number;
@@ -21,7 +25,8 @@ export function Nav({ activeCluster, onNavigate }: NavProps) {
           onNavigate(0);
         }}
       >
-        Anomalydevs
+        <BrandMark className={styles.mark} />
+        <span>Anomalydevs</span>
       </a>
       <ul className={styles.links}>
         {navSections.map((section, i) => {
@@ -35,13 +40,18 @@ export function Nav({ activeCluster, onNavigate }: NavProps) {
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => onNavigate(clusterIndex)}
               >
-                {section.label}
+                <ScrambleText text={section.label} durationMs={420} replayOnHover />
               </button>
             </li>
           );
         })}
       </ul>
-      <SoundToggle />
+      <div className={styles.actions}>
+        <SoundToggle />
+        <button type="button" className={styles.cta} onClick={() => onNavigate(CONTACT_CLUSTER)}>
+          Hablemos
+        </button>
+      </div>
     </nav>
   );
 }

@@ -29,4 +29,10 @@ describe('Hero', () => {
     fireEvent.click(screen.getByRole('link', { name: 'Hablemos' }));
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
+
+  it('shows the availability status and the tech stack ticker', () => {
+    render(<Hero />);
+    expect(screen.getByText('Disponible para nuevos proyectos')).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Tecnologías' })).toBeInTheDocument();
+  });
 });
