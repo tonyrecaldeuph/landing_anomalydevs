@@ -30,6 +30,13 @@ describe('content modules', () => {
     expect(ids.size).toBe(services.length);
   });
 
+  it('projects includes the portfolio from DESARROLLOS_UPHONE, 7 cases with unique ids', () => {
+    const ids = projects.map((p) => p.id);
+    expect(ids).toHaveLength(7);
+    expect(new Set(ids).size).toBe(7);
+    expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion']));
+  });
+
   it('projects has at least 4 entries, each with tags', () => {
     expect(projects.length).toBeGreaterThanOrEqual(4);
     projects.forEach((p) => expect(p.tags.length).toBeGreaterThan(0));

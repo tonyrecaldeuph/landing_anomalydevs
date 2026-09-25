@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="JetBrains Mono, ui-monospace, monospace">
+  <defs>
+    <pattern id="g" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#33FF77" stroke-opacity=".07"/>
+    </pattern>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#33FF77"/>
+    </marker>
+  </defs>
+  <rect width="640" height="360" fill="#060A07"/>
+  <rect width="640" height="360" fill="url(#g)"/>
+
+
+  <!-- Pipeline -->
+  <g font-size="11" font-weight="700" text-anchor="middle">
+    <rect x="24" y="96" width="112" height="64" fill="#0B150E" stroke="#33FF77" stroke-opacity=".5"/>
+    <text x="80" y="124" fill="#CFFFE0">SAP · ERP</text>
+    <text x="80" y="142" fill="#8FA898" font-weight="400">CSV diarios</text>
+
+    <rect x="180" y="96" width="112" height="64" fill="#0B150E" stroke="#33FF77" stroke-opacity=".5"/>
+    <text x="236" y="124" fill="#CFFFE0">STAGING</text>
+    <text x="236" y="142" fill="#8FA898" font-weight="400">COPY + reglas</text>
+
+    <rect x="336" y="96" width="112" height="64" fill="#0B150E" stroke="#33FF77" stroke-width="1.5"/>
+    <text x="392" y="124" fill="#33FF77">CORE</text>
+    <text x="392" y="142" fill="#8FA898" font-weight="400">modelo estrella</text>
+
+    <rect x="492" y="96" width="124" height="64" fill="#0B150E" stroke="#33FF77" stroke-opacity=".5"/>
+    <text x="554" y="124" fill="#CFFFE0">POWER BI</text>
+    <text x="554" y="142" fill="#8FA898" font-weight="400">tableros</text>
+  </g>
+  <g stroke="#33FF77" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)">
+    <path d="M138 128H176"/><path d="M294 128H332"/><path d="M450 128H488"/>
+  </g>
+
+  <!-- Automation robots -->
+  <g font-size="10" fill="#8FA898">
+    <rect x="24" y="200" width="180" height="40" fill="none" stroke="#33FF77" stroke-opacity=".3" stroke-dasharray="3 4"/>
+    <text x="36" y="224">⟳ robot ERP · diario</text>
+    <rect x="228" y="200" width="184" height="40" fill="none" stroke="#33FF77" stroke-opacity=".3" stroke-dasharray="3 4"/>
+    <text x="240" y="224">⚑ auditoría de plazos</text>
+    <rect x="436" y="200" width="180" height="40" fill="none" stroke="#33FF77" stroke-opacity=".3" stroke-dasharray="3 4"/>
+    <text x="448" y="224">➤ campañas Telegram</text>
+  </g>
+
+  <!-- Illustrative chart -->
+  <g fill="#33FF77">
+    <rect x="430" y="300" width="14" height="30" opacity=".35"/>
+    <rect x="452" y="288" width="14" height="42" opacity=".5"/>
+    <rect x="474" y="294" width="14" height="36" opacity=".45"/>
+    <rect x="496" y="276" width="14" height="54" opacity=".7"/>
+    <rect x="518" y="282" width="14" height="48" opacity=".6"/>
+    <rect x="540" y="266" width="14" height="64" opacity=".85"/>
+    <rect x="562" y="258" width="14" height="72"/>
+  </g>
+  <path d="M24 330H616" stroke="#33FF77" stroke-opacity=".25"/>
+  <text x="24" y="318" fill="#8FA898" font-size="10" letter-spacing="1.5">PYTHON · POSTGRESQL · PLAYWRIGHT</text>
+</svg>
