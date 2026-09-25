@@ -8,6 +8,7 @@ import { pipeline } from 'node:stream/promises';
 import { crc32, createDeflateRaw, constants as zlibConstants } from 'node:zlib';
 
 const PRODUCT_SLUG = 'Terminal-Cobranza';
+const DEFAULT_UPDATE_FEED_URL = 'https://api.anomalydevs.qzz.io/updates/';
 const MANIFEST_FILE = 'manifest.json';
 const ROUTE_RE = /^\/descargas\/terminal-cobranza\/([^/]*)(\/version)?\/?$/;
 
@@ -76,6 +77,14 @@ function sendJson(res, status, payload) {
 // Installer mirror
 // ---------------------------------------------------------------------------
 
+/** The mirror as configured in the container: shared by the server and the pin command. */
+export function mirrorFromEnv(env = process.env) {
+  return createInstallerMirror({
+    feedUrl: env.UPDATE_FEED_URL || DEFAULT_UPDATE_FEED_URL,
+    dataDir: path.join(env.DATA_DIR ?? '/data', 'descargas'),
+  });
+}
+
 /**
  * Keeps a verified, zipped copy of the installer the update feed currently publishes.
  * The feed stays the single source of truth: releasing there updates the link by itself.
@@ -94,55 +103,118 @@ export function createInstallerMirror({ feedUrl, dataDir, fetchFn = fetch, logge
     }
   }
 
-  async function runSync() {
-    let feed;
-    try {
-      const res = await fetchFn(new URL('latest.yml', feedUrl));
-      if (!res.ok) throw new Error(`latest.yml HTTP ${res.status}`);
-      feed = parseLatestYml(await res.text());
-      if (!feed.ok) throw new Error(feed.reason);
-    } catch (err) {
-      logger.error(`descargas: no se pudo leer el feed: ${err?.message ?? err}`);
-      return { changed: false, version: (await current()).version ?? '' };
-    }
+  /**
+   * Which feed build the served copy answers to. A copy mirrored from the feed carries its
+   * own sha512; a pinned copy records the feed build that was live when it was pinned.
+   * Deciding by this hash (not by version number) lets a pin outrank a stale feed without
+   * comparing version labels that may not be ordered.
+   */
+  const feedBuildOf = (manifest) => manifest.feedSha512 ?? manifest.sha512;
 
+  async function runSync() {
+    const feed = await readFeed();
     const existing = await current();
-    if (existing.available && existing.version === feed.version) {
-      return { changed: false, version: feed.version };
+    if (!feed.ok) {
+      logger.error(`descargas: no se pudo leer el feed: ${feed.reason}`);
+      return { changed: false, version: existing.version ?? '' };
+    }
+    if (existing.available && feedBuildOf(existing) === feed.sha512) {
+      return { changed: false, version: existing.version };
     }
 
     await mkdir(dataDir, { recursive: true });
     const tmpExe = path.join(dataDir, `.tmp-${feed.version}.exe`);
-    const zipFile = zipFileName(feed.version);
-    const tmpZip = path.join(dataDir, `.tmp-${zipFile}`);
     try {
       await downloadVerified(new URL(encodeURIComponent(feed.path), feedUrl), tmpExe, feed, fetchFn);
-      const { size } = await writeZip(tmpExe, feed.path, tmpZip);
-      await rename(tmpZip, path.join(dataDir, zipFile));
-      const manifest = { version: feed.version, zipFile, size, releaseDate: feed.releaseDate, sha512: feed.sha512 };
-      await writeFile(path.join(dataDir, `.tmp-${MANIFEST_FILE}`), JSON.stringify(manifest, null, 2));
-      await rename(path.join(dataDir, `.tmp-${MANIFEST_FILE}`), path.join(dataDir, MANIFEST_FILE));
-      await removeStaleZips(dataDir, zipFile);
-      logger.log(`descargas: publicada ${zipFile} (${size} bytes)`);
+      await publish({
+        sourcePath: tmpExe,
+        entryName: feed.path,
+        manifest: { version: feed.version, releaseDate: feed.releaseDate, sha512: feed.sha512, source: 'feed' },
+      });
       return { changed: true, version: feed.version };
     } catch (err) {
       logger.error(`descargas: no se pudo espejar ${feed.version}: ${err?.message ?? err}`);
       return { changed: false, version: existing.version ?? '' };
     } finally {
       await rm(tmpExe, { force: true });
+    }
+  }
+
+  async function runPin({ installerPath, version }) {
+    if (!VERSION_RE.test(version)) return { ok: false, reason: `versión inválida: ${version}` };
+    // Without the live feed build we could not tell later whether the feed moved on.
+    const feed = await readFeed();
+    if (!feed.ok) return { ok: false, reason: `feed no disponible: ${feed.reason}` };
+    try {
+      const sha512 = await sha512OfFile(installerPath);
+      await mkdir(dataDir, { recursive: true });
+      await publish({
+        sourcePath: installerPath,
+        entryName: `Terminal de Cobranza Setup ${version}.exe`,
+        manifest: { version, releaseDate: new Date().toISOString(), sha512, source: 'manual', feedSha512: feed.sha512 },
+      });
+      return { ok: true, version };
+    } catch (err) {
+      return { ok: false, reason: err?.message ?? String(err) };
+    }
+  }
+
+  async function readFeed() {
+    try {
+      const res = await fetchFn(new URL('latest.yml', feedUrl));
+      if (!res.ok) return { ok: false, reason: `latest.yml HTTP ${res.status}` };
+      return parseLatestYml(await res.text());
+    } catch (err) {
+      return { ok: false, reason: err?.message ?? String(err) };
+    }
+  }
+
+  /** Zips the installer and swaps it in atomically; the previous copy survives any failure. */
+  async function publish({ sourcePath, entryName, manifest }) {
+    const zipFile = zipFileName(manifest.version);
+    const tmpZip = path.join(dataDir, `.tmp-${zipFile}`);
+    try {
+      const { size } = await writeZip(sourcePath, entryName, tmpZip);
+      await rename(tmpZip, path.join(dataDir, zipFile));
+      const tmpManifest = path.join(dataDir, `.tmp-${MANIFEST_FILE}`);
+      await writeFile(tmpManifest, JSON.stringify({ ...manifest, zipFile, size }, null, 2));
+      await rename(tmpManifest, path.join(dataDir, MANIFEST_FILE));
+      await removeStaleZips(dataDir, zipFile);
+      logger.log(`descargas: publicada ${zipFile} (${size} bytes, origen ${manifest.source})`);
+    } finally {
       await rm(tmpZip, { force: true });
     }
   }
+
+  // Sync and pin both rewrite the served copy: run them one at a time.
+  let queue = Promise.resolve();
+  const exclusive = (fn) => {
+    const run = queue.then(fn, fn);
+    queue = run.catch(() => {});
+    return run;
+  };
 
   return {
     dataDir,
     current,
     /** Concurrent callers share one run, so a slow download is never duplicated. */
     sync() {
-      if (!inFlight) inFlight = runSync().finally(() => (inFlight = null));
+      if (!inFlight) inFlight = exclusive(runSync).finally(() => (inFlight = null));
       return inFlight;
     },
+    /** Serves a local installer under `version` until the feed publishes a different build. */
+    pin(options) {
+      return exclusive(() => runPin(options));
+    },
   };
+}
+
+const VERSION_RE = /^\d+\.\d+\.\d+$/;
+
+async function sha512OfFile(filePath) {
+  const hash = createHash('sha512');
+  await pipeline(createReadStream(filePath), hash);
+  return hash.digest('base64');
 }
 
 async function downloadVerified(url, destPath, feed, fetchFn) {

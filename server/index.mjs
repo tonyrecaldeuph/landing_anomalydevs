@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { appendFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createDownloadRoutes, createInstallerMirror } from './downloads.mjs';
+import { createDownloadRoutes, mirrorFromEnv } from './downloads.mjs';
 
 const MAX_NAME_LEN = 100;
 const MAX_EMAIL_LEN = 200;
@@ -12,7 +12,6 @@ const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 const DOWNLOAD_RATE_LIMIT_MAX = 30;
 const MIRROR_SYNC_INTERVAL_MS = 15 * 60 * 1000;
-const DEFAULT_UPDATE_FEED_URL = 'https://api.anomalydevs.qzz.io/updates/';
 /** Hard cap on tracked IPs so the in-memory rate limiter cannot grow unbounded. */
 const RATE_LIMIT_MAX_IPS = 10_000;
 
@@ -209,10 +208,7 @@ if (isMain) {
   const port = Number(process.env.PORT ?? 3000);
   const dataDir = process.env.DATA_DIR ?? '/data';
   const downloadToken = process.env.DOWNLOAD_TOKEN ?? '';
-  const mirror = createInstallerMirror({
-    feedUrl: process.env.UPDATE_FEED_URL || DEFAULT_UPDATE_FEED_URL,
-    dataDir: path.join(dataDir, 'descargas'),
-  });
+  const mirror = mirrorFromEnv();
   const app = createApp({
     dataDir,
     telegram: {

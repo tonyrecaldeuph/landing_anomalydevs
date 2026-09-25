@@ -101,6 +101,18 @@ DOWNLOAD_TOKEN=<32 bytes aleatorios en base64url>
   Sin `DOWNLOAD_TOKEN` la ruta no existe y no se descarga nada.
 - **Archivos:** volumen `api-data`, carpeta `/data/descargas/` (solo se conserva la versión
   vigente). Logs: `docker logs anomalydevs-api | grep descargas`.
+- **Fijar un instalador local** (cuando el build bueno aún no está en el feed). Desde la PC con
+  el instalador:
+
+```bash
+scp "terminal-cobranza/dist/Terminal de Cobranza Setup 3.1.6.exe" root@185.208.207.154:/tmp/setup.exe
+ssh root@185.208.207.154 'docker cp /tmp/setup.exe anomalydevs-api:/tmp/setup.exe   && docker exec anomalydevs-api node server/pin-installer.mjs /tmp/setup.exe 3.1.6   && docker exec anomalydevs-api rm /tmp/setup.exe && rm /tmp/setup.exe'
+```
+
+  El link sirve `Terminal-Cobranza-v3.1.6.zip` al instante. La decisión de reemplazo es por
+  **hash del build del feed**, no por número de versión: mientras el feed siga publicando el
+  mismo build, se respeta lo fijado; en cuanto el feed publique un build distinto, el link lo
+  toma automáticamente. Requiere que el feed esté accesible al fijar (se registra su build).
 
 ## Despliegues siguientes
 

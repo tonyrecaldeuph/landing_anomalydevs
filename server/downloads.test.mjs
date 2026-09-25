@@ -196,6 +196,62 @@ describe('createInstallerMirror', () => {
     expect(state.installerHits).toBe(1);
   });
 
+  it('pins a local installer: serves it at once under its own version label', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    await mirror.sync();
+    const local = Buffer.alloc(60_000, 5);
+    const localPath = path.join(dataDir, 'Terminal de Cobranza Setup 3.1.6.exe');
+    await writeFile(localPath, local);
+
+    expect(await mirror.pin({ installerPath: localPath, version: '3.1.6' })).toEqual({ ok: true, version: '3.1.6' });
+
+    const current = await mirror.current();
+    expect(current).toMatchObject({ available: true, version: '3.1.6', zipFile: 'Terminal-Cobranza-v3.1.6.zip' });
+    const entry = readSingleEntryZip(await readFile(path.join(dataDir, current.zipFile)));
+    expect(entry.name).toBe('Terminal de Cobranza Setup 3.1.6.exe');
+    expect(entry.data.equals(local)).toBe(true);
+    const zips = (await readdir(dataDir)).filter((f) => f.endsWith('.zip'));
+    expect(zips).toEqual(['Terminal-Cobranza-v3.1.6.zip']);
+  });
+
+  it('keeps a pinned installer while the feed still publishes the same build', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    const localPath = path.join(dataDir, 'local.exe');
+    await writeFile(localPath, Buffer.alloc(60_000, 5));
+    await mirror.pin({ installerPath: localPath, version: '3.1.6' });
+
+    expect(await mirror.sync()).toEqual({ changed: false, version: '3.1.6' });
+    expect((await mirror.current()).version).toBe('3.1.6');
+    expect(state.installerHits ?? 0).toBe(0);
+  });
+
+  it('follows the feed again as soon as it publishes a new build over a pinned one', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    const localPath = path.join(dataDir, 'local.exe');
+    await writeFile(localPath, Buffer.alloc(60_000, 5));
+    await mirror.pin({ installerPath: localPath, version: '3.1.6' });
+
+    const next = Buffer.alloc(40_000, 3);
+    Object.assign(state, feedFor('3.1.7', next), { installer: next });
+    expect(await mirror.sync()).toEqual({ changed: true, version: '3.1.7' });
+  });
+
+  it('refuses to pin while the feed is unreachable, keeping the current copy', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    await mirror.sync();
+    state.yml = 'roto';
+    const localPath = path.join(dataDir, 'local.exe');
+    await writeFile(localPath, Buffer.alloc(10_000, 5));
+
+    const result = await mirror.pin({ installerPath: localPath, version: '3.1.6' });
+    expect(result.ok).toBe(false);
+    expect((await mirror.current()).version).toBe('2.1.5');
+  });
+
   it('reports no change instead of throwing when the feed is down', async () => {
     const dataDir = await mkdtemp(path.join(tmpdir(), 'mirror-'));
     const fetchFn = vi.fn(async () => {
