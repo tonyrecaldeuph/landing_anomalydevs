@@ -1,11 +1,16 @@
 :80 {
-	encode gzip
-
 	handle /api/* {
+		encode gzip
+		reverse_proxy api:3000
+	}
+
+	# Link fijo del instalador (ya comprimido en .zip): sin encode, tal cual desde la API.
+	handle /descargas/* {
 		reverse_proxy api:3000
 	}
 
 	handle {
+		encode gzip
 		root * /srv
 		file_server
 	}

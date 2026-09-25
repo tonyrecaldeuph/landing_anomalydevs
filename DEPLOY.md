@@ -74,6 +74,34 @@ curl -s -X POST http://127.0.0.1:8643/api/contact \
   -d '{"name":"Prueba","email":"prueba@example.com","message":"Test de deploy"}'
 ```
 
+## Link fijo de descarga de Terminal de Cobranza (`/descargas`)
+
+Desde 2026-09-25 la API espeja el instalador que publica el feed de `electron-updater`
+(`https://api.anomalydevs.qzz.io/updates/latest.yml`), verifica su sha512, lo comprime en
+`Terminal-Cobranza-v<versión>.zip` y lo sirve en una URL que no cambia:
+
+```
+https://anomalydevs.qzz.io/descargas/terminal-cobranza/<DOWNLOAD_TOKEN>
+https://anomalydevs.qzz.io/descargas/terminal-cobranza/<DOWNLOAD_TOKEN>/version   # JSON
+```
+
+- **Actualización automática:** al publicar una versión en el feed (runbook de
+  terminal-cobranza), el link la entrega en ≤ 15 min. No hay paso extra.
+- **Acceso:** solo personal Uphone. Sin el token correcto la ruta responde 404. Límite de 30
+  descargas por IP por hora.
+- **Configuración** en `/opt/anomalydevs-landing/.env` (no se versiona):
+
+```
+DOWNLOAD_TOKEN=<32 bytes aleatorios en base64url>
+# UPDATE_FEED_URL=https://api.anomalydevs.qzz.io/updates/   # opcional, este es el valor por defecto
+```
+
+  Generar un token: `openssl rand -base64 32 | tr '+/' '-_' | tr -d '='`.
+  **Rotar** (si el link se filtra): cambiar `DOWNLOAD_TOKEN` y `docker compose up -d`.
+  Sin `DOWNLOAD_TOKEN` la ruta no existe y no se descarga nada.
+- **Archivos:** volumen `api-data`, carpeta `/data/descargas/` (solo se conserva la versión
+  vigente). Logs: `docker logs anomalydevs-api | grep descargas`.
+
 ## Despliegues siguientes
 
 ```bash

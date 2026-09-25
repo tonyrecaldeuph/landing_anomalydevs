@@ -1,8 +1,173 @@
 import { createReadStream, createWriteStream } from 'node:fs';
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { once } from 'node:events';
+import path from 'node:path';
+import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { crc32, createDeflateRaw, constants as zlibConstants } from 'node:zlib';
 
 const PRODUCT_SLUG = 'Terminal-Cobranza';
+const MANIFEST_FILE = 'manifest.json';
+const ROUTE_RE = /^\/descargas\/terminal-cobranza\/([^/]*)(\/version)?\/?$/;
+
+// ---------------------------------------------------------------------------
+// HTTP routes — high level first; mirror, zip and parsing details below.
+// ---------------------------------------------------------------------------
+
+/**
+ * Routes for the fixed download link. Returns a handler that answers and resolves `true`
+ * for any /descargas/terminal-cobranza/* request, `false` for everything else. A wrong
+ * token (or none configured) gets the same 404 as an unknown path.
+ */
+export function createDownloadRoutes({ mirror, token, rateLimiter = () => true, clientIp = () => 'unknown' }) {
+  return async function handleDownloads(req, res) {
+    const url = req.url?.split('?')[0] ?? '/';
+    const match = ROUTE_RE.exec(url);
+    if (!url.startsWith('/descargas/')) return false;
+    if (!match || !token || !tokensMatch(match[1], token) || (req.method !== 'GET' && req.method !== 'HEAD')) {
+      sendJson(res, 404, { ok: false, error: 'Not found' });
+      return true;
+    }
+
+    const current = await mirror.current();
+    if (!current.available) {
+      sendJson(res, 503, { ok: false, error: 'La descarga se está preparando. Intenta de nuevo en unos minutos.' });
+      return true;
+    }
+    if (match[2]) {
+      sendJson(res, 200, { ok: true, version: current.version, releaseDate: current.releaseDate });
+      return true;
+    }
+    if (req.method === 'GET' && !rateLimiter(clientIp(req))) {
+      sendJson(res, 429, { ok: false, error: 'Demasiadas descargas. Intenta de nuevo más tarde.' });
+      return true;
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'application/zip',
+      'Content-Length': current.size,
+      'Content-Disposition': `attachment; filename="${current.zipFile}"`,
+      'Cache-Control': 'private, no-store',
+    });
+    if (req.method === 'HEAD') {
+      res.end();
+      return true;
+    }
+    await pipeline(createReadStream(path.join(mirror.dataDir, current.zipFile)), res).catch(() => res.destroy());
+    return true;
+  };
+}
+
+/** Constant-time comparison; hashing first equalizes lengths so length never leaks either. */
+function tokensMatch(given, expected) {
+  const a = createHash('sha256').update(given).digest();
+  const b = createHash('sha256').update(expected).digest();
+  return timingSafeEqual(a, b);
+}
+
+function sendJson(res, status, payload) {
+  const body = JSON.stringify(payload);
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': Buffer.byteLength(body) });
+  res.end(body);
+}
+
+// ---------------------------------------------------------------------------
+// Installer mirror
+// ---------------------------------------------------------------------------
+
+/**
+ * Keeps a verified, zipped copy of the installer the update feed currently publishes.
+ * The feed stays the single source of truth: releasing there updates the link by itself.
+ * Every failure path leaves the previous good copy in place.
+ */
+export function createInstallerMirror({ feedUrl, dataDir, fetchFn = fetch, logger = console }) {
+  let inFlight = null;
+
+  async function current() {
+    try {
+      const manifest = JSON.parse(await readFile(path.join(dataDir, MANIFEST_FILE), 'utf8'));
+      await stat(path.join(dataDir, manifest.zipFile));
+      return { available: true, ...manifest };
+    } catch {
+      return { available: false };
+    }
+  }
+
+  async function runSync() {
+    let feed;
+    try {
+      const res = await fetchFn(new URL('latest.yml', feedUrl));
+      if (!res.ok) throw new Error(`latest.yml HTTP ${res.status}`);
+      feed = parseLatestYml(await res.text());
+      if (!feed.ok) throw new Error(feed.reason);
+    } catch (err) {
+      logger.error(`descargas: no se pudo leer el feed: ${err?.message ?? err}`);
+      return { changed: false, version: (await current()).version ?? '' };
+    }
+
+    const existing = await current();
+    if (existing.available && existing.version === feed.version) {
+      return { changed: false, version: feed.version };
+    }
+
+    await mkdir(dataDir, { recursive: true });
+    const tmpExe = path.join(dataDir, `.tmp-${feed.version}.exe`);
+    const zipFile = zipFileName(feed.version);
+    const tmpZip = path.join(dataDir, `.tmp-${zipFile}`);
+    try {
+      await downloadVerified(new URL(encodeURIComponent(feed.path), feedUrl), tmpExe, feed, fetchFn);
+      const { size } = await writeZip(tmpExe, feed.path, tmpZip);
+      await rename(tmpZip, path.join(dataDir, zipFile));
+      const manifest = { version: feed.version, zipFile, size, releaseDate: feed.releaseDate, sha512: feed.sha512 };
+      await writeFile(path.join(dataDir, `.tmp-${MANIFEST_FILE}`), JSON.stringify(manifest, null, 2));
+      await rename(path.join(dataDir, `.tmp-${MANIFEST_FILE}`), path.join(dataDir, MANIFEST_FILE));
+      await removeStaleZips(dataDir, zipFile);
+      logger.log(`descargas: publicada ${zipFile} (${size} bytes)`);
+      return { changed: true, version: feed.version };
+    } catch (err) {
+      logger.error(`descargas: no se pudo espejar ${feed.version}: ${err?.message ?? err}`);
+      return { changed: false, version: existing.version ?? '' };
+    } finally {
+      await rm(tmpExe, { force: true });
+      await rm(tmpZip, { force: true });
+    }
+  }
+
+  return {
+    dataDir,
+    current,
+    /** Concurrent callers share one run, so a slow download is never duplicated. */
+    sync() {
+      if (!inFlight) inFlight = runSync().finally(() => (inFlight = null));
+      return inFlight;
+    },
+  };
+}
+
+async function downloadVerified(url, destPath, feed, fetchFn) {
+  const res = await fetchFn(url);
+  if (!res.ok || !res.body) throw new Error(`instalador HTTP ${res.status}`);
+  const hash = createHash('sha512');
+  let size = 0;
+  const source = Readable.fromWeb(res.body);
+  source.on('data', (chunk) => {
+    hash.update(chunk);
+    size += chunk.length;
+  });
+  await pipeline(source, createWriteStream(destPath));
+  if (size !== feed.size) throw new Error(`tamaño ${size} ≠ ${feed.size}`);
+  if (hash.digest('base64') !== feed.sha512) throw new Error('sha512 no coincide con el feed');
+}
+
+async function removeStaleZips(dataDir, keep) {
+  const files = await readdir(dataDir);
+  await Promise.all(
+    files
+      .filter((f) => f.startsWith(`${PRODUCT_SLUG}-v`) && f.endsWith('.zip') && f !== keep)
+      .map((f) => rm(path.join(dataDir, f), { force: true })),
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Feed manifest (electron-updater latest.yml)

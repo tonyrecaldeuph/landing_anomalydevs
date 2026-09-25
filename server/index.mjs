@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { appendFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createDownloadRoutes, createInstallerMirror } from './downloads.mjs';
 
 const MAX_NAME_LEN = 100;
 const MAX_EMAIL_LEN = 200;
@@ -9,6 +10,9 @@ const MAX_MESSAGE_LEN = 3000;
 const MAX_BODY_BYTES = 16 * 1024;
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const DOWNLOAD_RATE_LIMIT_MAX = 30;
+const MIRROR_SYNC_INTERVAL_MS = 15 * 60 * 1000;
+const DEFAULT_UPDATE_FEED_URL = 'https://api.anomalydevs.qzz.io/updates/';
 /** Hard cap on tracked IPs so the in-memory rate limiter cannot grow unbounded. */
 const RATE_LIMIT_MAX_IPS = 10_000;
 
@@ -150,9 +154,12 @@ export function createApp({
   rateLimiter = createRateLimiter(),
   fetchFn = fetch,
   logger = console,
+  downloads = async () => false,
 } = {}) {
   return async function handler(req, res) {
     const url = req.url?.split('?')[0] ?? '/';
+
+    if (await downloads(req, res)) return;
 
     if (req.method === 'GET' && url === '/api/health') {
       sendJson(res, 200, { ok: true });
@@ -200,13 +207,30 @@ export function createApp({
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
   const port = Number(process.env.PORT ?? 3000);
+  const dataDir = process.env.DATA_DIR ?? '/data';
+  const downloadToken = process.env.DOWNLOAD_TOKEN ?? '';
+  const mirror = createInstallerMirror({
+    feedUrl: process.env.UPDATE_FEED_URL || DEFAULT_UPDATE_FEED_URL,
+    dataDir: path.join(dataDir, 'descargas'),
+  });
   const app = createApp({
-    dataDir: process.env.DATA_DIR ?? '/data',
+    dataDir,
     telegram: {
       token: process.env.TELEGRAM_BOT_TOKEN ?? '',
       chatId: process.env.TELEGRAM_CHAT_ID ?? '',
     },
+    downloads: createDownloadRoutes({
+      mirror,
+      token: downloadToken,
+      rateLimiter: createRateLimiter({ max: DOWNLOAD_RATE_LIMIT_MAX }),
+      clientIp,
+    }),
   });
+  // No token → the link is disabled, so there is nothing to mirror either.
+  if (downloadToken) {
+    mirror.sync();
+    setInterval(() => mirror.sync(), MIRROR_SYNC_INTERVAL_MS).unref();
+  }
   createServer(app).listen(port, () => {
     console.log(`contact api listening on :${port}`);
   });

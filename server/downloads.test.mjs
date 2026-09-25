@@ -1,11 +1,19 @@
 // @vitest-environment node
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
-import { randomBytes } from 'node:crypto';
+import { createServer } from 'node:http';
+import { mkdtemp, readdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash, randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { crc32, inflateRawSync } from 'node:zlib';
-import { describe, it, expect } from 'vitest';
-import { parseLatestYml, writeZip, zipFileName } from './downloads.mjs';
+import { describe, it, expect, vi } from 'vitest';
+import {
+  parseLatestYml,
+  writeZip,
+  zipFileName,
+  createInstallerMirror,
+  createDownloadRoutes,
+} from './downloads.mjs';
+import { createApp, createRateLimiter } from './index.mjs';
 
 const FEED_YML = `version: 2.1.5
 files:
@@ -84,5 +92,219 @@ describe('writeZip', () => {
     expect(entry.size).toBe(original.length);
     expect(entry.crc).toBe(crc32(original));
     expect(entry.data.equals(original)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Mirror
+// ---------------------------------------------------------------------------
+
+const FEED = 'https://feed.test/updates/';
+const silent = { error: () => {}, log: () => {} };
+
+function feedFor(version, installer) {
+  const sha512 = createHash('sha512').update(installer).digest('base64');
+  const name = `Terminal de Cobranza Setup ${version}.exe`;
+  const yml = [
+    `version: ${version}`,
+    'files:',
+    `  - url: ${name}`,
+    `    sha512: ${sha512}`,
+    `    size: ${installer.length}`,
+    `path: ${name}`,
+    `sha512: ${sha512}`,
+    "releaseDate: '2026-09-25T10:00:00.000Z'",
+    '',
+  ].join('\n');
+  return { yml, name };
+}
+
+/** Fake feed: serves latest.yml and the installer bytes, counting installer downloads. */
+function fakeFetch(state) {
+  return vi.fn(async (url) => {
+    const u = String(url);
+    if (u === `${FEED}latest.yml`) return new Response(state.yml);
+    if (u === `${FEED}${encodeURIComponent(state.name)}`) {
+      state.installerHits = (state.installerHits ?? 0) + 1;
+      return new Response(state.served ?? state.installer);
+    }
+    return new Response('nope', { status: 404 });
+  });
+}
+
+async function newMirror(state) {
+  const dataDir = await mkdtemp(path.join(tmpdir(), 'mirror-'));
+  const fetchFn = fakeFetch(state);
+  return { dataDir, mirror: createInstallerMirror({ feedUrl: FEED, dataDir, fetchFn, logger: silent }) };
+}
+
+describe('createInstallerMirror', () => {
+  const installer = Buffer.concat([randomBytes(20_000), Buffer.alloc(80_000, 1)]);
+
+  it('starts unavailable, then mirrors the feed version as a verified zip', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    expect(await mirror.current()).toEqual({ available: false });
+
+    expect(await mirror.sync()).toEqual({ changed: true, version: '2.1.5' });
+
+    const current = await mirror.current();
+    expect(current).toMatchObject({ available: true, version: '2.1.5', zipFile: 'Terminal-Cobranza-v2.1.5.zip' });
+    const zip = await readFile(path.join(dataDir, current.zipFile));
+    expect(current.size).toBe(zip.length);
+    expect(readSingleEntryZip(zip).data.equals(installer)).toBe(true);
+  });
+
+  it('does not download again when the feed version is already mirrored', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror } = await newMirror(state);
+    await mirror.sync();
+    expect(await mirror.sync()).toEqual({ changed: false, version: '2.1.5' });
+    expect(state.installerHits).toBe(1);
+  });
+
+  it('keeps the previous good copy when a new installer fails its sha512 check', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    await mirror.sync();
+
+    const next = Buffer.alloc(50_000, 9);
+    Object.assign(state, feedFor('2.1.6', next), { installer: next, served: Buffer.alloc(50_000, 8) });
+    expect((await mirror.sync()).changed).toBe(false);
+
+    expect((await mirror.current()).version).toBe('2.1.5');
+    const leftovers = (await readdir(dataDir)).filter((f) => f.startsWith('.tmp'));
+    expect(leftovers).toEqual([]);
+  });
+
+  it('replaces the old zip when a new version is released', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror, dataDir } = await newMirror(state);
+    await mirror.sync();
+    const next = Buffer.alloc(40_000, 3);
+    Object.assign(state, feedFor('2.1.6', next), { installer: next, served: undefined });
+
+    expect(await mirror.sync()).toEqual({ changed: true, version: '2.1.6' });
+    const zips = (await readdir(dataDir)).filter((f) => f.endsWith('.zip'));
+    expect(zips).toEqual(['Terminal-Cobranza-v2.1.6.zip']);
+  });
+
+  it('collapses concurrent syncs into a single download', async () => {
+    const state = { ...feedFor('2.1.5', installer), installer };
+    const { mirror } = await newMirror(state);
+    await Promise.all([mirror.sync(), mirror.sync(), mirror.sync()]);
+    expect(state.installerHits).toBe(1);
+  });
+
+  it('reports no change instead of throwing when the feed is down', async () => {
+    const dataDir = await mkdtemp(path.join(tmpdir(), 'mirror-'));
+    const fetchFn = vi.fn(async () => {
+      throw new Error('ECONNREFUSED');
+    });
+    const mirror = createInstallerMirror({ feedUrl: FEED, dataDir, fetchFn, logger: silent });
+    expect(await mirror.sync()).toEqual({ changed: false, version: '' });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// HTTP routes
+// ---------------------------------------------------------------------------
+
+const TOKEN = 'tok_0123456789abcdefghijklmnopqrstuv';
+
+async function startDownloads({ current, rateLimiter = createRateLimiter({ max: 100 }), token = TOKEN } = {}) {
+  const dataDir = await mkdtemp(path.join(tmpdir(), 'routes-'));
+  const zipBytes = Buffer.from('PK-fake-zip-bytes');
+  await writeFile(path.join(dataDir, 'Terminal-Cobranza-v2.1.5.zip'), zipBytes);
+  const available = {
+    available: true,
+    version: '2.1.5',
+    zipFile: 'Terminal-Cobranza-v2.1.5.zip',
+    size: zipBytes.length,
+    releaseDate: '2026-07-18',
+  };
+  const mirror = { dataDir, current: async () => current ?? available };
+  const downloads = createDownloadRoutes({ mirror, token, rateLimiter });
+  const server = createServer(createApp({ dataDir, downloads, logger: silent }));
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const url = `http://127.0.0.1:${server.address().port}`;
+  return { url, zipBytes, close: () => new Promise((r) => server.close(r)) };
+}
+
+describe('download routes', () => {
+  it('serves the current zip as an attachment for the right token', async () => {
+    const { url, zipBytes, close } = await startDownloads();
+    try {
+      const res = await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}`);
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-type')).toBe('application/zip');
+      expect(res.headers.get('content-disposition')).toBe('attachment; filename="Terminal-Cobranza-v2.1.5.zip"');
+      expect(res.headers.get('cache-control')).toBe('private, no-store');
+      expect(Buffer.from(await res.arrayBuffer()).equals(zipBytes)).toBe(true);
+    } finally {
+      await close();
+    }
+  });
+
+  it('answers 404 to a wrong or missing token, hiding that the route exists', async () => {
+    const { url, close } = await startDownloads();
+    try {
+      expect((await fetch(`${url}/descargas/terminal-cobranza/otro-token`)).status).toBe(404);
+      expect((await fetch(`${url}/descargas/terminal-cobranza/`)).status).toBe(404);
+    } finally {
+      await close();
+    }
+  });
+
+  it('answers HEAD with the headers and no body', async () => {
+    const { url, zipBytes, close } = await startDownloads();
+    try {
+      const res = await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}`, { method: 'HEAD' });
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-length')).toBe(String(zipBytes.length));
+    } finally {
+      await close();
+    }
+  });
+
+  it('reports the published version as JSON', async () => {
+    const { url, close } = await startDownloads();
+    try {
+      const res = await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}/version`);
+      expect(await res.json()).toEqual({ ok: true, version: '2.1.5', releaseDate: '2026-07-18' });
+    } finally {
+      await close();
+    }
+  });
+
+  it('answers 503 while no copy has been mirrored yet', async () => {
+    const { url, close } = await startDownloads({ current: { available: false } });
+    try {
+      const res = await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}`);
+      expect(res.status).toBe(503);
+      expect((await res.json()).ok).toBe(false);
+    } finally {
+      await close();
+    }
+  });
+
+  it('rate limits repeated downloads from one IP with 429', async () => {
+    const { url, close } = await startDownloads({ rateLimiter: createRateLimiter({ max: 1 }) });
+    try {
+      expect((await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}`)).status).toBe(200);
+      expect((await fetch(`${url}/descargas/terminal-cobranza/${TOKEN}`)).status).toBe(429);
+    } finally {
+      await close();
+    }
+  });
+
+  it('does not exist at all when no token is configured', async () => {
+    const { url, close } = await startDownloads({ token: '' });
+    try {
+      expect((await fetch(`${url}/descargas/terminal-cobranza/`)).status).toBe(404);
+      expect((await fetch(`${url}/descargas/terminal-cobranza/x`)).status).toBe(404);
+    } finally {
+      await close();
+    }
   });
 });
