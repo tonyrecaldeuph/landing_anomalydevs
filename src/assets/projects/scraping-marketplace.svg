@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="JetBrains Mono, ui-monospace, monospace">
+  <defs>
+    <pattern id="g" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#33FF77" stroke-opacity=".07"/>
+    </pattern>
+    <linearGradient id="scan" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#33FF77" stop-opacity="0"/>
+      <stop offset=".85" stop-color="#33FF77" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#33FF77" stop-opacity=".7"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="#060A07"/>
+  <rect width="640" height="360" fill="url(#g)"/>
+
+  <!-- Listing grid (generic cards, no real data) -->
+  <g fill="#0B150E" stroke="#33FF77" stroke-opacity=".25">
+    <rect x="24" y="64" width="96" height="112"/><rect x="132" y="64" width="96" height="112"/>
+    <rect x="240" y="64" width="96" height="112"/><rect x="348" y="64" width="96" height="112"/>
+    <rect x="24" y="188" width="96" height="112"/><rect x="132" y="188" width="96" height="112"/>
+    <rect x="348" y="188" width="96" height="112"/>
+  </g>
+  <g fill="#33FF77" fill-opacity=".1">
+    <rect x="32" y="72" width="80" height="56"/><rect x="140" y="72" width="80" height="56"/>
+    <rect x="248" y="72" width="80" height="56"/><rect x="356" y="72" width="80" height="56"/>
+    <rect x="32" y="196" width="80" height="56"/><rect x="140" y="196" width="80" height="56"/>
+    <rect x="356" y="196" width="80" height="56"/>
+  </g>
+  <g fill="#8FA898" fill-opacity=".45">
+    <rect x="32" y="138" width="64" height="6"/><rect x="32" y="152" width="40" height="6"/>
+    <rect x="140" y="138" width="56" height="6"/><rect x="140" y="152" width="44" height="6"/>
+    <rect x="248" y="138" width="68" height="6"/><rect x="248" y="152" width="36" height="6"/>
+    <rect x="356" y="138" width="60" height="6"/><rect x="356" y="152" width="48" height="6"/>
+    <rect x="32" y="262" width="58" height="6"/><rect x="32" y="276" width="42" height="6"/>
+    <rect x="140" y="262" width="66" height="6"/><rect x="140" y="276" width="38" height="6"/>
+    <rect x="356" y="262" width="54" height="6"/><rect x="356" y="276" width="40" height="6"/>
+  </g>
+
+  <!-- The match -->
+  <rect x="240" y="188" width="96" height="112" fill="#0F2416" stroke="#33FF77" stroke-width="2"/>
+  <rect x="248" y="196" width="80" height="56" fill="#33FF77" fill-opacity=".22"/>
+  <path d="M270 238 l8 -14 h22 l8 14 z M268 238 a7 7 0 1 0 0.1 0 M308 238 a7 7 0 1 0 0.1 0" fill="none" stroke="#CFFFE0" stroke-width="1.5"/>
+  <rect x="248" y="262" width="70" height="6" fill="#CFFFE0" fill-opacity=".8"/>
+  <rect x="248" y="276" width="42" height="6" fill="#33FF77"/>
+  <g stroke="#33FF77" stroke-width="2" fill="none">
+    <path d="M232 180v-12h12"/><path d="M332 168h12v12"/><path d="M232 308v12h12"/><path d="M344 308v12h-12"/>
+  </g>
+  <text x="288" y="336" fill="#33FF77" font-size="10" text-anchor="middle" font-weight="700">COINCIDENCIA</text>
+
+  <!-- Scan sweep -->
+  <rect x="16" y="120" width="436" height="60" fill="url(#scan)"/>
+
+  <!-- Telegram alert -->
+  <path d="M344 244 C400 244 420 170 470 150" fill="none" stroke="#33FF77" stroke-dasharray="4 5" stroke-opacity=".7"/>
+  <rect x="470" y="104" width="148" height="92" rx="10" fill="#0B150E" stroke="#33FF77" stroke-opacity=".7"/>
+  <circle cx="492" cy="126" r="9" fill="#33FF77"/>
+  <path d="M487 126 l9 -4 -2 9 -2.5 -3 z" fill="#060A07"/>
+  <text x="508" y="130" fill="#CFFFE0" font-size="11" font-weight="700">ALERTA</text>
+  <rect x="482" y="146" width="120" height="6" fill="#8FA898" fill-opacity=".6"/>
+  <rect x="482" y="160" width="96" height="6" fill="#8FA898" fill-opacity=".6"/>
+  <rect x="482" y="174" width="60" height="6" fill="#33FF77" fill-opacity=".8"/>
+
+  <text x="470" y="236" fill="#8FA898" font-size="10" letter-spacing="1">cada N min</text>
+  <text x="470" y="252" fill="#8FA898" font-size="10" letter-spacing="1">→ Telegram</text>
+  <text x="24" y="336" fill="#8FA898" font-size="10" letter-spacing="1.5">MONITOREO RECURRENTE</text>
+</svg>

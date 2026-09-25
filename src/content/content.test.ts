@@ -37,6 +37,12 @@ describe('content modules', () => {
     expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion']));
   });
 
+  it('never presents SQLite as a project stack — production runs on PostgreSQL', () => {
+    projects.forEach((p) => {
+      expect(`${p.description} ${p.tags.join(' ')}`).not.toMatch(/sqlite/i);
+    });
+  });
+
   it('projects has at least 4 entries, each with tags', () => {
     expect(projects.length).toBeGreaterThanOrEqual(4);
     projects.forEach((p) => expect(p.tags.length).toBeGreaterThan(0));

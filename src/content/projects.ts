@@ -1,7 +1,7 @@
 import terminalCobranzaImage from '../assets/projects/terminal-cobranza.png';
 import smsProImage from '../assets/projects/sms-pro.png';
 import mailerProImage from '../assets/projects/mailer-pro.png';
-import scrapingMarketplaceImage from '../assets/projects/scraping-marketplace.png';
+import scrapingMarketplaceImage from '../assets/projects/scraping-marketplace.svg';
 import terminalMarketingImage from '../assets/projects/terminal-marketing.svg';
 import veneciaSartoriaImage from '../assets/projects/venecia-sartoria.jpg';
 import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg';
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     title: 'Terminal Marketing',
     tags: ['Electron', 'React', 'PostgreSQL'],
     description:
-      'Aplicación de escritorio para campañas masivas por SMS, WhatsApp y Email: importación de contactos desde Excel/CSV, roles y permisos, y estadísticas de entrega en tiempo real sobre SQLite o PostgreSQL en la nube.',
+      'Aplicación de escritorio para campañas masivas por SMS, WhatsApp y Email: importación de contactos desde Excel/CSV, roles y permisos, y estadísticas de entrega en tiempo real sobre PostgreSQL en la nube.',
     image: terminalMarketingImage,
   },
   {
