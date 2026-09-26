@@ -1,0 +1,7 @@
+/* La home inmersiva fija `body { overflow: hidden }` en global.css; esta entrada no
+   lo importa y restaura el desplazamiento normal del documento. */
+html,
+body {
+  overflow: auto;
+  height: auto;
+}

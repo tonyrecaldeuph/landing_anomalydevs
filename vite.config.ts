@@ -8,6 +8,14 @@ export default defineConfig({
     // In dev, run the contact API alongside: node server/index.mjs (listens on :3000).
     proxy: { '/api': 'http://localhost:3000' },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        telegramprosend: './productos/telegramprosend/index.html',
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test-setup.ts',
