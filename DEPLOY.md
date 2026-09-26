@@ -128,6 +128,31 @@ A diferencia de `/descargas/*`, que va a la API con token y límite por IP, esta
 descargas son públicas y sin control de acceso. Para actualizar TelegramProSend se
 reemplaza `public/files/TelegramProSend.zip` y se redepliega.
 
+## Páginas de producto
+
+Además de la home inmersiva (`/`), el repo genera páginas de producto estáticas con la
+configuración multipágina de Vite (`build.rollupOptions.input` en `vite.config.ts`).
+Cada página vive en su propia ruta bajo `/productos/<slug>/`:
+
+```
+https://anomalydevs.qzz.io/productos/telegramprosend/
+```
+
+- **Entradas:** `productos/<slug>/index.html` (HTML propio con su `<script type="module">`)
+  y `src/pages/ProductPage/main.tsx` (monta el componente con su contenido). La página de
+  producto no carga la escena 3D ni la navegación de la home, y usa su propio CSS de
+  desplazamiento en vez de `src/styles/global.css` (que fija `body { overflow: hidden }`).
+- **Servido:** el Caddy del contenedor sirve `dist/` estático (`file_server`), así que
+  `dist/productos/<slug>/index.html` responde la ruta sin tocar la API ni el Caddy del
+  sistema. Verificar tras el build: `dist/productos/<slug>/index.html` existe.
+- **Contenido:** `src/content/products/<slug>.ts` (datos) + `src/pages/ProductPage/`
+  (componente genérico por props). El "Ver caso" de la tarjeta correspondiente apunta a
+  la página mediante el campo `caseHref` del proyecto en `src/content/projects.ts`.
+- **Agregar otra página:** duplica `productos/<slug>/index.html` (ajusta título, metadatos
+  y canonical), crea su módulo en `src/content/products/`, registra la entrada en
+  `vite.config.ts` y fija `caseHref` en su proyecto. Redepliega normal (`git pull` +
+  `docker compose up -d --build`).
+
 ## Despliegues siguientes
 
 ```bash
