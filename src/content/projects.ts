@@ -1,4 +1,5 @@
 import terminalCobranzaImage from '../assets/projects/terminal-cobranza.png';
+import telegramProSendImage from '../assets/projects/telegram-pro-send.svg';
 import smsProImage from '../assets/projects/sms-pro.png';
 import mailerProImage from '../assets/projects/mailer-pro.png';
 import scrapingMarketplaceImage from '../assets/projects/scraping-marketplace.svg';
@@ -12,6 +13,7 @@ export interface Project {
   tags: string[];
   description: string;
   image: string;
+  download?: { href: string; label: string; note: string };
 }
 
 export const projects: Project[] = [
@@ -38,6 +40,15 @@ export const projects: Project[] = [
     description:
       'Tienda online de lujo trilingüe (español, inglés, italiano) para una sastrería artesanal de Quito: catálogo, pagos con Payphone y reserva de citas para trajes a medida.',
     image: veneciaSartoriaImage,
+  },
+  {
+    id: 'telegram-pro-send',
+    title: 'TelegramProSend',
+    tags: ['Chrome Extension', 'JavaScript', 'Telegram'],
+    description:
+      'Extensión de Chrome para campañas masivas por Telegram Web: contactos desde Excel, mensajes personalizados con imagen, detección automática de números sin Telegram, historial y reportes exportables. Funciona incluso con el navegador minimizado.',
+    image: telegramProSendImage,
+    download: { href: '/files/TelegramProSend.zip', label: 'Descargar', note: 'Requiere licencia' },
   },
   {
     id: 'sms-pro',

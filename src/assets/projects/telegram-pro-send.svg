@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="JetBrains Mono, ui-monospace, monospace">
+  <defs>
+    <pattern id="tps-g" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#33FF77" stroke-opacity=".07"/>
+    </pattern>
+    <radialGradient id="tps-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#33FF77" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#33FF77" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tps-beam" x1="0" x2="1">
+      <stop offset="0" stop-color="#33FF77" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#33FF77" stop-opacity=".1"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="#060A07"/>
+  <rect width="640" height="360" fill="url(#tps-g)"/>
+
+  <!-- Sender core -->
+  <circle cx="150" cy="170" r="105" fill="url(#tps-glow)"/>
+  <circle cx="150" cy="170" r="60" fill="#0B150E" stroke="#33FF77" stroke-width="1.5"/>
+  <circle cx="150" cy="170" r="76" fill="none" stroke="#33FF77" stroke-opacity=".35" stroke-dasharray="4 6"/>
+  <!-- Paper plane -->
+  <g transform="translate(150 170)">
+    <path d="M-26 4 L26 -14 L-8 22 L-13 6 Z" fill="none" stroke="#33FF77" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M-13 6 L26 -14 L-6 0 Z" fill="#33FF77" fill-opacity=".25"/>
+    <path d="M-13 6 L-8 22 L-10 8 Z" fill="#33FF77" fill-opacity=".4"/>
+  </g>
+  <text x="150" y="258" fill="#CFFFE0" font-size="15" text-anchor="middle" font-weight="700">TelegramProSend</text>
+  <text x="150" y="278" fill="#33FF77" font-size="11" text-anchor="middle">campaña masiva</text>
+
+  <!-- Delivery beams -->
+  <path d="M210 132 C280 100 330 74 392 72" fill="none" stroke="url(#tps-beam)" stroke-width="2"/>
+  <path d="M210 170 H392" fill="none" stroke="url(#tps-beam)" stroke-width="2"/>
+  <path d="M210 208 C280 240 330 262 392 264" fill="none" stroke="url(#tps-beam)" stroke-width="2"/>
+  <path d="M210 246 C270 268 320 292 392 306" fill="none" stroke="#8FA898" stroke-opacity=".35" stroke-width="2" stroke-dasharray="5 5"/>
+  <g fill="#9DFFC0">
+    <circle cx="258" cy="112" r="3"/><circle cx="312" cy="88" r="2.5"/>
+    <circle cx="256" cy="170" r="3"/><circle cx="312" cy="170" r="2.5"/>
+    <circle cx="258" cy="228" r="3"/><circle cx="312" cy="252" r="2.5"/>
+  </g>
+
+  <!-- Recipients -->
+  <g font-size="12" font-weight="700">
+    <rect x="392" y="50" width="208" height="44" fill="#0B150E" stroke="#33FF77" stroke-opacity=".6"/>
+    <circle cx="414" cy="72" r="9" fill="none" stroke="#33FF77" stroke-width="1.5"/>
+    <text x="414" y="76" fill="#33FF77" font-size="11" text-anchor="middle">✓</text>
+    <text x="432" y="77" fill="#CFFFE0">+593 9•• ••01</text>
+    <text x="584" y="77" fill="#33FF77" text-anchor="end" font-weight="400">✓✓</text>
+
+    <rect x="392" y="148" width="208" height="44" fill="#0B150E" stroke="#33FF77" stroke-opacity=".6"/>
+    <circle cx="414" cy="170" r="9" fill="none" stroke="#33FF77" stroke-width="1.5"/>
+    <text x="414" y="174" fill="#33FF77" font-size="11" text-anchor="middle">✓</text>
+    <text x="432" y="175" fill="#CFFFE0">+593 9•• ••02</text>
+    <text x="584" y="175" fill="#33FF77" text-anchor="end" font-weight="400">✓✓</text>
+
+    <rect x="392" y="242" width="208" height="44" fill="#0B150E" stroke="#33FF77" stroke-opacity=".6"/>
+    <circle cx="414" cy="264" r="9" fill="none" stroke="#33FF77" stroke-width="1.5"/>
+    <text x="414" y="268" fill="#33FF77" font-size="11" text-anchor="middle">✓</text>
+    <text x="432" y="269" fill="#CFFFE0">+593 9•• ••03</text>
+    <text x="584" y="269" fill="#33FF77" text-anchor="end" font-weight="400">✓✓</text>
+
+    <rect x="392" y="294" width="208" height="44" fill="#0B150E" stroke="#8FA898" stroke-opacity=".45"/>
+    <circle cx="414" cy="316" r="9" fill="none" stroke="#8FA898" stroke-width="1.5"/>
+    <text x="414" y="320" fill="#8FA898" font-size="11" text-anchor="middle">–</text>
+    <text x="432" y="321" fill="#8FA898">+593 9•• ••04</text>
+    <text x="584" y="321" fill="#8FA898" text-anchor="end" font-weight="400">sin Telegram</text>
+  </g>
+
+  <text x="24" y="336" fill="#8FA898" font-size="10" letter-spacing="1.5">EXCEL · MENSAJES CON IMAGEN · HISTORIAL Y REPORTES</text>
+</svg>
