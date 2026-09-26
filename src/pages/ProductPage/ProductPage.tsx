@@ -1,7 +1,22 @@
+import { lazy, Suspense } from 'react';
 import type { ProductPageContent } from '../../content/products/telegramProSend';
 import { BrandMark } from '../../components/BrandMark/BrandMark';
 import { Footer } from '../../components/Footer/Footer';
+import { SECTIONS } from '../../three/clusterConfig';
 import styles from './ProductPage.module.css';
+
+const ImmersiveCanvas = lazy(() =>
+  import('../../components/ImmersiveCanvas/ImmersiveCanvas').then((m) => ({
+    default: m.ImmersiveCanvas,
+  })),
+);
+
+function resolveProductCluster(): number {
+  const index = SECTIONS.findIndex((section) => section.id === 'projects');
+  return index < 0 ? 0 : index;
+}
+
+const PRODUCT_CLUSTER = resolveProductCluster();
 
 const STATUS_ICONS: Record<string, string> = {
   Enviado: '✅',
@@ -19,7 +34,11 @@ interface ProductPageProps {
 
 export function ProductPage({ content }: ProductPageProps) {
   return (
-    <div className={styles.page}>
+    <>
+      <Suspense fallback={null}>
+        <ImmersiveCanvas activeCluster={PRODUCT_CLUSTER} />
+      </Suspense>
+      <div className={styles.page}>
       <header className={styles.topbar}>
         <a href="/" className={styles.brand} aria-label="AnomalyDevs — inicio">
           <BrandMark className={styles.mark} />
@@ -179,6 +198,7 @@ export function ProductPage({ content }: ProductPageProps) {
       </main>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,9 @@
 /* La home inmersiva fija `body { overflow: hidden }` en global.css; esta entrada no
-   lo importa y restaura el desplazamiento normal del documento. */
+   lo importa y restaura el desplazamiento normal del documento. El fondo sólido
+   vive en html/body para dejar ver el canvas fijo de partículas a través de `.page`. */
 html,
 body {
   overflow: auto;
   height: auto;
+  background: var(--color-bg, #060a07);
 }

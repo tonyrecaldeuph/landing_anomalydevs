@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { ProductPage } from './ProductPage';
 import { telegramProSendPage } from '../../content/products/telegramProSend';
+// @ts-expect-error: tipos de Node no incluidos en la landing; import solo para Vitest
+import { readFileSync } from 'node:fs';
+// @ts-expect-error: tipos de Node no incluidos en la landing; import solo para Vitest
+import { join } from 'node:path';
+
+vi.mock('../../components/ImmersiveCanvas/ImmersiveCanvas', () => ({
+  ImmersiveCanvas: () => null,
+}));
 
 describe('ProductPage', () => {
   it('muestra el nombre del producto como h1', () => {
@@ -41,5 +49,29 @@ describe('ProductPage', () => {
       'href',
       '/#proyectos',
     );
+  });
+
+  it('apila el contenido sobre el fondo de partículas dejando ver el canvas', () => {
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const modulePath = join(process.cwd(), 'src', 'pages', 'ProductPage', 'ProductPage.module.css');
+    const moduleCss = readFileSync(modulePath, 'utf8');
+    expect(moduleCss).toContain('position: relative');
+    expect(moduleCss).toContain('z-index: 1');
+    expect(moduleCss).toContain('background: transparent');
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const globalPath = join(process.cwd(), 'src', 'pages', 'ProductPage', 'product.css');
+    const globalCss = readFileSync(globalPath, 'utf8');
+    expect(globalCss).toContain('background');
+
+    const { container } = render(<ProductPage content={telegramProSendPage} />);
+    expect(container.firstChild).toBeInTheDocument();
+  });
+
+  it('no falla sin WebGL y no monta canvas', () => {
+    const { container } = render(<ProductPage content={telegramProSendPage} />);
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'TelegramProSend' }),
+    ).toBeInTheDocument();
+    expect(container.querySelector('canvas')).toBeNull();
   });
 });
