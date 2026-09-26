@@ -43,9 +43,15 @@ export function Projects() {
                 ))}
               </div>
               <div className={styles.actions}>
-                <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>
-                  Ver caso <span aria-hidden="true">→</span>
-                </a>
+                {project.caseHref ? (
+                  <a href={project.caseHref} className={styles.caseLink}>
+                    Ver caso <span aria-hidden="true">→</span>
+                  </a>
+                ) : (
+                  <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>
+                    Ver caso <span aria-hidden="true">→</span>
+                  </a>
+                )}
                 {project.download && (
                   <a
                     href={project.download.href}

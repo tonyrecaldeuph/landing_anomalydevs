@@ -28,6 +28,34 @@ describe('Projects', () => {
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
 
+  it('TelegramProSend abre su página de producto sin navegación inmersiva', () => {
+    const navigateTo = vi.fn();
+    render(
+      <NavigationContext.Provider value={navigateTo}>
+        <Projects />
+      </NavigationContext.Provider>,
+    );
+    const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
+    const card = heading.closest('article')!;
+    const caseLink = within(card).getByRole('link', { name: /Ver caso/ });
+    expect(caseLink).toHaveAttribute('href', '/productos/telegramprosend/');
+    fireEvent.click(caseLink);
+    expect(navigateTo).not.toHaveBeenCalled();
+  });
+
+  it('las demás tarjetas conservan la navegación inmersiva a contacto', () => {
+    const navigateTo = vi.fn();
+    render(
+      <NavigationContext.Provider value={navigateTo}>
+        <Projects />
+      </NavigationContext.Provider>,
+    );
+    const heading = screen.getByRole('heading', { name: 'Terminal de Cobranza' });
+    const card = heading.closest('article')!;
+    fireEvent.click(within(card).getByRole('link', { name: /Ver caso/ }));
+    expect(navigateTo).toHaveBeenCalledWith(5);
+  });
+
   it('TelegramProSend card exposes its download link, other cards do not', () => {
     render(<Projects />);
     const heading = screen.getByRole('heading', { name: 'TelegramProSend' });

@@ -14,6 +14,7 @@ export interface Project {
   description: string;
   image: string;
   download?: { href: string; label: string; note: string };
+  caseHref?: string;
 }
 
 export const projects: Project[] = [
@@ -49,6 +50,7 @@ export const projects: Project[] = [
       'Extensión de Chrome para campañas masivas por Telegram Web: contactos desde Excel, mensajes personalizados con imagen, detección automática de números sin Telegram, historial y reportes exportables. Funciona incluso con el navegador minimizado.',
     image: telegramProSendImage,
     download: { href: '/files/TelegramProSend.zip', label: 'Descargar', note: 'Requiere licencia' },
+    caseHref: '/productos/telegramprosend/',
   },
   {
     id: 'sms-pro',
