@@ -27,4 +27,20 @@ describe('Projects', () => {
     fireEvent.click(screen.getAllByRole('link', { name: /Ver caso/ })[0]);
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
+
+  it('TelegramProSend card exposes its download link, other cards do not', () => {
+    render(<Projects />);
+    const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
+    const card = heading.closest('article')!;
+    const downloadLink = within(card).getByRole('link', { name: /Descargar TelegramProSend/ });
+    expect(downloadLink).toHaveAttribute('href', '/files/TelegramProSend.zip');
+    expect(downloadLink).toHaveAttribute('download');
+    projects
+      .filter((project) => project.id !== 'telegram-pro-send')
+      .forEach((project) => {
+        const otherHeading = screen.getByRole('heading', { name: project.title });
+        const otherCard = otherHeading.closest('article')!;
+        expect(within(otherCard).queryByRole('link', { name: /Descargar/ })).not.toBeInTheDocument();
+      });
+  });
 });

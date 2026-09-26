@@ -5,6 +5,10 @@ import { SectionHeading } from '../SectionHeading/SectionHeading';
 import { TiltCard } from '../TiltCard/TiltCard';
 import styles from './Projects.module.css';
 
+function lowerFirst(value: string): string {
+  return value.charAt(0).toLowerCase() + value.slice(1);
+}
+
 export function Projects() {
   const navigateTo = useContext(NavigationContext);
 
@@ -38,9 +42,24 @@ export function Projects() {
                   <span className={styles.tag} key={tag}>{tag}</span>
                 ))}
               </div>
-              <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>
-                Ver caso <span aria-hidden="true">→</span>
-              </a>
+              <div className={styles.actions}>
+                <a href="#contacto" className={styles.caseLink} onClick={flyToContact}>
+                  Ver caso <span aria-hidden="true">→</span>
+                </a>
+                {project.download && (
+                  <a
+                    href={project.download.href}
+                    download
+                    className={styles.downloadLink}
+                    aria-label={`Descargar ${project.title} (${lowerFirst(project.download.note)})`}
+                  >
+                    {project.download.label} <span aria-hidden="true">↓</span>
+                  </a>
+                )}
+              </div>
+              {project.download && (
+                <p className={styles.downloadNote}>{project.download.note}</p>
+              )}
             </div>
           </TiltCard>
         ))}
