@@ -114,6 +114,20 @@ ssh root@185.208.207.154 'docker cp /tmp/setup.exe anomalydevs-api:/tmp/setup.ex
   mismo build, se respeta lo fijado; en cuanto el feed publique un build distinto, el link lo
   toma automáticamente. Requiere que el feed esté accesible al fijar (se registra su build).
 
+## Descargas públicas
+
+Los archivos en `public/files/` se publican tal cual en el build (Vite los copia a
+`dist/files/`) y el Caddy del contenedor los sirve estáticos (`/files/...` cae en el
+`handle` genérico con `file_server`), sin pasar por la API:
+
+```
+https://anomalydevs.qzz.io/files/TelegramProSend.zip
+```
+
+A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas
+descargas son públicas y sin control de acceso. Para actualizar TelegramProSend se
+reemplaza `public/files/TelegramProSend.zip` y se redepliega.
+
 ## Despliegues siguientes
 
 ```bash
