@@ -122,11 +122,13 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 
 ```
 https://anomalydevs.qzz.io/files/TelegramProSend.zip
+https://anomalydevs.qzz.io/files/SmsProSend.zip
 ```
 
 A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas
 descargas son públicas y sin control de acceso. Para actualizar TelegramProSend se
-reemplaza `public/files/TelegramProSend.zip` y se redepliega.
+reemplaza `public/files/TelegramProSend.zip` y se redepliega; igual para
+SMS_RCS_PRO_V3.0 con `public/files/SmsProSend.zip`.
 
 ## Páginas de producto
 
@@ -136,6 +138,7 @@ Cada página vive en su propia ruta bajo `/productos/<slug>/`:
 
 ```
 https://anomalydevs.qzz.io/productos/telegramprosend/
+https://anomalydevs.qzz.io/productos/smsprosend/
 ```
 
 - **Entradas:** `productos/<slug>/index.html` (HTML propio con su `<script type="module">`)

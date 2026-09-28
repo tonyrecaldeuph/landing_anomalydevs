@@ -56,15 +56,20 @@ describe('Projects', () => {
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
 
-  it('TelegramProSend card exposes its download link, other cards do not', () => {
+  it('TelegramProSend y SMS Pro exponen su link de descarga, las demás tarjetas no', () => {
     render(<Projects />);
     const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
     const card = heading.closest('article')!;
     const downloadLink = within(card).getByRole('link', { name: /Descargar TelegramProSend/ });
     expect(downloadLink).toHaveAttribute('href', '/files/TelegramProSend.zip');
     expect(downloadLink).toHaveAttribute('download');
+    const smsHeading = screen.getByRole('heading', { name: 'SMS Pro' });
+    const smsCard = smsHeading.closest('article')!;
+    const smsDownloadLink = within(smsCard).getByRole('link', { name: /Descargar SMS Pro/ });
+    expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend.zip');
+    expect(smsDownloadLink).toHaveAttribute('download');
     projects
-      .filter((project) => project.id !== 'telegram-pro-send')
+      .filter((project) => project.id !== 'telegram-pro-send' && project.id !== 'sms-pro')
       .forEach((project) => {
         const otherHeading = screen.getByRole('heading', { name: project.title });
         const otherCard = otherHeading.closest('article')!;

@@ -59,6 +59,8 @@ export const projects: Project[] = [
     description:
       'Extensión que automatiza el envío masivo e ilimitado de campañas de SMS y RCS, con carga de contactos, intervalos configurables y seguimiento en tiempo real de la campaña.',
     image: smsProImage,
+    download: { href: '/files/SmsProSend.zip', label: 'Descargar', note: 'Requiere licencia' },
+    caseHref: '/productos/smsprosend/',
   },
   {
     id: 'mailer-pro',

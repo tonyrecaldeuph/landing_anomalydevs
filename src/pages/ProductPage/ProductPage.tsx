@@ -21,6 +21,10 @@ const PRODUCT_CLUSTER = resolveProductCluster();
 const STATUS_ICONS: Record<string, string> = {
   Enviado: '✅',
   'Sin Telegram': '⚪',
+  Omitido: '⚪',
+  RCS: '🔵',
+  SMS: '🟢',
+  Duplicado: '⏭️',
   Error: '❌',
 };
 
@@ -51,7 +55,7 @@ export function ProductPage({ content }: ProductPageProps) {
 
       <main className={styles.main}>
         <section className={styles.hero} aria-labelledby="product-title">
-          <p className={styles.kicker}>Extensión de Chrome · Telegram</p>
+          <p className={styles.kicker}>{content.kicker ?? 'Extensión de Chrome · Telegram'}</p>
           <h1 id="product-title">{content.name}</h1>
           <p className={styles.tagline}>{content.tagline}</p>
           <p className={styles.summary}>{content.summary}</p>
@@ -178,7 +182,7 @@ export function ProductPage({ content }: ProductPageProps) {
         </section>
 
         <section aria-labelledby="cta-final" className={styles.finalCta}>
-          <h2 id="cta-final">Descarga TelegramProSend</h2>
+          <h2 id="cta-final">Descarga {content.name}</h2>
           <div className={styles.heroActions}>
             <a href={content.download.href} download className={styles.downloadButton}>
               {content.download.label} <span aria-hidden="true">↓</span>

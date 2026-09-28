@@ -41,7 +41,7 @@ describe('content modules', () => {
     expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion', 'telegram-pro-send']));
   });
 
-  it('telegram-pro-send exposes its public download and no other project does', () => {
+  it('telegram-pro-send y sms-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
     const telegram = projects.find((p) => p.id === 'telegram-pro-send');
     expect(telegram).toBeDefined();
     expect(telegram?.download?.href).toBe('/files/TelegramProSend.zip');
@@ -50,8 +50,16 @@ describe('content modules', () => {
     expect(existsSync(zipPath)).toBe(true);
     const signature = readFileSync(zipPath).subarray(0, 2).toString('utf8');
     expect(signature).toBe('PK');
+    const sms = projects.find((p) => p.id === 'sms-pro');
+    expect(sms).toBeDefined();
+    expect(sms?.download?.href).toBe('/files/SmsProSend.zip');
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend.zip');
+    expect(existsSync(smsZipPath)).toBe(true);
+    const smsSignature = readFileSync(smsZipPath).subarray(0, 2).toString('utf8');
+    expect(smsSignature).toBe('PK');
     projects
-      .filter((p) => p.id !== 'telegram-pro-send')
+      .filter((p) => p.id !== 'telegram-pro-send' && p.id !== 'sms-pro')
       .forEach((p) => {
         expect(p.download).toBeUndefined();
       });

@@ -32,6 +32,7 @@ export interface ProductFaq {
 export interface ProductPageContent {
   slug: string;
   name: string;
+  kicker?: string;
   tagline: string;
   summary: string;
   download: { href: string; label: string; note: string };

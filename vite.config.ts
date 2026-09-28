@@ -13,6 +13,7 @@ export default defineConfig({
       input: {
         main: './index.html',
         telegramprosend: './productos/telegramprosend/index.html',
+        smsprosend: './productos/smsprosend/index.html',
       },
     },
   },
