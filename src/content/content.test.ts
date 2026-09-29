@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error: tipos de Node no incluidos en la landing; import solo para Vitest
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 // @ts-expect-error: tipos de Node no incluidos en la landing; import solo para Vitest
 import { join } from 'node:path';
 import { heroContent } from './hero';
@@ -58,6 +58,9 @@ describe('content modules', () => {
     expect(existsSync(smsZipPath)).toBe(true);
     const smsSignature = readFileSync(smsZipPath).subarray(0, 2).toString('utf8');
     expect(smsSignature).toBe('PK');
+    // Espejo total de SMS PRO V3.0 (puente ADB, native-launcher, fixtures, docs):
+    // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
+    expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
     projects
       .filter((p) => p.id !== 'telegram-pro-send' && p.id !== 'sms-pro')
       .forEach((p) => {

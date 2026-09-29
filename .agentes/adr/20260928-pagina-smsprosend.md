@@ -30,11 +30,12 @@ promociones, variantes, programación y reportes CSV/Excel), con slug
    (`Omitido`, `RCS`, `SMS`, `Duplicado`); los iconos existentes no cambian.
 6. Capturas `src/assets/products/sms-pro-send/01..07.png`: reutilizar como placeholder
    las capturas de Telegram hasta publicar las reales de SMS; se documenta como deuda.
-7. ZIP `public/files/SmsProSend.zip` con prefijo `SmsProSend/`, incluyendo
-   `manifest.json`, `background.js`, `content.js`, `campaignEngine.js`,
-   `channels/*.js`, `ui/*`, `assets/*`; excluyendo `docs`, `.git.bak`, `dist`,
-   `adb-bridge-server`, `native-launcher` y `*.test.js` (mismo criterio que
-   `scripts/empaquetar.js` de Telegram).
+7. ZIP `public/files/SmsProSend.zip` como espejo total de la carpeta `SMS PRO V3.0`
+   con prefijo `SmsProSend/` (incluye `native-launcher`, `adb-bridge-server` con su
+   `node_modules/ws`, `channels` con fixtures y pruebas, `docs`, `ui`, `assets` y
+   raíz; más `INSTALACION.txt` generada). Única exclusión: `.git.bak` (respaldo de
+   control de versiones, no parte del producto; mismo criterio `.git` del
+   empaquetador de Telegram).
 
 ## Consecuencias (trade-offs)
 
