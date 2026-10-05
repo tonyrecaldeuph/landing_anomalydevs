@@ -14,6 +14,7 @@ export default defineConfig({
         main: './index.html',
         telegramprosend: './productos/telegramprosend/index.html',
         smsprosend: './productos/smsprosend/index.html',
+        'terminal-marketing': './productos/terminal-marketing/index.html',
         mailerpro: './productos/mailerpro/index.html',
       },
     },

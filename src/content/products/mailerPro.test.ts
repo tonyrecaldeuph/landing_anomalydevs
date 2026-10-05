@@ -62,13 +62,13 @@ describe('mailerProPage', () => {
     // seguía entregando la versión anterior tras publicar una nueva.
     expect(mailerProPage.download.href).toBe('/files/MailerPro-3.3.0.zip');
     expect(mailerProPage.download.note).toBe('v3.3.0 · Requiere licencia');
-    expect(mailerProPage.licenseCtaHref).toBe('/#contacto');
+    expect(mailerProPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('avisa que la licencia va antes de conectar Gmail', () => {
     // La extensión no abre el consentimiento de Google sin licencia: si la
     // página dijera lo contrario, el cliente se trabaría en el primer paso.
-    const joined = mailerProPage.licenseSteps.join(' ');
+    const joined = mailerProPage.access.steps.join(' ');
     expect(joined).toMatch(/antes de conectar/i);
   });
 

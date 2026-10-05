@@ -29,6 +29,17 @@ export interface ProductFaq {
   answer: string;
 }
 
+// Cómo obtiene acceso el usuario: una licencia comprada o un usuario creado por
+// el administrador. Ambos casos se pintan igual; solo cambian los textos.
+export interface ProductAccess {
+  heading: string;
+  ctaLabel: string;
+  ctaHref: string;
+  steps: string[];
+  image: string;
+  imageAlt: string;
+}
+
 export interface ProductPageContent {
   slug: string;
   name: string;
@@ -36,13 +47,10 @@ export interface ProductPageContent {
   tagline: string;
   summary: string;
   download: { href: string; label: string; note: string };
-  licenseCtaHref: string;
+  access: ProductAccess;
   features: ProductFeature[];
   requirements: string[];
   installSteps: string[];
-  licenseSteps: string[];
-  licenseImage: string;
-  licenseImageAlt: string;
   usageSteps: ProductUsageStep[];
   results: ProductResult[];
   tips: string[];
@@ -68,7 +76,6 @@ export const telegramProSendPage: ProductPageContent = {
     'a través de Telegram Web, con reportes, historial y control del envío. Funciona incluso ' +
     'con la ventana minimizada: no necesitas estar mirando la pantalla, solo dejar la pestaña abierta.',
   download: resolveDownload(),
-  licenseCtaHref: '/#contacto',
   features: [
     {
       title: 'Envío con el navegador minimizado',
@@ -108,14 +115,19 @@ export const telegramProSendPage: ProductPageContent = {
     'Elige la carpeta donde descomprimiste el archivo: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
     'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija TelegramProSend para tenerla siempre a la vista.',
   ],
-  licenseSteps: [
-    'Pulsa el icono de TelegramProSend en la barra de Chrome.',
-    'Abre la sección «Licencia».',
-    'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
-    'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
-  ],
-  licenseImage: licenciaImage,
-  licenseImageAlt: 'Ventana de licencia de TelegramProSend con el campo de clave y el botón Activar',
+  access: {
+    heading: 'Activar la licencia',
+    ctaLabel: 'Solicitar licencia',
+    ctaHref: '/#contacto',
+    steps: [
+      'Pulsa el icono de TelegramProSend en la barra de Chrome.',
+      'Abre la sección «Licencia».',
+      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
+      'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
+    ],
+    image: licenciaImage,
+    imageAlt: 'Ventana de licencia de TelegramProSend con el campo de clave y el botón Activar',
+  },
   usageSteps: [
     {
       title: 'Importa tus contactos',

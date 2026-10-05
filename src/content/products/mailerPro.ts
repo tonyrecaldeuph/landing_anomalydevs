@@ -29,7 +29,6 @@ export const mailerProPage: ProductPageContent = {
     'Importa un Excel, revisa las direcciones dudosas antes de enviar y sigue la campaña ' +
     'en vivo desde el panel lateral.',
   download: resolveDownload(),
-  licenseCtaHref: '/#contacto',
   features: [
     {
       title: 'Desde tu propia cuenta de Gmail',
@@ -69,14 +68,19 @@ export const mailerProPage: ProductPageContent = {
     'Elige la carpeta MailerPro que quedó al descomprimir: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
     'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija MailerPro para tenerla siempre a la vista.',
   ],
-  licenseSteps: [
-    'Pulsa el icono de MailerPro en la barra de Chrome.',
-    'Abre la sección «Licencia» en el menú superior.',
-    'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX) y pulsa «Activar». El indicador del pie pasa a verde con el nombre de tu empresa.',
-    'Activa la licencia antes de conectar Gmail: sin una licencia vigente la extensión no abre la autorización de Google ni permite iniciar campañas.',
-  ],
-  licenseImage: licenciaImage,
-  licenseImageAlt: 'Ventana de licencia de MailerPro con el campo de clave y el botón Activar',
+  access: {
+    heading: 'Activar la licencia',
+    ctaLabel: 'Solicitar licencia',
+    ctaHref: '/#contacto',
+    steps: [
+      'Pulsa el icono de MailerPro en la barra de Chrome.',
+      'Abre la sección «Licencia» en el menú superior.',
+      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX) y pulsa «Activar». El indicador del pie pasa a verde con el nombre de tu empresa.',
+      'Activa la licencia antes de conectar Gmail: sin una licencia vigente la extensión no abre la autorización de Google ni permite iniciar campañas.',
+    ],
+    image: licenciaImage,
+    imageAlt: 'Ventana de licencia de MailerPro con el campo de clave y el botón Activar',
+  },
   usageSteps: [
     {
       title: 'Conecta tu cuenta de Gmail',

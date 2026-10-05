@@ -66,8 +66,8 @@ export function ProductPage({ content }: ProductPageProps) {
             </a>
             <p className={styles.licenseNote}>
               {content.download.note} ·{' '}
-              <a href={content.licenseCtaHref} className={styles.licenseLink}>
-                Solicitar licencia →
+              <a href={content.access.ctaHref} className={styles.licenseLink}>
+                {content.access.ctaLabel} →
               </a>
             </p>
           </div>
@@ -101,17 +101,17 @@ export function ProductPage({ content }: ProductPageProps) {
               <li key={step}>{step}</li>
             ))}
           </ol>
-          <h3>Activar la licencia</h3>
+          <h3>{content.access.heading}</h3>
           <div className={styles.licenseBlock}>
             <ol className={styles.steps}>
-              {content.licenseSteps.map((step) => (
+              {content.access.steps.map((step) => (
                 <li key={step}>{step}</li>
               ))}
             </ol>
-            <a href={content.licenseImage} target="_blank" rel="noopener">
+            <a href={content.access.image} target="_blank" rel="noopener">
               <img
-                src={content.licenseImage}
-                alt={content.licenseImageAlt}
+                src={content.access.image}
+                alt={content.access.imageAlt}
                 loading="lazy"
                 className={styles.shot}
               />
@@ -190,8 +190,8 @@ export function ProductPage({ content }: ProductPageProps) {
             </a>
             <p className={styles.licenseNote}>
               {content.download.note} ·{' '}
-              <a href={content.licenseCtaHref} className={styles.licenseLink}>
-                Solicitar licencia →
+              <a href={content.access.ctaHref} className={styles.licenseLink}>
+                {content.access.ctaLabel} →
               </a>
             </p>
           </div>

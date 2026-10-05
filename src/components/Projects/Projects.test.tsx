@@ -56,7 +56,7 @@ describe('Projects', () => {
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
 
-  it('TelegramProSend, SMS Pro y Mailer Pro exponen su link de descarga, las demás tarjetas no', () => {
+  it('TelegramProSend, SMS Pro, Terminal Marketing y Mailer Pro exponen su link de descarga, las demás tarjetas no', () => {
     render(<Projects />);
     const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
     const card = heading.closest('article')!;
@@ -68,12 +68,16 @@ describe('Projects', () => {
     const smsDownloadLink = within(smsCard).getByRole('link', { name: /Descargar SMS Pro/ });
     expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend-3.0.1.zip');
     expect(smsDownloadLink).toHaveAttribute('download');
+    const terminalCard = screen.getByRole('heading', { name: 'Terminal Marketing' }).closest('article')!;
+    const terminalDownloadLink = within(terminalCard).getByRole('link', { name: /Descargar Terminal Marketing/ });
+    expect(terminalDownloadLink).toHaveAttribute('href', expect.stringMatching(/^https:\/\/crm\.anomalydevs\.qzz\.io\/updates\/.*\.exe$/));
+    expect(within(terminalCard).getByText(/Sin licencia/)).toBeInTheDocument();
     const mailerCard = screen.getByRole('heading', { name: 'Mailer Pro' }).closest('article')!;
     const mailerDownloadLink = within(mailerCard).getByRole('link', { name: /Descargar Mailer Pro/ });
     expect(mailerDownloadLink).toHaveAttribute('href', '/files/MailerPro-3.3.0.zip');
     expect(mailerDownloadLink).toHaveAttribute('download');
     projects
-      .filter((project) => !['telegram-pro-send', 'sms-pro', 'mailer-pro'].includes(project.id))
+      .filter((project) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing', 'mailer-pro'].includes(project.id))
       .forEach((project) => {
         const otherHeading = screen.getByRole('heading', { name: project.title });
         const otherCard = otherHeading.closest('article')!;

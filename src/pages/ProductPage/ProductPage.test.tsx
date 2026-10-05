@@ -43,6 +43,12 @@ describe('ProductPage', () => {
     });
   });
 
+  it('conserva la activación de licencia en los productos que la requieren', () => {
+    render(<ProductPage content={telegramProSendPage} />);
+    expect(screen.getByRole('heading', { name: 'Activar la licencia' })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /Solicitar licencia/ })).toHaveLength(2);
+  });
+
   it('enlaza de vuelta a los proyectos de la home', () => {
     render(<ProductPage content={telegramProSendPage} />);
     expect(screen.getByRole('link', { name: /Volver a proyectos/ })).toHaveAttribute(

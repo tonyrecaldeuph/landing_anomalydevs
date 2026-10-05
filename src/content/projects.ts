@@ -13,6 +13,16 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 export const SMS_PRO_VERSION = '3.0.1';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
+// Versión publicada de Terminal Marketing (CRM Marketing Uphone). El instalador
+// pesa ~196 MB y no cabe en git: se descarga del mismo servidor que alimenta el
+// auto-update, así la landing y la app instalada nunca divergen de versión.
+export const TERMINAL_MARKETING_VERSION = '3.0.9';
+export const TERMINAL_MARKETING_INSTALLER_URL =
+  'https://crm.anomalydevs.qzz.io/updates/' +
+  encodeURIComponent(`CRM Marketing Uphone Setup ${TERMINAL_MARKETING_VERSION}.exe`);
+export const TERMINAL_MARKETING_DOWNLOAD_NOTE =
+  `v${TERMINAL_MARKETING_VERSION} · Sin licencia · El administrador crea tu usuario`;
+
 // Misma regla que SMS: la versión va en el nombre del zip por la caché de
 // Cloudflare. Se publica solo el zip versionado; MailerPro no tiene enlaces
 // viejos con nombre fijo que mantener.
@@ -43,8 +53,10 @@ export const projects: Project[] = [
     title: 'Terminal Marketing',
     tags: ['Electron', 'React', 'PostgreSQL'],
     description:
-      'Aplicación de escritorio para campañas masivas por SMS, WhatsApp y Email: importación de contactos desde Excel/CSV, roles y permisos, y estadísticas de entrega en tiempo real sobre PostgreSQL en la nube.',
+      'Aplicación de escritorio para cobranza y campañas: cartera asignada por asesor, marcación asistida desde Android, envíos masivos por WhatsApp, RCS y correo, y monitoreo del supervisor en tiempo real sobre PostgreSQL. No requiere licencia: el administrador del sistema crea tu usuario.',
     image: terminalMarketingImage,
+    download: { href: TERMINAL_MARKETING_INSTALLER_URL, label: 'Descargar', note: TERMINAL_MARKETING_DOWNLOAD_NOTE },
+    caseHref: '/productos/terminal-marketing/',
   },
   {
     id: 'venecia-sartoria',
