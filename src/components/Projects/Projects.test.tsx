@@ -56,7 +56,7 @@ describe('Projects', () => {
     expect(navigateTo).toHaveBeenCalledWith(5);
   });
 
-  it('TelegramProSend y SMS Pro exponen su link de descarga, las demás tarjetas no', () => {
+  it('TelegramProSend, SMS Pro y Terminal Marketing exponen su link de descarga, las demás tarjetas no', () => {
     render(<Projects />);
     const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
     const card = heading.closest('article')!;
@@ -68,8 +68,12 @@ describe('Projects', () => {
     const smsDownloadLink = within(smsCard).getByRole('link', { name: /Descargar SMS Pro/ });
     expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend-3.0.1.zip');
     expect(smsDownloadLink).toHaveAttribute('download');
+    const terminalCard = screen.getByRole('heading', { name: 'Terminal Marketing' }).closest('article')!;
+    const terminalDownloadLink = within(terminalCard).getByRole('link', { name: /Descargar Terminal Marketing/ });
+    expect(terminalDownloadLink).toHaveAttribute('href', expect.stringMatching(/^https:\/\/crm\.anomalydevs\.qzz\.io\/updates\/.*\.exe$/));
+    expect(within(terminalCard).getByText(/Sin licencia/)).toBeInTheDocument();
     projects
-      .filter((project) => project.id !== 'telegram-pro-send' && project.id !== 'sms-pro')
+      .filter((project) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing'].includes(project.id))
       .forEach((project) => {
         const otherHeading = screen.getByRole('heading', { name: project.title });
         const otherCard = otherHeading.closest('article')!;

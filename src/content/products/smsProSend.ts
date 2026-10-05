@@ -28,7 +28,6 @@ export const smsProSendPage: ProductPageContent = {
     'reportes exportables. La campaña sigue en segundo plano: puedes minimizar la ventana ' +
     'o cerrar el panel, solo deja la pestaña de Google Messages abierta.',
   download: resolveDownload(),
-  licenseCtaHref: '/#contacto',
   features: [
     {
       title: 'SMS y RCS en un solo canal',
@@ -68,14 +67,19 @@ export const smsProSendPage: ProductPageContent = {
     'Elige la carpeta donde descomprimiste el archivo: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
     'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija SMS_RCS_PRO para tenerla siempre a la vista.',
   ],
-  licenseSteps: [
-    'Pulsa el icono de SMS_RCS_PRO en la barra de Chrome.',
-    'Abre la sección «Licencia».',
-    'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
-    'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
-  ],
-  licenseImage: licenciaImage,
-  licenseImageAlt: 'Ventana de licencia de SMS_RCS_PRO con el campo de clave y el botón Activar',
+  access: {
+    heading: 'Activar la licencia',
+    ctaLabel: 'Solicitar licencia',
+    ctaHref: '/#contacto',
+    steps: [
+      'Pulsa el icono de SMS_RCS_PRO en la barra de Chrome.',
+      'Abre la sección «Licencia».',
+      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
+      'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
+    ],
+    image: licenciaImage,
+    imageAlt: 'Ventana de licencia de SMS_RCS_PRO con el campo de clave y el botón Activar',
+  },
   usageSteps: [
     {
       title: 'Importa tus contactos',
