@@ -129,7 +129,7 @@ A diferencia de `/descargas/*`, que va a la API con token y límite por IP, esta
 descargas son públicas y sin control de acceso. Para actualizar TelegramProSend se
 reemplaza `public/files/TelegramProSend.zip` y se redepliega.
 
-### SMS_RCS_PRO_V3.0 — zip versionado
+### SMS_RCS_PRO — zip versionado
 
 Cloudflare cachea `/files/*` 4 h (`Cache-Control: max-age=14400`) en cada nodo. Con un
 nombre fijo, otras PCs seguían bajando la versión anterior tras publicar una nueva

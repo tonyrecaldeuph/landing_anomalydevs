@@ -16,9 +16,15 @@ function collectTexts(value: unknown, out: string[]): void {
 }
 
 describe('smsProSendPage', () => {
+  it('nombra el producto sin versión en todos sus textos', () => {
+    const texts: string[] = [];
+    collectTexts(smsProSendPage, texts);
+    texts.forEach((text) => expect(text).not.toMatch(/V3\.0/));
+  });
+
   it('expone slug, nombre y resumen del producto', () => {
     expect(smsProSendPage.slug).toBe('smsprosend');
-    expect(smsProSendPage.name).toBe('SMS_RCS_PRO_V3.0');
+    expect(smsProSendPage.name).toBe('SMS_RCS_PRO');
     expect(smsProSendPage.tagline.length).toBeGreaterThan(0);
     expect(smsProSendPage.summary.length).toBeGreaterThan(0);
   });

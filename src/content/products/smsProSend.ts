@@ -19,11 +19,11 @@ function resolveDownload(): { href: string; label: string; note: string } {
 
 export const smsProSendPage: ProductPageContent = {
   slug: 'smsprosend',
-  name: 'SMS_RCS_PRO_V3.0',
+  name: 'SMS_RCS_PRO',
   kicker: 'Extensión de Chrome · SMS/RCS',
   tagline: 'Campañas masivas SMS y RCS desde tu navegador.',
   summary:
-    'SMS_RCS_PRO_V3.0 es una extensión para Chrome que envía mensajes masivos de campaña ' +
+    'SMS_RCS_PRO es una extensión para Chrome que envía mensajes masivos de campaña ' +
     'a través de Google Messages, con doble canal Web y ADB, promociones, historial y ' +
     'reportes exportables. La campaña sigue en segundo plano: puedes minimizar la ventana ' +
     'o cerrar el panel, solo deja la pestaña de Google Messages abierta.',
@@ -58,7 +58,7 @@ export const smsProSendPage: ProductPageContent = {
   requirements: [
     'Google Chrome actualizado (también funciona en navegadores basados en Chromium como Microsoft Edge o Brave).',
     'Sesión iniciada en https://messages.google.com/ con el teléfono Android vinculado.',
-    'Clave de licencia de SMS_RCS_PRO_V3.0 provista por AnomalyDevs.',
+    'Clave de licencia de SMS_RCS_PRO provista por AnomalyDevs.',
   ],
   installSteps: [
     `Descomprime ${SMS_PRO_ZIP_NAME} en una carpeta fija de tu computador (por ejemplo, Documentos/SmsProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.`,
@@ -66,22 +66,22 @@ export const smsProSendPage: ProductPageContent = {
     'Activa arriba a la derecha la opción «Modo de desarrollador».',
     'Pulsa el botón «Cargar descomprimida» (Load unpacked).',
     'Elige la carpeta donde descomprimiste el archivo: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
-    'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija SMS_RCS_PRO_V3.0 para tenerla siempre a la vista.',
+    'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija SMS_RCS_PRO para tenerla siempre a la vista.',
   ],
   licenseSteps: [
-    'Pulsa el icono de SMS_RCS_PRO_V3.0 en la barra de Chrome.',
+    'Pulsa el icono de SMS_RCS_PRO en la barra de Chrome.',
     'Abre la sección «Licencia».',
     'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
     'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
   ],
   licenseImage: licenciaImage,
-  licenseImageAlt: 'Ventana de licencia de SMS_RCS_PRO_V3.0 con el campo de clave y el botón Activar',
+  licenseImageAlt: 'Ventana de licencia de SMS_RCS_PRO con el campo de clave y el botón Activar',
   usageSteps: [
     {
       title: 'Importa tus contactos',
       text: 'Abre https://messages.google.com/ y comprueba que tu teléfono está vinculado. Luego abre la extensión y carga tu lista con «Importar contactos» (Excel .xlsx/.xls con columna de teléfono de 7 a 15 dígitos; los números 09XXXXXXXX se convierten solos a +593).',
       image: contactosImage,
-      imageAlt: 'Lista de contactos importados en el panel de SMS_RCS_PRO_V3.0',
+      imageAlt: 'Lista de contactos importados en el panel de SMS_RCS_PRO',
     },
     {
       title: 'Redacta el mensaje y la promoción',

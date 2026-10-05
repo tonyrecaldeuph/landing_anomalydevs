@@ -7,7 +7,7 @@ import terminalMarketingImage from '../assets/projects/terminal-marketing.svg';
 import veneciaSartoriaImage from '../assets/projects/venecia-sartoria.jpg';
 import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg';
 
-// Versión publicada de SMS_RCS_PRO_V3.0. El zip lleva la versión en el nombre
+// Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
 // porque Cloudflare cachea /files/* 4 h: con un nombre fijo, otras PCs seguían
 // descargando la versión anterior tras publicar una nueva.
 export const SMS_PRO_VERSION = '3.0.1';
