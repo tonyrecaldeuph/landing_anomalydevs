@@ -1,5 +1,5 @@
 import type { ProductPageContent } from './telegramProSend';
-import { projects } from '../projects';
+import { projects, SMS_PRO_VERSION, SMS_PRO_ZIP_NAME } from '../projects';
 import contactosImage from '../../assets/products/sms-pro-send/01-contactos.png';
 import mensajeImage from '../../assets/products/sms-pro-send/02-mensaje.png';
 import opcionesImage from '../../assets/products/sms-pro-send/03-opciones.png';
@@ -14,7 +14,7 @@ function resolveDownload(): { href: string; label: string; note: string } {
   if (smsProject?.download) {
     return smsProject.download;
   }
-  return { href: '/files/SmsProSend.zip', label: 'Descargar', note: 'Requiere licencia' };
+  return { href: `/files/${SMS_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${SMS_PRO_VERSION} · Requiere licencia` };
 }
 
 export const smsProSendPage: ProductPageContent = {
@@ -61,7 +61,7 @@ export const smsProSendPage: ProductPageContent = {
     'Clave de licencia de SMS_RCS_PRO_V3.0 provista por AnomalyDevs.',
   ],
   installSteps: [
-    'Descomprime SmsProSend.zip en una carpeta fija de tu computador (por ejemplo, Documentos/SmsProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.',
+    `Descomprime ${SMS_PRO_ZIP_NAME} en una carpeta fija de tu computador (por ejemplo, Documentos/SmsProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.`,
     'Abre en Chrome la dirección chrome://extensions',
     'Activa arriba a la derecha la opción «Modo de desarrollador».',
     'Pulsa el botón «Cargar descomprimida» (Load unpacked).',

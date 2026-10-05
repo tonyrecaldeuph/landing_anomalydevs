@@ -66,7 +66,7 @@ describe('Projects', () => {
     const smsHeading = screen.getByRole('heading', { name: 'SMS Pro' });
     const smsCard = smsHeading.closest('article')!;
     const smsDownloadLink = within(smsCard).getByRole('link', { name: /Descargar SMS Pro/ });
-    expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend.zip');
+    expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend-3.0.1.zip');
     expect(smsDownloadLink).toHaveAttribute('download');
     projects
       .filter((project) => project.id !== 'telegram-pro-send' && project.id !== 'sms-pro')

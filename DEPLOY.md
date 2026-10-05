@@ -122,13 +122,27 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 
 ```
 https://anomalydevs.qzz.io/files/TelegramProSend.zip
-https://anomalydevs.qzz.io/files/SmsProSend.zip
+https://anomalydevs.qzz.io/files/SmsProSend-3.0.1.zip
 ```
 
 A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas
 descargas son públicas y sin control de acceso. Para actualizar TelegramProSend se
-reemplaza `public/files/TelegramProSend.zip` y se redepliega; igual para
-SMS_RCS_PRO_V3.0 con `public/files/SmsProSend.zip`.
+reemplaza `public/files/TelegramProSend.zip` y se redepliega.
+
+### SMS_RCS_PRO_V3.0 — zip versionado
+
+Cloudflare cachea `/files/*` 4 h (`Cache-Control: max-age=14400`) en cada nodo. Con un
+nombre fijo, otras PCs seguían bajando la versión anterior tras publicar una nueva
+(visto 2026-10-05). Por eso la página enlaza `SmsProSend-<versión>.zip`:
+
+1. Subir `version` en `SMS PRO V3.0/manifest.json` (repo de la extensión) y mergear.
+2. Cambiar `SMS_PRO_VERSION` en `src/content/projects.ts`: de ahí salen el enlace, la nota
+   `v<versión> · Requiere licencia` y el paso de instalación. Ajustar los tests que fijan la versión.
+3. Copiar el zip a `public/files/` con ambos nombres y commitearlos (están en `.gitignore`,
+   se agregan con `git add -f`; así llegan al VPS con el `git pull`):
+   `SmsProSend-<versión>.zip` y `SmsProSend.zip` (este último solo para enlaces antiguos
+   ya compartidos; puede quedar viejo en la caché de Cloudflare hasta 4 h).
+4. `git pull && docker compose up -d --build` (también recrea `anomalydevs-api`).
 
 ## Páginas de producto
 
