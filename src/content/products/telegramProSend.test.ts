@@ -50,7 +50,7 @@ describe('telegramProSendPage', () => {
 
   it('reutiliza la descarga pública de TelegramProSend', () => {
     expect(telegramProSendPage.download.href).toBe('/files/TelegramProSend.zip');
-    expect(telegramProSendPage.licenseCtaHref).toBe('/#contacto');
+    expect(telegramProSendPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('no menciona asistentes ni herramientas de autoría', () => {

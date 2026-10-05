@@ -59,7 +59,7 @@ describe('smsProSendPage', () => {
     // seguía entregando la versión anterior tras publicar una nueva.
     expect(smsProSendPage.download.href).toBe('/files/SmsProSend-3.0.1.zip');
     expect(smsProSendPage.download.note).toContain('v3.0.1');
-    expect(smsProSendPage.licenseCtaHref).toBe('/#contacto');
+    expect(smsProSendPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('nombra el zip versionado en el primer paso de instalación', () => {
