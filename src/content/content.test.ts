@@ -62,10 +62,21 @@ describe('content modules', () => {
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
     projects
-      .filter((p) => p.id !== 'telegram-pro-send' && p.id !== 'sms-pro')
+      .filter((p) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing'].includes(p.id))
       .forEach((p) => {
         expect(p.download).toBeUndefined();
       });
+  });
+
+  it('terminal-marketing descarga el instalador desde el servidor de actualizaciones, sin licencia', () => {
+    const terminal = projects.find((p) => p.id === 'terminal-marketing');
+    // El .exe pesa ~196 MB: no cabe en git, se sirve desde el mismo origen del auto-update.
+    expect(terminal?.download?.href).toBe(
+      'https://crm.anomalydevs.qzz.io/updates/CRM%20Marketing%20Uphone%20Setup%203.0.9.exe',
+    );
+    expect(terminal?.download?.note).toMatch(/Sin licencia/);
+    expect(terminal?.download?.note).toMatch(/administrador/);
+    expect(terminal?.caseHref).toBe('/productos/terminal-marketing/');
   });
 
   it('never presents SQLite as a project stack — production runs on PostgreSQL', () => {
