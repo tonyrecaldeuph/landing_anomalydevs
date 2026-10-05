@@ -51,9 +51,14 @@ describe('ProductPage con contenido SMS', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/SmsProSend.zip');
+      expect(link).toHaveAttribute('href', '/files/SmsProSend-3.0.1.zip');
       expect(link).toHaveAttribute('download');
     });
     expect(screen.getByRole('heading', { name: 'Descarga SMS_RCS_PRO_V3.0' })).toBeInTheDocument();
+  });
+
+  it('muestra la versión 3.0.1 junto a la descarga', () => {
+    render(<ProductPage content={smsProSendPage} />);
+    expect(screen.getAllByText(/v3\.0\.1/).length).toBeGreaterThanOrEqual(1);
   });
 });

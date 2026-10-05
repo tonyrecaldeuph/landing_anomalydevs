@@ -7,6 +7,12 @@ import terminalMarketingImage from '../assets/projects/terminal-marketing.svg';
 import veneciaSartoriaImage from '../assets/projects/venecia-sartoria.jpg';
 import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg';
 
+// Versión publicada de SMS_RCS_PRO_V3.0. El zip lleva la versión en el nombre
+// porque Cloudflare cachea /files/* 4 h: con un nombre fijo, otras PCs seguían
+// descargando la versión anterior tras publicar una nueva.
+export const SMS_PRO_VERSION = '3.0.1';
+export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
+
 export interface Project {
   id: string;
   title: string;
@@ -59,7 +65,7 @@ export const projects: Project[] = [
     description:
       'Extensión que automatiza el envío masivo e ilimitado de campañas de SMS y RCS, con carga de contactos, intervalos configurables y seguimiento en tiempo real de la campaña.',
     image: smsProImage,
-    download: { href: '/files/SmsProSend.zip', label: 'Descargar', note: 'Requiere licencia' },
+    download: { href: `/files/${SMS_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${SMS_PRO_VERSION} · Requiere licencia` },
     caseHref: '/productos/smsprosend/',
   },
   {
