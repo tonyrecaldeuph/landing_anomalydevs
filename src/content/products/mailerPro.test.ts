@@ -44,7 +44,7 @@ describe('mailerProPage', () => {
   });
 
   it('nombra el zip versionado en el primer paso de instalación', () => {
-    expect(mailerProPage.installSteps[0]).toContain('MailerPro-3.3.0.zip');
+    expect(mailerProPage.installSteps[0]).toContain('MailerPro-3.3.1.zip');
   });
 
   it('guía el uso en 6 pasos con capturas accesibles', () => {
@@ -60,8 +60,8 @@ describe('mailerProPage', () => {
   it('descarga el zip versionado y muestra la versión junto a la licencia', () => {
     // Nombre versionado: Cloudflare cachea /files/* 4 h, un nombre fijo
     // seguía entregando la versión anterior tras publicar una nueva.
-    expect(mailerProPage.download.href).toBe('/files/MailerPro-3.3.0.zip');
-    expect(mailerProPage.download.note).toBe('v3.3.0 · Requiere licencia');
+    expect(mailerProPage.download.href).toBe('/files/MailerPro-3.3.1.zip');
+    expect(mailerProPage.download.note).toBe('v3.3.1 · Requiere licencia');
     expect(mailerProPage.access.ctaHref).toBe('/#contacto');
   });
 

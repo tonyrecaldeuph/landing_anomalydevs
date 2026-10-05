@@ -47,10 +47,10 @@ describe('ProductPage con contenido de MailerPro', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/MailerPro-3.3.0.zip');
+      expect(link).toHaveAttribute('href', '/files/MailerPro-3.3.1.zip');
       expect(link).toHaveAttribute('download');
     });
     expect(screen.getByRole('heading', { name: 'Descarga MailerPro' })).toBeInTheDocument();
-    expect(screen.getAllByText(/v3\.3\.0/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/v3.3.1/).length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -75,7 +75,7 @@ export const mailerProPage: ProductPageContent = {
     steps: [
       'Pulsa el icono de MailerPro en la barra de Chrome.',
       'Abre la sección «Licencia» en el menú superior.',
-      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX) y pulsa «Activar». El indicador del pie pasa a verde con el nombre de tu empresa.',
+      'Pega tu clave (formato parecido a ANOMALYDEVS-XXXX-XXXX-XXXX) y pulsa «Activar». El indicador del pie pasa a verde con el nombre de tu empresa.',
       'Activa la licencia antes de conectar Gmail: sin una licencia vigente la extensión no abre la autorización de Google ni permite iniciar campañas.',
     ],
     image: licenciaImage,

@@ -10,7 +10,7 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 // Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
 // porque Cloudflare cachea /files/* 4 h: con un nombre fijo, otras PCs seguían
 // descargando la versión anterior tras publicar una nueva.
-export const SMS_PRO_VERSION = '3.0.1';
+export const SMS_PRO_VERSION = '3.0.2';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
 // Versión publicada de Terminal Marketing (CRM Marketing Uphone). El instalador
@@ -26,7 +26,7 @@ export const TERMINAL_MARKETING_DOWNLOAD_NOTE =
 // Misma regla que SMS: la versión va en el nombre del zip por la caché de
 // Cloudflare. Se publica solo el zip versionado; MailerPro no tiene enlaces
 // viejos con nombre fijo que mantener.
-export const MAILER_PRO_VERSION = '3.3.0';
+export const MAILER_PRO_VERSION = '3.3.1';
 export const MAILER_PRO_ZIP_NAME = `MailerPro-${MAILER_PRO_VERSION}.zip`;
 
 export interface Project {

@@ -74,7 +74,7 @@ export const smsProSendPage: ProductPageContent = {
     steps: [
       'Pulsa el icono de SMS_RCS_PRO en la barra de Chrome.',
       'Abre la sección «Licencia».',
-      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
+      'Pega tu clave (formato parecido a ANOMALYDEVS-XXXX-XXXX-XXXX).',
       'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
     ],
     image: licenciaImage,
