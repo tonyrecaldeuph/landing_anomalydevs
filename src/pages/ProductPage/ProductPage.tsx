@@ -25,6 +25,7 @@ const STATUS_ICONS: Record<string, string> = {
   RCS: '🔵',
   SMS: '🟢',
   Duplicado: '⏭️',
+  Pendiente: '⏳',
   Error: '❌',
 };
 

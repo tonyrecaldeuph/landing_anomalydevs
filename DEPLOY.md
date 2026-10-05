@@ -123,6 +123,7 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 ```
 https://anomalydevs.qzz.io/files/TelegramProSend.zip
 https://anomalydevs.qzz.io/files/SmsProSend-3.0.1.zip
+https://anomalydevs.qzz.io/files/MailerPro-3.3.0.zip
 ```
 
 A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas
@@ -144,6 +145,16 @@ nombre fijo, otras PCs seguían bajando la versión anterior tras publicar una n
    ya compartidos; puede quedar viejo en la caché de Cloudflare hasta 4 h).
 4. `git pull && docker compose up -d --build` (también recrea `anomalydevs-api`).
 
+### MailerPro — zip versionado
+
+Mismo criterio que SMS_RCS_PRO, pero sin copia con nombre fijo:
+
+1. En el repo de MailerPro: subir `version` en `manifest.json` y correr
+   `npm run empaquetar` → `dist/MailerPro-<versión>.zip`.
+2. Cambiar `MAILER_PRO_VERSION` en `src/content/projects.ts` y los tests que la fijan.
+3. Copiar el zip a `public/files/`, `git add -f` y borrar el anterior.
+4. `git pull && docker compose up -d --build`.
+
 ## Páginas de producto
 
 Además de la home inmersiva (`/`), el repo genera páginas de producto estáticas con la
@@ -153,6 +164,7 @@ Cada página vive en su propia ruta bajo `/productos/<slug>/`:
 ```
 https://anomalydevs.qzz.io/productos/telegramprosend/
 https://anomalydevs.qzz.io/productos/smsprosend/
+https://anomalydevs.qzz.io/productos/mailerpro/
 ```
 
 - **Entradas:** `productos/<slug>/index.html` (HTML propio con su `<script type="module">`)

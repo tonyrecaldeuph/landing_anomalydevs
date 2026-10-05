@@ -13,6 +13,12 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 export const SMS_PRO_VERSION = '3.0.1';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
+// Misma regla que SMS: la versión va en el nombre del zip por la caché de
+// Cloudflare. Se publica solo el zip versionado; MailerPro no tiene enlaces
+// viejos con nombre fijo que mantener.
+export const MAILER_PRO_VERSION = '3.3.0';
+export const MAILER_PRO_ZIP_NAME = `MailerPro-${MAILER_PRO_VERSION}.zip`;
+
 export interface Project {
   id: string;
   title: string;
@@ -71,10 +77,12 @@ export const projects: Project[] = [
   {
     id: 'mailer-pro',
     title: 'Mailer Pro',
-    tags: ['Chrome Extension', 'Google Apps Script', 'JavaScript'],
+    tags: ['Chrome Extension', 'Gmail API', 'JavaScript'],
     description:
-      'Herramienta de envío masivo de correo electrónico con soporte multicuenta, pensada para campañas de comunicación a gran escala sin depender de un único remitente.',
+      'Extensión de Chrome para campañas masivas de correo desde tu propia cuenta de Gmail: contactos desde Excel, mensajes personalizados con imagen y PDF, revisión de direcciones dudosas, relevo de cuenta al agotar la cuota diaria y reportes exportables.',
     image: mailerProImage,
+    download: { href: `/files/${MAILER_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${MAILER_PRO_VERSION} · Requiere licencia` },
+    caseHref: '/productos/mailerpro/',
   },
   {
     id: 'data-automatizacion',
