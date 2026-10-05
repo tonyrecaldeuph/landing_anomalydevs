@@ -41,7 +41,7 @@ describe('content modules', () => {
     expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion', 'telegram-pro-send']));
   });
 
-  it('telegram-pro-send y sms-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
+  it('telegram-pro-send, sms-pro y mailer-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
     const telegram = projects.find((p) => p.id === 'telegram-pro-send');
     expect(telegram).toBeDefined();
     expect(telegram?.download?.href).toBe('/files/TelegramProSend.zip');
@@ -61,8 +61,14 @@ describe('content modules', () => {
     // Espejo total de SMS PRO V3.0 (puente ADB, native-launcher, fixtures, docs):
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
+    const mailer = projects.find((p) => p.id === 'mailer-pro');
+    expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.0.zip');
+    expect(mailer?.caseHref).toBe('/productos/mailerpro/');
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.0.zip');
+    expect(readFileSync(mailerZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
     projects
-      .filter((p) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing'].includes(p.id))
+      .filter((p) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing', 'mailer-pro'].includes(p.id))
       .forEach((p) => {
         expect(p.download).toBeUndefined();
       });
