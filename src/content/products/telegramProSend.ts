@@ -122,7 +122,7 @@ export const telegramProSendPage: ProductPageContent = {
     steps: [
       'Pulsa el icono de TelegramProSend en la barra de Chrome.',
       'Abre la sección «Licencia».',
-      'Pega tu clave (formato parecido a UPHONE-XXXX-XXXX-XXXX).',
+      'Pega tu clave (formato parecido a ANOMALYDEVS-XXXX-XXXX-XXXX).',
       'Pulsa «Activar». Sin licencia válida no se pueden enviar campañas.',
     ],
     image: licenciaImage,

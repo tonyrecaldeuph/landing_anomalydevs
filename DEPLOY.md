@@ -122,8 +122,8 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 
 ```
 https://anomalydevs.qzz.io/files/TelegramProSend.zip
-https://anomalydevs.qzz.io/files/SmsProSend-3.0.2.zip
-https://anomalydevs.qzz.io/files/MailerPro-3.3.0.zip
+https://anomalydevs.qzz.io/files/SmsProSend-3.0.3.zip
+https://anomalydevs.qzz.io/files/MailerPro-3.3.1.zip
 ```
 
 A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas

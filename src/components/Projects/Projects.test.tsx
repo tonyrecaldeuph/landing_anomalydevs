@@ -66,7 +66,7 @@ describe('Projects', () => {
     const smsHeading = screen.getByRole('heading', { name: 'SMS Pro' });
     const smsCard = smsHeading.closest('article')!;
     const smsDownloadLink = within(smsCard).getByRole('link', { name: /Descargar SMS Pro/ });
-    expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend-3.0.2.zip');
+    expect(smsDownloadLink).toHaveAttribute('href', '/files/SmsProSend-3.0.3.zip');
     expect(smsDownloadLink).toHaveAttribute('download');
     const terminalCard = screen.getByRole('heading', { name: 'Terminal Marketing' }).closest('article')!;
     const terminalDownloadLink = within(terminalCard).getByRole('link', { name: /Descargar Terminal Marketing/ });
@@ -74,7 +74,7 @@ describe('Projects', () => {
     expect(within(terminalCard).getByText(/Sin licencia/)).toBeInTheDocument();
     const mailerCard = screen.getByRole('heading', { name: 'Mailer Pro' }).closest('article')!;
     const mailerDownloadLink = within(mailerCard).getByRole('link', { name: /Descargar Mailer Pro/ });
-    expect(mailerDownloadLink).toHaveAttribute('href', '/files/MailerPro-3.3.0.zip');
+    expect(mailerDownloadLink).toHaveAttribute('href', '/files/MailerPro-3.3.1.zip');
     expect(mailerDownloadLink).toHaveAttribute('download');
     projects
       .filter((project) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing', 'mailer-pro'].includes(project.id))

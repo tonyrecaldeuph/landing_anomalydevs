@@ -52,9 +52,9 @@ describe('content modules', () => {
     expect(signature).toBe('PK');
     const sms = projects.find((p) => p.id === 'sms-pro');
     expect(sms).toBeDefined();
-    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.2.zip');
+    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.3.zip');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.2.zip');
+    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.3.zip');
     expect(existsSync(smsZipPath)).toBe(true);
     const smsSignature = readFileSync(smsZipPath).subarray(0, 2).toString('utf8');
     expect(smsSignature).toBe('PK');
@@ -62,10 +62,10 @@ describe('content modules', () => {
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
     const mailer = projects.find((p) => p.id === 'mailer-pro');
-    expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.0.zip');
+    expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.1.zip');
     expect(mailer?.caseHref).toBe('/productos/mailerpro/');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.0.zip');
+    const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.1.zip');
     expect(readFileSync(mailerZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
     projects
       .filter((p) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing', 'mailer-pro'].includes(p.id))

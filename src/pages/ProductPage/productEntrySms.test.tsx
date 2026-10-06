@@ -27,7 +27,7 @@ describe('sms product page entry', () => {
     const html = readFileSync(htmlPath, 'utf8');
     expect(html).toContain('/src/pages/ProductPage/main-sms.tsx');
     expect(html).toContain('<title>SMS_RCS_PRO — ');
-    // La versión solo se muestra junto a la descarga (v3.0.2): un "V3.0" en el
+    // La versión solo se muestra junto a la descarga (v3.0.3): un "V3.0" en el
     // nombre confundía con la versión publicada.
     expect(html).not.toMatch(/V3\.0/);
     expect(html).toContain('https://anomalydevs.qzz.io/productos/smsprosend/');
@@ -54,14 +54,14 @@ describe('ProductPage con contenido SMS', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/SmsProSend-3.0.2.zip');
+      expect(link).toHaveAttribute('href', '/files/SmsProSend-3.0.3.zip');
       expect(link).toHaveAttribute('download');
     });
     expect(screen.getByRole('heading', { name: 'Descarga SMS_RCS_PRO' })).toBeInTheDocument();
   });
 
-  it('muestra la versión 3.0.2 junto a la descarga', () => {
+  it('muestra la versión 3.0.3 junto a la descarga', () => {
     render(<ProductPage content={smsProSendPage} />);
-    expect(screen.getAllByText(/v3\.0\.2/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/v3\.0\.3/).length).toBeGreaterThanOrEqual(1);
   });
 });
