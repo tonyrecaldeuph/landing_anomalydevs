@@ -52,9 +52,9 @@ describe('content modules', () => {
     expect(signature).toBe('PK');
     const sms = projects.find((p) => p.id === 'sms-pro');
     expect(sms).toBeDefined();
-    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.3.zip');
+    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.4.zip');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.3.zip');
+    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.4.zip');
     expect(existsSync(smsZipPath)).toBe(true);
     const smsSignature = readFileSync(smsZipPath).subarray(0, 2).toString('utf8');
     expect(smsSignature).toBe('PK');
