@@ -57,13 +57,13 @@ describe('smsProSendPage', () => {
   it('reutiliza la descarga pública versionada de SmsProSend', () => {
     // Nombre versionado: Cloudflare cachea /files/* 4 h, un nombre fijo
     // seguía entregando la versión anterior tras publicar una nueva.
-    expect(smsProSendPage.download.href).toBe('/files/SmsProSend-3.0.3.zip');
-    expect(smsProSendPage.download.note).toContain('v3.0.3');
+    expect(smsProSendPage.download.href).toBe('/files/SmsProSend-3.0.4.zip');
+    expect(smsProSendPage.download.note).toContain('v3.0.4');
     expect(smsProSendPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('nombra el zip versionado en el primer paso de instalación', () => {
-    expect(smsProSendPage.installSteps[0]).toContain('SmsProSend-3.0.3.zip');
+    expect(smsProSendPage.installSteps[0]).toContain('SmsProSend-3.0.4.zip');
   });
 
   it('menciona Google Messages como canal de envío', () => {
