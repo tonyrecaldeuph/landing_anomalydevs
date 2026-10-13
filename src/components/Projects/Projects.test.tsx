@@ -61,7 +61,7 @@ describe('Projects', () => {
     const heading = screen.getByRole('heading', { name: 'TelegramProSend' });
     const card = heading.closest('article')!;
     const downloadLink = within(card).getByRole('link', { name: /Descargar TelegramProSend/ });
-    expect(downloadLink).toHaveAttribute('href', '/files/TelegramProSend.zip');
+    expect(downloadLink).toHaveAttribute('href', '/files/TelegramProSend-1.1.3.zip');
     expect(downloadLink).toHaveAttribute('download');
     const smsHeading = screen.getByRole('heading', { name: 'SMS Pro' });
     const smsCard = smsHeading.closest('article')!;
