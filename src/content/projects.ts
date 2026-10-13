@@ -10,7 +10,7 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 // Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
 // porque Cloudflare cachea /files/* 4 h: con un nombre fijo, otras PCs seguían
 // descargando la versión anterior tras publicar una nueva.
-export const SMS_PRO_VERSION = '3.0.3';
+export const SMS_PRO_VERSION = '3.0.4';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
 // Versión publicada de Terminal Marketing (CRM Marketing Uphone). El instalador
