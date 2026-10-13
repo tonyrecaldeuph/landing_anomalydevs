@@ -121,7 +121,7 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 `handle` genérico con `file_server`), sin pasar por la API:
 
 ```
-https://anomalydevs.qzz.io/files/TelegramProSend-1.1.3.zip
+https://anomalydevs.qzz.io/files/TelegramProSend-1.1.4.zip
 https://anomalydevs.qzz.io/files/SmsProSend-3.0.4.zip
 https://anomalydevs.qzz.io/files/MailerPro-3.3.1.zip
 ```

@@ -22,7 +22,7 @@ describe('ProductPage', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/TelegramProSend-1.1.3.zip');
+      expect(link).toHaveAttribute('href', '/files/TelegramProSend-1.1.4.zip');
       expect(link).toHaveAttribute('download');
     });
   });
