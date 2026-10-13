@@ -44,12 +44,17 @@ describe('content modules', () => {
   it('telegram-pro-send, sms-pro y mailer-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
     const telegram = projects.find((p) => p.id === 'telegram-pro-send');
     expect(telegram).toBeDefined();
-    expect(telegram?.download?.href).toBe('/files/TelegramProSend.zip');
+    expect(telegram?.download?.href).toBe('/files/TelegramProSend-1.1.3.zip');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const zipPath = join(process.cwd(), 'public', 'files', 'TelegramProSend.zip');
+    const zipPath = join(process.cwd(), 'public', 'files', 'TelegramProSend-1.1.3.zip');
     expect(existsSync(zipPath)).toBe(true);
     const signature = readFileSync(zipPath).subarray(0, 2).toString('utf8');
     expect(signature).toBe('PK');
+    // Alias para enlaces viejos ya compartidos.
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const aliasPath = join(process.cwd(), 'public', 'files', 'TelegramProSend.zip');
+    expect(existsSync(aliasPath)).toBe(true);
+    expect(readFileSync(aliasPath).subarray(0, 2).toString('utf8')).toBe('PK');
     const sms = projects.find((p) => p.id === 'sms-pro');
     expect(sms).toBeDefined();
     expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.4.zip');

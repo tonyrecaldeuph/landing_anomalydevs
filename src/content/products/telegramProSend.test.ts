@@ -49,7 +49,9 @@ describe('telegramProSendPage', () => {
   });
 
   it('reutiliza la descarga pública de TelegramProSend', () => {
-    expect(telegramProSendPage.download.href).toBe('/files/TelegramProSend.zip');
+    expect(telegramProSendPage.download.href).toBe('/files/TelegramProSend-1.1.3.zip');
+    expect(telegramProSendPage.download.note).toBe('v1.1.3 · Requiere licencia');
+    expect(telegramProSendPage.installSteps.some((step) => step.includes('TelegramProSend-1.1.3.zip'))).toBe(true);
     expect(telegramProSendPage.access.ctaHref).toBe('/#contacto');
   });
 

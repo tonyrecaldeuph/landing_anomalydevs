@@ -1,4 +1,4 @@
-import { projects } from '../projects';
+import { projects, TELEGRAM_PRO_VERSION, TELEGRAM_PRO_ZIP_NAME } from '../projects';
 import contactosImage from '../../assets/products/telegram-pro-send/01-contactos.png';
 import mensajeImage from '../../assets/products/telegram-pro-send/02-mensaje.png';
 import opcionesImage from '../../assets/products/telegram-pro-send/03-opciones.png';
@@ -64,7 +64,7 @@ function resolveDownload(): { href: string; label: string; note: string } {
   if (telegramProject?.download) {
     return telegramProject.download;
   }
-  return { href: '/files/TelegramProSend.zip', label: 'Descargar', note: 'Requiere licencia' };
+  return { href: `/files/${TELEGRAM_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${TELEGRAM_PRO_VERSION} · Requiere licencia` };
 }
 
 export const telegramProSendPage: ProductPageContent = {
@@ -108,7 +108,7 @@ export const telegramProSendPage: ProductPageContent = {
     'Clave de licencia de TelegramProSend provista por AnomalyDevs.',
   ],
   installSteps: [
-    'Descomprime TelegramProSend.zip en una carpeta fija de tu computador (por ejemplo, Documentos/TelegramProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.',
+    `Descomprime ${TELEGRAM_PRO_ZIP_NAME} en una carpeta fija de tu computador (por ejemplo, Documentos/TelegramProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.`,
     'Abre en Chrome la dirección chrome://extensions',
     'Activa arriba a la derecha la opción «Modo de desarrollador».',
     'Pulsa el botón «Cargar descomprimida» (Load unpacked).',
