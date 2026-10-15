@@ -44,9 +44,9 @@ describe('content modules', () => {
   it('telegram-pro-send, sms-pro y mailer-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
     const telegram = projects.find((p) => p.id === 'telegram-pro-send');
     expect(telegram).toBeDefined();
-    expect(telegram?.download?.href).toBe('/files/TelegramProSend-1.1.3.zip');
+    expect(telegram?.download?.href).toBe('/files/TelegramProSend-1.1.4.zip');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const zipPath = join(process.cwd(), 'public', 'files', 'TelegramProSend-1.1.3.zip');
+    const zipPath = join(process.cwd(), 'public', 'files', 'TelegramProSend-1.1.4.zip');
     expect(existsSync(zipPath)).toBe(true);
     const signature = readFileSync(zipPath).subarray(0, 2).toString('utf8');
     expect(signature).toBe('PK');

@@ -10,7 +10,7 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 // Misma regla que SMS: la versión va en el nombre del zip por la caché de
 // Cloudflare. TelegramProSend.zip queda como alias para enlaces viejos ya
 // compartidos.
-export const TELEGRAM_PRO_VERSION = '1.1.3';
+export const TELEGRAM_PRO_VERSION = '1.1.4';
 export const TELEGRAM_PRO_ZIP_NAME = `TelegramProSend-${TELEGRAM_PRO_VERSION}.zip`;
 
 // Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
