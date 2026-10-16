@@ -121,10 +121,14 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 `handle` genérico con `file_server`), sin pasar por la API:
 
 ```
-https://anomalydevs.qzz.io/files/TelegramProSend-1.1.4.zip
+https://anomalydevs.qzz.io/files/TelegramProSend-1.2.0.zip
 https://anomalydevs.qzz.io/files/SmsProSend-3.0.4.zip
 https://anomalydevs.qzz.io/files/MailerPro-3.3.1.zip
 ```
+
+> **Nota:** `TelegramProSend-1.1.4.zip` se conserva en `public/files/` aunque ya no
+> se enlaza: quienes vienen de la 1.1.3 o anterior la necesitan para exportar su
+> respaldo antes de migrar a la 1.2.0 (ver la FAQ «¿Cómo actualizo desde la 1.1.x?»).
 
 A diferencia de `/descargas/*`, que va a la API con token y límite por IP, estas
 descargas son públicas y sin control de acceso.

@@ -10,7 +10,7 @@ import dataAutomatizacionImage from '../assets/projects/data-automatizacion.svg'
 // Misma regla que SMS: la versión va en el nombre del zip por la caché de
 // Cloudflare. TelegramProSend.zip queda como alias para enlaces viejos ya
 // compartidos.
-export const TELEGRAM_PRO_VERSION = '1.1.4';
+export const TELEGRAM_PRO_VERSION = '1.2.0';
 export const TELEGRAM_PRO_ZIP_NAME = `TelegramProSend-${TELEGRAM_PRO_VERSION}.zip`;
 
 // Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
@@ -77,7 +77,7 @@ export const projects: Project[] = [
     title: 'TelegramProSend',
     tags: ['Chrome Extension', 'JavaScript', 'Telegram'],
     description:
-      'Extensión de Chrome para campañas masivas por Telegram Web: contactos desde Excel, mensajes personalizados con imagen, detección automática de números sin Telegram, historial y reportes exportables. Funciona incluso con el navegador minimizado.',
+      'Extensión de Chrome para campañas masivas por Telegram Web o tus celulares Android: contactos desde Excel, mensajes personalizados, detección automática de números sin Telegram, historial y reportes exportables. Funciona incluso con el navegador minimizado.',
     image: telegramProSendImage,
     download: { href: `/files/${TELEGRAM_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${TELEGRAM_PRO_VERSION} · Requiere licencia` },
     caseHref: '/productos/telegramprosend/',

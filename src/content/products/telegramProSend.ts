@@ -6,6 +6,7 @@ import resultadosImage from '../../assets/products/telegram-pro-send/04-resultad
 import resumenImage from '../../assets/products/telegram-pro-send/05-resumen.png';
 import historialImage from '../../assets/products/telegram-pro-send/06-historial.png';
 import licenciaImage from '../../assets/products/telegram-pro-send/07-licencia.png';
+import celularesImage from '../../assets/products/telegram-pro-send/08-celulares.png';
 
 export interface ProductFeature {
   title: string;
@@ -70,11 +71,12 @@ function resolveDownload(): { href: string; label: string; note: string } {
 export const telegramProSendPage: ProductPageContent = {
   slug: 'telegramprosend',
   name: 'TelegramProSend',
-  tagline: 'Campañas masivas por Telegram Web desde tu navegador.',
+  tagline: 'Campañas masivas por Telegram Web o desde tus celulares Android.',
   summary:
     'TelegramProSend es una extensión para Chrome que envía mensajes masivos de campaña ' +
-    'a través de Telegram Web, con reportes, historial y control del envío. Funciona incluso ' +
-    'con la ventana minimizada: no necesitas estar mirando la pantalla, solo dejar la pestaña abierta.',
+    'por Telegram Web o desde tus celulares Android conectados por USB, con reportes, historial ' +
+    'y control del envío. Con Telegram Web funciona incluso con la ventana minimizada: no ' +
+    'necesitas estar mirando la pantalla, solo dejar la pestaña abierta.',
   download: resolveDownload(),
   features: [
     {
@@ -82,8 +84,12 @@ export const telegramProSendPage: ProductPageContent = {
       text: 'La primera vez la pestaña de Telegram debe quedar visible un momento; después puedes minimizar la ventana sin detener la campaña.',
     },
     {
+      title: 'Envío por celular (ADB)',
+      text: 'Conecta uno o varios celulares Android por USB y envía en paralelo desde la app de Telegram; se activa con un botón en las Opciones de Envío.',
+    },
+    {
       title: 'Imagen y texto en un solo mensaje',
-      text: 'Adjunta una imagen opcional que viaja junto al texto como pie en un único mensaje.',
+      text: 'Adjunta una imagen opcional que viaja junto al texto como pie en un único mensaje (en Telegram Web).',
     },
     {
       title: 'Detección automática «Sin Telegram»',
@@ -106,6 +112,7 @@ export const telegramProSendPage: ProductPageContent = {
     'Google Chrome actualizado (también funciona en navegadores basados en Chromium como Microsoft Edge o Brave).',
     'Cuenta de Telegram con la sesión iniciada en https://web.telegram.org/k/',
     'Clave de licencia de TelegramProSend provista por AnomalyDevs.',
+    'Para el canal celular (opcional): PC con Windows, celulares Android con depuración USB activada, app de Telegram con la sesión iniciada y en español, y ejecutar una vez por PC native-launcher\\install.exe de la carpeta descomprimida.',
   ],
   installSteps: [
     `Descomprime ${TELEGRAM_PRO_ZIP_NAME} en una carpeta fija de tu computador (por ejemplo, Documentos/TelegramProSend). No borres ni muevas esa carpeta después, porque Chrome la usa cada vez.`,
@@ -114,6 +121,7 @@ export const telegramProSendPage: ProductPageContent = {
     'Pulsa el botón «Cargar descomprimida» (Load unpacked).',
     'Elige la carpeta donde descomprimiste el archivo: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
     'La extensión quedará instalada. Pulsa el icono de piezas (Extensiones) en la barra de Chrome y fija TelegramProSend para tenerla siempre a la vista.',
+    'Para enviar por celular (opcional): ejecuta una vez native-launcher\\install.exe de la carpeta descomprimida.',
   ],
   access: {
     heading: 'Activar la licencia',
@@ -146,6 +154,12 @@ export const telegramProSendPage: ProductPageContent = {
       text: 'Define el tiempo mínimo y máximo entre envíos, en segundos. Usa intervalos prudentes para evitar límites temporales.',
       image: opcionesImage,
       imageAlt: 'Opciones de envío con tiempos mínimo y máximo entre mensajes',
+    },
+    {
+      title: 'Envía desde tus celulares (opcional)',
+      text: 'En Opciones de Envío elige el canal Celular (ADB), pulsa «Iniciar puente» y marca los celulares a usar. Conecta cada Android por USB con depuración activada y la app de Telegram abierta.',
+      image: celularesImage,
+      imageAlt: 'Selección del canal Celular (ADB) con puente iniciado y celulares marcados para el envío',
     },
     {
       title: 'Envía y sigue el avance en vivo',
@@ -184,8 +198,24 @@ export const telegramProSendPage: ProductPageContent = {
     'Usa intervalos prudentes entre envíos (varios segundos): enviar muy rápido puede provocar límites temporales (FLOOD_WAIT).',
     'No abras Telegram Web en dos pestañas o ventanas a la vez durante la campaña.',
     'No cierres la pestaña de Telegram mientras se envía la campaña.',
+    'Si envías por celular: mantenlo desbloqueado y con batería, y no lo uses durante la campaña.',
   ],
   faq: [
+    {
+      question: '¿Cómo actualizo desde la 1.1.x?',
+      answer:
+        'La 1.2.0 usa un identificador fijo de extensión y Chrome no conserva los datos de la versión anterior, así que migra tu respaldo: 1) en la 1.1.4, Historial → Exportar respaldo; 2) quita la extensión anterior en chrome://extensions; 3) descomprime y carga la 1.2.0; 4) en la 1.2.0, Historial → Importar respaldo ANTES de activar la licencia; 5) activa con la misma clave (conserva el cupo de dispositivo). Si vienes de la 1.1.3 o anterior, instala primero la 1.1.4 (/files/TelegramProSend-1.1.4.zip) para exportar tu respaldo.',
+    },
+    {
+      question: '¿Qué límites tiene el envío por celular?',
+      answer:
+        'En esta versión el celular escribe el texto sin tildes ni ñ, todavía no envía imagen (si la campaña lleva imagen, quítala o usa Telegram Web) y no tiene pausa: puedes detener la campaña y retomarla desde el Historial.',
+    },
+    {
+      question: '«Falta instalar el puente»',
+      answer:
+        'Ese aviso sale cuando el canal celular no encuentra su puente: ejecuta native-launcher\\install.exe de la carpeta descomprimida (una sola vez por PC) y vuelve a abrir la extensión.',
+    },
     {
       question: '«No se conecta»',
       answer:
