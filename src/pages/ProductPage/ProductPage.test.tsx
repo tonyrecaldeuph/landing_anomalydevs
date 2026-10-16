@@ -22,7 +22,7 @@ describe('ProductPage', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/TelegramProSend-1.1.4.zip');
+      expect(link).toHaveAttribute('href', '/files/TelegramProSend-1.2.0.zip');
       expect(link).toHaveAttribute('download');
     });
   });
@@ -36,11 +36,18 @@ describe('ProductPage', () => {
   it('ilustra cada paso con capturas accesibles', () => {
     render(<ProductPage content={telegramProSendPage} />);
     const images = screen.getAllByRole('img');
-    expect(images.length).toBeGreaterThanOrEqual(7);
+    expect(images.length).toBeGreaterThanOrEqual(8);
     images.forEach((img) => {
       const alt = img.getAttribute('alt') ?? '';
       expect(alt.trim().length).toBeGreaterThan(0);
     });
+  });
+
+  it('muestra el paso de envío desde celulares', () => {
+    render(<ProductPage content={telegramProSendPage} />);
+    expect(screen.getByRole('heading', { name: /celulares/i })).toBeInTheDocument();
+    const images = screen.getAllByRole('img');
+    expect(images.some((img) => (img.getAttribute('src') ?? '').includes('08-celulares'))).toBe(true);
   });
 
   it('conserva la activación de licencia en los productos que la requieren', () => {
