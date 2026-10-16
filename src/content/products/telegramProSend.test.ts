@@ -96,6 +96,14 @@ describe('telegramProSendPage', () => {
     expect(bridge?.answer).toMatch(/native-launcher\\install\.exe/);
   });
 
+  it('explica los límites del canal celular', () => {
+    const limites = telegramProSendPage.faq.find((f) => f.question.includes('límites') && f.question.toLowerCase().includes('celular'));
+    expect(limites).toBeDefined();
+    expect(limites?.answer).toMatch(/tildes/);
+    expect(limites?.answer).toMatch(/imagen/);
+    expect(limites?.answer).toMatch(/pausa/);
+  });
+
   it('reutiliza la descarga pública de TelegramProSend', () => {
     expect(telegramProSendPage.download.href).toBe('/files/TelegramProSend-1.2.0.zip');
     expect(telegramProSendPage.download.note).toBe('v1.2.0 · Requiere licencia');

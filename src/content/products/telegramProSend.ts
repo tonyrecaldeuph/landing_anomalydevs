@@ -207,6 +207,11 @@ export const telegramProSendPage: ProductPageContent = {
         'La 1.2.0 usa un identificador fijo de extensión y Chrome no conserva los datos de la versión anterior, así que migra tu respaldo: 1) en la 1.1.4, Historial → Exportar respaldo; 2) quita la extensión anterior en chrome://extensions; 3) descomprime y carga la 1.2.0; 4) en la 1.2.0, Historial → Importar respaldo ANTES de activar la licencia; 5) activa con la misma clave (conserva el cupo de dispositivo). Si vienes de la 1.1.3 o anterior, instala primero la 1.1.4 (/files/TelegramProSend-1.1.4.zip) para exportar tu respaldo.',
     },
     {
+      question: '¿Qué límites tiene el envío por celular?',
+      answer:
+        'En esta versión el celular escribe el texto sin tildes ni ñ, todavía no envía imagen (si la campaña lleva imagen, quítala o usa Telegram Web) y no tiene pausa: puedes detener la campaña y retomarla desde el Historial.',
+    },
+    {
       question: '«Falta instalar el puente»',
       answer:
         'Ese aviso sale cuando el canal celular no encuentra su puente: ejecuta native-launcher\\install.exe de la carpeta descomprimida (una sola vez por PC) y vuelve a abrir la extensión.',
