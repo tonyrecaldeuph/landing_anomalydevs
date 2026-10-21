@@ -34,14 +34,14 @@ describe('content modules', () => {
     expect(ids.size).toBe(services.length);
   });
 
-  it('projects includes the portfolio from DESARROLLOS_UPHONE, 8 cases with unique ids', () => {
+  it('projects includes the portfolio from DESARROLLOS_UPHONE, 9 cases with unique ids', () => {
     const ids = projects.map((p) => p.id);
-    expect(ids).toHaveLength(8);
-    expect(new Set(ids).size).toBe(8);
-    expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion', 'telegram-pro-send']));
+    expect(ids).toHaveLength(9);
+    expect(new Set(ids).size).toBe(9);
+    expect(ids).toEqual(expect.arrayContaining(['terminal-marketing', 'venecia-sartoria', 'data-automatizacion', 'telegram-pro-send', 'whatsapp-pro-send']));
   });
 
-  it('telegram-pro-send, sms-pro y mailer-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
+  it('telegram-pro-send, sms-pro, whatsapp-pro-send y mailer-pro exponen sus descargas públicas y ningún otro proyecto lo hace', () => {
     const telegram = projects.find((p) => p.id === 'telegram-pro-send');
     expect(telegram).toBeDefined();
     expect(telegram?.download?.href).toBe('/files/TelegramProSend-1.2.0.zip');
@@ -72,6 +72,16 @@ describe('content modules', () => {
     // Espejo total de SMS PRO V3.0 (puente ADB, native-launcher, fixtures, docs):
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
+    const whatsapp = projects.find((p) => p.id === 'whatsapp-pro-send');
+    expect(whatsapp?.download?.href).toBe('/files/WhatsAppProSend-1.1.4.zip');
+    expect(whatsapp?.caseHref).toBe('/productos/whatsappprosend/');
+    // @ts-expect-error: process solo existe en el runtime de Vitest/Node
+    const whatsappZipPath = join(process.cwd(), 'public', 'files', 'WhatsAppProSend-1.1.4.zip');
+    expect(existsSync(whatsappZipPath)).toBe(true);
+    expect(readFileSync(whatsappZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
+    // Este zip incluye el puente y el launcher nativo: el recorte solo-extensión
+    // pesaba ~415 KB y no servía para instalar desde cero.
+    expect(statSync(whatsappZipPath).size).toBeGreaterThan(450_000);
     const mailer = projects.find((p) => p.id === 'mailer-pro');
     expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.1.zip');
     expect(mailer?.caseHref).toBe('/productos/mailerpro/');
@@ -79,7 +89,7 @@ describe('content modules', () => {
     const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.1.zip');
     expect(readFileSync(mailerZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
     projects
-      .filter((p) => !['telegram-pro-send', 'sms-pro', 'terminal-marketing', 'mailer-pro'].includes(p.id))
+      .filter((p) => !['telegram-pro-send', 'sms-pro', 'whatsapp-pro-send', 'terminal-marketing', 'mailer-pro'].includes(p.id))
       .forEach((p) => {
         expect(p.download).toBeUndefined();
       });

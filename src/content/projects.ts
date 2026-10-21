@@ -1,6 +1,7 @@
 import terminalCobranzaImage from '../assets/projects/terminal-cobranza.png';
 import telegramProSendImage from '../assets/projects/telegram-pro-send.svg';
 import smsProImage from '../assets/projects/sms-pro.png';
+import whatsappProSendImage from '../assets/projects/whatsapp-pro-send.png';
 import mailerProImage from '../assets/projects/mailer-pro.png';
 import scrapingMarketplaceImage from '../assets/projects/scraping-marketplace.svg';
 import terminalMarketingImage from '../assets/projects/terminal-marketing.svg';
@@ -18,6 +19,11 @@ export const TELEGRAM_PRO_ZIP_NAME = `TelegramProSend-${TELEGRAM_PRO_VERSION}.zi
 // descargando la versión anterior tras publicar una nueva.
 export const SMS_PRO_VERSION = '3.0.4';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
+
+// WhatsAppProSend debuta con el mismo criterio: el zip versionado evita que
+// Cloudflare entregue una versión vieja desde su caché de /files/*.
+export const WHATSAPP_PRO_VERSION = '1.1.4';
+export const WHATSAPP_PRO_ZIP_NAME = `WhatsAppProSend-${WHATSAPP_PRO_VERSION}.zip`;
 
 // Versión publicada de Terminal Marketing (CRM Marketing Uphone). El instalador
 // pesa ~196 MB y no cabe en git: se descarga del mismo servidor que alimenta el
@@ -91,6 +97,16 @@ export const projects: Project[] = [
     image: smsProImage,
     download: { href: `/files/${SMS_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${SMS_PRO_VERSION} · Requiere licencia` },
     caseHref: '/productos/smsprosend/',
+  },
+  {
+    id: 'whatsapp-pro-send',
+    title: 'WhatsAppProSend',
+    tags: ['Chrome Extension', 'JavaScript', 'WhatsApp', 'ADB'],
+    description:
+      'Extensión de Chrome para campañas por la app nativa de WhatsApp en celulares Android conectados por USB: contactos desde Excel, varias cuentas por teléfono, cuota diaria, detección de números sin WhatsApp, historial y reportes exportables.',
+    image: whatsappProSendImage,
+    download: { href: `/files/${WHATSAPP_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${WHATSAPP_PRO_VERSION} · Requiere licencia` },
+    caseHref: '/productos/whatsappprosend/',
   },
   {
     id: 'mailer-pro',
