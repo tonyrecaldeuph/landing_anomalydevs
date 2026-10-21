@@ -123,6 +123,7 @@ Los archivos en `public/files/` se publican tal cual en el build (Vite los copia
 ```
 https://anomalydevs.qzz.io/files/TelegramProSend-1.2.0.zip
 https://anomalydevs.qzz.io/files/SmsProSend-3.0.4.zip
+https://anomalydevs.qzz.io/files/WhatsAppProSend-1.1.4.zip
 https://anomalydevs.qzz.io/files/MailerPro-3.3.1.zip
 ```
 
@@ -165,6 +166,19 @@ nombre fijo, otras PCs seguían bajando la versión anterior tras publicar una n
    ya compartidos; puede quedar viejo en la caché de Cloudflare hasta 4 h).
 4. `git pull && docker compose up -d --build` (también recrea `anomalydevs-api`).
 
+### WhatsAppProSend — zip versionado
+
+Mismo criterio que MailerPro, sin copia con nombre fijo:
+
+1. En `Wsp_adb`: subir `version` en `manifest.json` y correr
+   `npm run empaquetar` → `dist/WhatsAppProSend-<versión>.zip`. El zip incluye
+   la extensión, `bridge/` con `ws` y `native-launcher/`, para que la descarga
+   sirva en una PC nueva.
+2. Cambiar `WHATSAPP_PRO_VERSION` en `src/content/projects.ts` y los tests que
+   la fijan. Si cambian las pantallas, correr `npm run capturas` en `Wsp_adb`.
+3. Copiar el zip a `public/files/`, `git add -f` y borrar el anterior.
+4. `git pull && docker compose up -d --build`.
+
 ### MailerPro — zip versionado
 
 Mismo criterio que SMS_RCS_PRO, pero sin copia con nombre fijo:
@@ -184,6 +198,7 @@ Cada página vive en su propia ruta bajo `/productos/<slug>/`:
 ```
 https://anomalydevs.qzz.io/productos/telegramprosend/
 https://anomalydevs.qzz.io/productos/smsprosend/
+https://anomalydevs.qzz.io/productos/whatsappprosend/
 https://anomalydevs.qzz.io/productos/mailerpro/
 ```
 

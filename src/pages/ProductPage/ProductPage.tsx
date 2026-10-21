@@ -21,6 +21,7 @@ const PRODUCT_CLUSTER = resolveProductCluster();
 const STATUS_ICONS: Record<string, string> = {
   Enviado: '✅',
   'Sin Telegram': '⚪',
+  'Sin WhatsApp': '⚪',
   Omitido: '⚪',
   RCS: '🔵',
   SMS: '🟢',
