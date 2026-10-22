@@ -73,10 +73,10 @@ describe('content modules', () => {
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
     const whatsapp = projects.find((p) => p.id === 'whatsapp-pro-send');
-    expect(whatsapp?.download?.href).toBe('/files/WhatsAppProSend-1.1.5.zip');
+    expect(whatsapp?.download?.href).toBe('/files/WhatsAppProSend-1.1.7.zip');
     expect(whatsapp?.caseHref).toBe('/productos/whatsappprosend/');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const whatsappZipPath = join(process.cwd(), 'public', 'files', 'WhatsAppProSend-1.1.5.zip');
+    const whatsappZipPath = join(process.cwd(), 'public', 'files', 'WhatsAppProSend-1.1.7.zip');
     expect(existsSync(whatsappZipPath)).toBe(true);
     expect(readFileSync(whatsappZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
     // Este zip incluye el puente y el launcher nativo: el recorte solo-extensión
