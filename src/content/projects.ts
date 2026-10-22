@@ -22,7 +22,7 @@ export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
 // WhatsAppProSend debuta con el mismo criterio: el zip versionado evita que
 // Cloudflare entregue una versión vieja desde su caché de /files/*.
-export const WHATSAPP_PRO_VERSION = '1.1.4';
+export const WHATSAPP_PRO_VERSION = '1.1.5';
 export const WHATSAPP_PRO_ZIP_NAME = `WhatsAppProSend-${WHATSAPP_PRO_VERSION}.zip`;
 
 // Versión publicada de Terminal Marketing (CRM Marketing Uphone). El instalador
