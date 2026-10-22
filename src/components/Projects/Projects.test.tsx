@@ -86,7 +86,7 @@ describe('Projects', () => {
     const whatsappHeading = screen.getByRole('heading', { name: 'WhatsAppProSend' });
     const whatsappCard = whatsappHeading.closest('article')!;
     const whatsappDownloadLink = within(whatsappCard).getByRole('link', { name: /Descargar WhatsAppProSend/ });
-    expect(whatsappDownloadLink).toHaveAttribute('href', '/files/WhatsAppProSend-1.1.5.zip');
+    expect(whatsappDownloadLink).toHaveAttribute('href', '/files/WhatsAppProSend-1.1.7.zip');
     expect(whatsappDownloadLink).toHaveAttribute('download');
     const terminalCard = screen.getByRole('heading', { name: 'Terminal Marketing' }).closest('article')!;
     const terminalDownloadLink = within(terminalCard).getByRole('link', { name: /Descargar Terminal Marketing/ });

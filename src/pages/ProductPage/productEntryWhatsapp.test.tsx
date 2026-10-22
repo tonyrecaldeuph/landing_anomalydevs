@@ -51,15 +51,15 @@ describe('ProductPage con contenido WhatsApp', () => {
     const downloads = screen.getAllByRole('link', { name: /Descargar/ });
     expect(downloads.length).toBeGreaterThanOrEqual(2);
     downloads.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/files/WhatsAppProSend-1.1.5.zip');
+      expect(link).toHaveAttribute('href', '/files/WhatsAppProSend-1.1.7.zip');
       expect(link).toHaveAttribute('download');
     });
     expect(screen.getByRole('heading', { name: 'Descarga WhatsAppProSend' })).toBeInTheDocument();
   });
 
-  it('muestra la versión 1.1.5 junto a la descarga', () => {
+  it('muestra la versión 1.1.7 junto a la descarga', () => {
     render(<ProductPage content={whatsappProSendPage} />);
-    expect(screen.getAllByText(/v1\.1\.5/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/v1\.1\.7/).length).toBeGreaterThanOrEqual(1);
   });
 
   it('pinta los cuatro resultados, incluido Sin WhatsApp', () => {

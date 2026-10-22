@@ -51,13 +51,13 @@ describe('whatsappProSendPage', () => {
   });
 
   it('reutiliza la descarga pública versionada de WhatsAppProSend', () => {
-    expect(whatsappProSendPage.download.href).toBe('/files/WhatsAppProSend-1.1.5.zip');
-    expect(whatsappProSendPage.download.note).toContain('v1.1.5');
+    expect(whatsappProSendPage.download.href).toBe('/files/WhatsAppProSend-1.1.7.zip');
+    expect(whatsappProSendPage.download.note).toContain('v1.1.7');
     expect(whatsappProSendPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('nombra el zip versionado en el primer paso de instalación', () => {
-    expect(whatsappProSendPage.installSteps[0]).toContain('WhatsAppProSend-1.1.5.zip');
+    expect(whatsappProSendPage.installSteps[0]).toContain('WhatsAppProSend-1.1.7.zip');
   });
 
   it('explica los resultados propios del canal WhatsApp', () => {
