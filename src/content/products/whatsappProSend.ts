@@ -63,7 +63,7 @@ export const whatsappProSendPage: ProductPageContent = {
     'Uno o más celulares Android con WhatsApp y/o WhatsApp Business con la sesión iniciada.',
     'Depuración por USB activada y el computador autorizado en cada celular.',
     'Autocorrección del teclado desactivada y pantalla sin bloqueo durante la campaña.',
-    'Cable USB de datos y WhatsAppProSend instalado con el puente ADB incluido en el zip.',
+    'Cable USB de datos y WhatsAppProSend instalado con el puente ADB incluido en el zip. Hasta 3 celulares por PC pueden trabajar por Bluetooth, sin cable, tras darlos de alta una vez con el cable.',
     'Clave de licencia de WhatsAppProSend provista por AnomalyDevs.',
   ],
   installSteps: [
@@ -74,6 +74,7 @@ export const whatsappProSendPage: ProductPageContent = {
     'Elige la carpeta donde descomprimiste el archivo: debe ser la que contiene manifest.json. Pulsa «Seleccionar carpeta».',
     'Fija WhatsAppProSend en la barra de Chrome con el icono de piezas (Extensiones).',
     'Ejecuta una sola vez native-launcher\\install.exe de la carpeta descomprimida: instala lo necesario para el puente ADB y registra el host que permite reiniciarlo.',
+    'Opcional, envío sin cable: con el Bluetooth de la PC encendido y el celular conectado por cable, haz doble clic en agregar-celular-bluetooth.bat y sigue los 6 pasos. La primera vez instala el puente Bluetooth (acepta los permisos de administrador). Hasta 3 celulares por PC; al final puedes quitar el cable.',
   ],
   access: {
     heading: 'Activar la licencia',
