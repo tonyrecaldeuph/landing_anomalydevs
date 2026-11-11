@@ -94,7 +94,7 @@ describe('Projects', () => {
     expect(within(terminalCard).getByText(/Sin licencia/)).toBeInTheDocument();
     const mailerCard = screen.getByRole('heading', { name: 'Mailer Pro' }).closest('article')!;
     const mailerDownloadLink = within(mailerCard).getByRole('link', { name: /Descargar Mailer Pro/ });
-    expect(mailerDownloadLink).toHaveAttribute('href', '/files/MailerPro-3.3.1.zip');
+    expect(mailerDownloadLink).toHaveAttribute('href', '/files/MailerPro-3.3.2.zip');
     expect(mailerDownloadLink).toHaveAttribute('download');
     projects
       .filter((project) => !['telegram-pro-send', 'sms-pro', 'whatsapp-pro-send', 'terminal-marketing', 'mailer-pro'].includes(project.id))
