@@ -38,7 +38,7 @@ export const TERMINAL_MARKETING_DOWNLOAD_NOTE =
 // Misma regla que SMS: la versión va en el nombre del zip por la caché de
 // Cloudflare. Se publica solo el zip versionado; MailerPro no tiene enlaces
 // viejos con nombre fijo que mantener.
-export const MAILER_PRO_VERSION = '3.3.1';
+export const MAILER_PRO_VERSION = '3.3.2';
 export const MAILER_PRO_ZIP_NAME = `MailerPro-${MAILER_PRO_VERSION}.zip`;
 
 export interface Project {

@@ -83,10 +83,10 @@ describe('content modules', () => {
     // pesaba ~415 KB y no servía para instalar desde cero.
     expect(statSync(whatsappZipPath).size).toBeGreaterThan(450_000);
     const mailer = projects.find((p) => p.id === 'mailer-pro');
-    expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.1.zip');
+    expect(mailer?.download?.href).toBe('/files/MailerPro-3.3.2.zip');
     expect(mailer?.caseHref).toBe('/productos/mailerpro/');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.1.zip');
+    const mailerZipPath = join(process.cwd(), 'public', 'files', 'MailerPro-3.3.2.zip');
     expect(readFileSync(mailerZipPath).subarray(0, 2).toString('utf8')).toBe('PK');
     projects
       .filter((p) => !['telegram-pro-send', 'sms-pro', 'whatsapp-pro-send', 'terminal-marketing', 'mailer-pro'].includes(p.id))
