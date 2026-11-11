@@ -51,13 +51,20 @@ describe('whatsappProSendPage', () => {
   });
 
   it('reutiliza la descarga pública versionada de WhatsAppProSend', () => {
-    expect(whatsappProSendPage.download.href).toBe('/files/WhatsAppProSend-1.1.7.zip');
-    expect(whatsappProSendPage.download.note).toContain('v1.1.7');
+    expect(whatsappProSendPage.download.href).toBe('/files/WhatsAppProSend-1.2.2.zip');
+    expect(whatsappProSendPage.download.note).toContain('v1.2.2');
     expect(whatsappProSendPage.access.ctaHref).toBe('/#contacto');
   });
 
   it('nombra el zip versionado en el primer paso de instalación', () => {
-    expect(whatsappProSendPage.installSteps[0]).toContain('WhatsAppProSend-1.1.7.zip');
+    expect(whatsappProSendPage.installSteps[0]).toContain('WhatsAppProSend-1.2.2.zip');
+  });
+
+  it('explica cómo agregar celulares por Bluetooth con el archivo del zip', () => {
+    const pasos = whatsappProSendPage.installSteps.join(' ');
+    expect(pasos).toContain('agregar-celular-bluetooth.bat');
+    expect(pasos).toMatch(/3 celulares/);
+    expect(whatsappProSendPage.requirements.join(' ')).toMatch(/Bluetooth/);
   });
 
   it('explica los resultados propios del canal WhatsApp', () => {
