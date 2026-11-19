@@ -63,15 +63,28 @@ describe('content modules', () => {
     expect(readFileSync(aliasPath).subarray(0, 2).toString('utf8')).toBe('PK');
     const sms = projects.find((p) => p.id === 'sms-pro');
     expect(sms).toBeDefined();
-    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.4.zip');
+    expect(sms?.download?.href).toBe('/files/SmsProSend-3.0.6.zip');
     // @ts-expect-error: process solo existe en el runtime de Vitest/Node
-    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.4.zip');
+    const smsZipPath = join(process.cwd(), 'public', 'files', 'SmsProSend-3.0.6.zip');
     expect(existsSync(smsZipPath)).toBe(true);
-    const smsSignature = readFileSync(smsZipPath).subarray(0, 2).toString('utf8');
-    expect(smsSignature).toBe('PK');
+    const smsZip = readFileSync(smsZipPath);
+    expect(smsZip.subarray(0, 2).toString('utf8')).toBe('PK');
     // Espejo total de SMS PRO V3.0 (puente ADB, native-launcher, fixtures, docs):
     // el recorte mínimo pesaba ~445 KB; el espejo supera los 500 KB.
     expect(statSync(smsZipPath).size).toBeGreaterThan(500_000);
+    // El 3.0.4 publicado no traía el puente Bluetooth: el asesor lo descargaba y
+    // no podía dar de alta un celular sin cable. Estas tres rutas son lo que le
+    // falta a un zip empaquetado sin PUENTE_BLUETOOTH_DIST, así que se afirman
+    // aquí, antes de publicar. Se buscan como bytes: el directorio central del
+    // zip guarda los nombres sin comprimir, y así no hace falta una dependencia
+    // nueva para leer el zip.
+    for (const entrada of [
+      'agregar-celular-bluetooth.bat',
+      'bluetooth/PuenteBluetooth-Setup.exe',
+      'bluetooth/app/puente-adb.apk',
+    ]) {
+      expect(smsZip.includes(entrada), `el zip de SMS PRO debe traer ${entrada}`).toBe(true);
+    }
     const whatsapp = projects.find((p) => p.id === 'whatsapp-pro-send');
     expect(whatsapp?.download?.href).toBe('/files/WhatsAppProSend-1.2.2.zip');
     expect(whatsapp?.caseHref).toBe('/productos/whatsappprosend/');

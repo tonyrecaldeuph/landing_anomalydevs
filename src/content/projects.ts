@@ -17,7 +17,7 @@ export const TELEGRAM_PRO_ZIP_NAME = `TelegramProSend-${TELEGRAM_PRO_VERSION}.zi
 // Versión publicada de SMS_RCS_PRO. El zip lleva la versión en el nombre
 // porque Cloudflare cachea /files/* 4 h: con un nombre fijo, otras PCs seguían
 // descargando la versión anterior tras publicar una nueva.
-export const SMS_PRO_VERSION = '3.0.4';
+export const SMS_PRO_VERSION = '3.0.6';
 export const SMS_PRO_ZIP_NAME = `SmsProSend-${SMS_PRO_VERSION}.zip`;
 
 // WhatsAppProSend debuta con el mismo criterio: el zip versionado evita que
@@ -93,7 +93,7 @@ export const projects: Project[] = [
     title: 'SMS Pro',
     tags: ['Chrome Extension', 'JavaScript', 'Automatización'],
     description:
-      'Extensión que automatiza el envío masivo e ilimitado de campañas de SMS y RCS, con carga de contactos, intervalos configurables y seguimiento en tiempo real de la campaña.',
+      'Extensión que automatiza el envío masivo e ilimitado de campañas de SMS y RCS, con carga de contactos, celulares por cable o Bluetooth y seguimiento en tiempo real de la campaña.',
     image: smsProImage,
     download: { href: `/files/${SMS_PRO_ZIP_NAME}`, label: 'Descargar', note: `v${SMS_PRO_VERSION} · Requiere licencia` },
     caseHref: '/productos/smsprosend/',
